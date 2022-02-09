@@ -1,4 +1,11 @@
-# SD-Helper
+# 프로젝트 소개 :
+
+## LOGO
+
+![](<https://ifh.cc/g/4aYDXk.png)
+![](https://ifh.cc/g/Z9s0R4.jpg)
+
+## Intro
 
 “HoloSulo”는 바쁘게 살아가는 현대인의 혼술 생활을 책임지는 힐링 서비스 입니다.
 
@@ -10,3 +17,13 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 평소 하지 못했던 말, 마음에 담아둔 말 들을 편하게 적고 지울 수 있는 메모 기능을 제공합니다.   
 
 혼술과 함께 “HoloSulo”에서 힐링을 하시기 바랍니다.
+
+
+## Team SD-Helper
+
+| 이름     | Position & Role |
+| -------- | --------------- |
+| [박강용] | Back-end   |
+| [성재호] | Front-end  |
+| [강범규] | Front-end  |
+| [김상언] | Back-end   |
