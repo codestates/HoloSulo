@@ -2,11 +2,8 @@
 
 ## LOGO
 
-![](<https://ifh.cc/g/4aYDXk.png)
-
-## Font LOGO
-
 <a href='https://ifh.cc/v-Y6O7aJ' target='_blank'><img src='https://ifh.cc/g/Y6O7aJ.jpg' border='0'></a>
+
 
 ## Intro
 
