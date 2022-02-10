@@ -22,8 +22,8 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 ## Team SD-Helper
 
 | 이름     | Position & Role |
-| -------- | --------------- |
-| [박강용] | Back-end   |
-| [성재호] | Front-end  |
-| [강범규] | Front-end  |
-| [김상언] | Back-end   |
+| -------- | ---------- |
+| [박강용] | Back-end|
+| [성재호] | Front-end|
+| [강범규] | Front-end|
+| [김상언] | Back-end|
