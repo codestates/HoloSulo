@@ -3,7 +3,8 @@ import styled from "styled-components";
 const HeaderContainer = styled.div`
   width: 100%;
   height: 80px;
-  display: fixed;
+  position: fixed;
+  background-color: #f1eded;
   left: 0;
   top: 0;
   border: 1px solid black;
