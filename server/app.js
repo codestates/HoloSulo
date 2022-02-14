@@ -1,9 +1,19 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const cors = require("cors");
 
 app.use(express.json());
 const controllers = require("./controller");
+
+app.use(express.urlencoded({ extended: false }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

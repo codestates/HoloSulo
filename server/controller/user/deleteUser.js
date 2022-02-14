@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { deleteUser } = require("../modules/deletUsers");
+const { deleteUser } = require("../modules/deleteUsers");
 
 module.exports = async (res, req) => {
   if (req.headers.authorized) {
