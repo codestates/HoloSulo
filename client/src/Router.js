@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
 import EditMypage from "./pages/EditMypage";
 import Ending from "./pages/Ending";
 import Home from "./pages/Home";
@@ -11,14 +12,70 @@ import Signup from "./pages/Signup";
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/menu" element={<Menu />} />
-      <Route path="/main" element={<Main />} />
-      <Route path="/ending" element={<Ending />} />
-      <Route path="/mypage" element={<Mypage />} />
-      <Route path="/mypage/edit" element={<EditMypage />} />
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <Home />
+          </Layout>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <Login />
+          </Layout>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <Layout>
+            <Signup />
+          </Layout>
+        }
+      />
+      <Route
+        path="/menu"
+        element={
+          <Layout>
+            <Menu />
+          </Layout>
+        }
+      />
+      <Route
+        path="/main"
+        element={
+          <Layout>
+            <Main />
+          </Layout>
+        }
+      />
+      <Route
+        path="/ending"
+        element={
+          <Layout>
+            <Ending />
+          </Layout>
+        }
+      />
+      <Route
+        path="/mypage"
+        element={
+          <Layout>
+            <Mypage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/mypage/edit"
+        element={
+          <Layout>
+            <EditMypage />
+          </Layout>
+        }
+      />
     </Routes>
   );
 }
