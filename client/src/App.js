@@ -1,5 +1,13 @@
+import Header from "./components/Header";
+import Router from "./Router";
+
 function App() {
-  return <div>Hello World</div>;
+  return (
+    <div>
+      <Header />
+      <Router />
+    </div>
+  );
 }
 
 export default App;
