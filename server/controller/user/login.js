@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { User } = require("../../models");
+const { generateAccessToken } = require("../modules/accessToken");
 
 module.exports = async (req, res) => {
   const userInfo = await User.findOne({

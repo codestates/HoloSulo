@@ -10,6 +10,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("users/login", controllers.login);
+app.post("users/userName", controllers.userName);
+app.delete("/users/:id", controllers.deleteUser);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
