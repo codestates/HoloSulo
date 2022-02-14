@@ -40,19 +40,19 @@ function Header({ isLoggedIn = false }) {
       {pathname === "/" ? null : (
         <MenuItems>
           <Item active={pathname === "/menu" ? "underline" : "none"}>
-            <Link to="menu">Menu</Link>
+            <Link to="/menu">Menu</Link>
           </Item>
           {isLoggedIn ? (
             <Item active={pathname === "/mypage" ? "underline" : "none"}>
-              <Link to="mypage">mypage</Link>
+              <Link to="/mypage">mypage</Link>
             </Item>
           ) : (
             <>
               <Item active={pathname === "/login" ? "underline" : "none"}>
-                <Link to="login">Login</Link>
+                <Link to="/login">Login</Link>
               </Item>
               <Item active={pathname === "/signup" ? "underline" : "none"}>
-                <Link to="signup">Signup</Link>
+                <Link to="/signup">Signup</Link>
               </Item>
             </>
           )}
