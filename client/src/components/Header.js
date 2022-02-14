@@ -1,27 +1,64 @@
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import logo from "../images/logo.png";
 
-const HeaderContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   height: 80px;
-  display: fixed;
+  position: fixed;
+  background-color: #f1eded;
   left: 0;
   top: 0;
-  border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
 `;
 
-function Header() {
+const Logo = styled.img`
+  height: 80px;
+  src: ${logo};
+`;
+
+const MenuItems = styled.ul`
+  display: flex;
+`;
+
+const Item = styled.li`
+  margin-left: 20px;
+  text-decoration: ${(props) => props.active};
+`;
+
+function Header({ isLoggedIn = false }) {
+  const { pathname } = useLocation();
+
   return (
-    <HeaderContainer>
-      <div>Logo</div>
-      <div>
-        <span>Menu</span>
-        <span>Login</span>
-        <span>Signup</span>
-      </div>
-    </HeaderContainer>
+    <Container>
+      <Link to="/">
+        <Logo src={logo} />
+      </Link>
+      {pathname === "/" ? null : (
+        <MenuItems>
+          <Item active={pathname === "/menu" ? "underline" : "none"}>
+            <Link to="/menu">Menu</Link>
+          </Item>
+          {isLoggedIn ? (
+            <Item active={pathname === "/mypage" ? "underline" : "none"}>
+              <Link to="/mypage">mypage</Link>
+            </Item>
+          ) : (
+            <>
+              <Item active={pathname === "/login" ? "underline" : "none"}>
+                <Link to="/login">Login</Link>
+              </Item>
+              <Item active={pathname === "/signup" ? "underline" : "none"}>
+                <Link to="/signup">Signup</Link>
+              </Item>
+            </>
+          )}
+        </MenuItems>
+      )}
+    </Container>
   );
 }
 

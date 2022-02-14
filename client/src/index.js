@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import { createGlobalStyle } from "styled-components";
+import { BrowserRouter } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -67,8 +69,12 @@ a {
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyle />
-    <App />
+    <RecoilRoot>
+      <BrowserRouter>
+        <GlobalStyle />
+        <App />
+      </BrowserRouter>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
 );
