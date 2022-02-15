@@ -3,8 +3,8 @@ const { verify } = require("jsonwebtoken");
 const { User } = require("../../models");
 
 module.exports = {
-  deleteUser: (userInfo) => {
-    const checkUser = verify(
+  deleteUser: async (userInfo) => {
+    const checkUser = await verify(
       userInfo,
       process.env.ACCESS_SECRET,
       (err, decode) => {
@@ -16,7 +16,7 @@ module.exports = {
     if (!checkUser) {
       return;
     } else {
-      const user = User.destroy({ where: { email: checkUser.email } });
+      const user = await User.destroy({ where: { email: checkUser.email } });
       return true;
     }
   },

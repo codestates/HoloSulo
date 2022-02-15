@@ -2,12 +2,16 @@ require("dotenv").config();
 const { User } = require("../../models");
 
 module.exports = {
-  userNameCheck: async (username) => {
-    const userInfo = await User.findOne({ where: { username: username } });
+  userNameCheck: async (userbody) => {
+    console.log(userbody);
+    const userInfo = await User.findOne({
+      where: { username: userbody.username },
+    });
+    if (!userInfo) {
+      return false;
+    }
     if (userInfo.dataValues.username) {
       return true;
-    } else {
-      return false;
     }
   },
 };

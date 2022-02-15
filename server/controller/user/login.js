@@ -3,9 +3,11 @@ const { User } = require("../../models");
 const { generateAccessToken } = require("../modules/accessToken");
 
 module.exports = async (req, res) => {
+  console.log(req.body);
   const userInfo = await User.findOne({
     where: { email: req.body.email, password: req.body.password },
   });
+
   if (!userInfo) {
     return res.status(404).send("invaild user");
   } else {

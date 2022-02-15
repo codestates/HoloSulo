@@ -1,8 +1,9 @@
 require("dotenv").config();
 const { userNameCheck } = require("../modules/nameCheck");
 
-module.exports = async (res, req) => {
-  const check = userNameCheck(req.bdoy.username);
+module.exports = async (req, res) => {
+  console.log(req);
+  const check = await userNameCheck(req.body);
 
   if (check === true) {
     return res.status(409).send("user name conflict");

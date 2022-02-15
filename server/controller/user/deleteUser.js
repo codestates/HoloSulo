@@ -1,9 +1,9 @@
 require("dotenv").config();
 const { deleteUser } = require("../modules/deleteUsers");
 
-module.exports = async (res, req) => {
-  if (req.headers.authorized) {
+module.exports = async (req, res) => {
+  if (!req.headers.accessToekn) {
     return res.status(401).send("Unauthorized");
   }
-  return deleteUser(req.headers.authorized);
+  return deleteUser(req.headers.accessToekn);
 };
