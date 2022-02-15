@@ -15,9 +15,9 @@ function Router() {
       <Route
         path="/"
         element={
-          <Layout>
-            <Home />
-          </Layout>
+          // <Layout>
+          <Home />
+          // </Layout>
         }
       />
       <Route
