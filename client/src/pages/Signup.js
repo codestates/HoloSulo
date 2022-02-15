@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import Logo from "../images/logo.png";
 
 function Signup() {
   return (
     <Total>
       <center>
-        <Logo></Logo>
+        <FontLogo></FontLogo>
 
         <Mention>email을 입력해주세요.</Mention>
         <Compo>
@@ -25,20 +26,19 @@ function Signup() {
           type="password"
           placeholder="password"
           onfocus="this.placeholder=''"
-          onblur="this.placeholder='change password'"
+          onblur="this.placeholder='password'"
         ></Password>
         <Space></Space>
 
-        <CheckPassword
+        <Password
           type="password"
           placeholder="check password"
           onfocus="this.placeholder=''"
           onblur="this.placeholder='check password'"
-        ></CheckPassword>
-        <Space></Space>
-
+        ></Password>
+        <MarginBot></MarginBot>
+        <Mention>nickname을 입력해주세요.</Mention>
         <Compo>
-          <Mention>nickname을 입력해주세요.</Mention>
           <TypoNickname
             type="text"
             placeholder="nickname"
@@ -47,10 +47,11 @@ function Signup() {
           ></TypoNickname>
           <Check>check</Check>
         </Compo>
+
         <Space></Space>
         <Terms>회원약관</Terms>
         <Space></Space>
-        <Link to="/Menu">
+        <Link to="/menu">
           <Confirm>회원가입</Confirm>
         </Link>
 
@@ -60,40 +61,47 @@ function Signup() {
   );
 }
 
-const Total = styled.body`
-  width: 100vw;
-  height: 100vh;
-  padding-top: 25%;
+const Total = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #f3f1f0;
   outline: none;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
 `;
 
 const Space = styled.div`
   margin-top: 2%;
 `;
 
-const Logo = styled.title``;
+const MarginBot = styled.div`
+  margin-bottom: 8%;
+`;
+
+const FontLogo = styled.div`
+  width: 260px;
+  height: 260px;
+  background-image: url(${Logo});
+  background-size: cover;
+`;
 
 const TypoEmail = styled.input`
   width: 200px;
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  margin-bottom: 6%;
   font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
+  padding-left: 10px;
   display: flex;
-  margin-left: 350px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  float: left;
 `;
 
 const Confirm = styled.button`
@@ -107,6 +115,7 @@ const Confirm = styled.button`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
+  margin-bottom: 100%;
   align-items: center;
   text-align: auto;
   vertical-align: center;
@@ -126,29 +135,11 @@ const Password = styled.input`
   width: 23em;
   height: 2em;
   margin-bottom: 2%;
+  padding-left: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-`;
-
-const CheckPassword = styled.input`
-  width: 200px;
-  background-color: #e8e8e8;
-  color: #707070;
-  outline: none;
-  font-family: monospace;
-  margin-bottom: 6%;
-  border: 0.2em;
-  border-radius: 0.9em;
-  width: 23em;
-  height: 2em;
-
-  margin-left: 350px;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  float: left; ;
 `;
 
 const TypoNickname = styled.input`
@@ -161,12 +152,12 @@ const TypoNickname = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
+  margin-bottom: 2%;
+  padding-left: 10px;
   display: flex;
-  margin-left: 350px;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  float: left;
 `;
 
 const Check = styled.button`
@@ -180,14 +171,16 @@ const Check = styled.button`
   border-radius: 0.9em;
   width: 5em;
   height: 2em;
-  float: left;
   line-height: 25px;
   cursor: pointer;
 `;
 
 const Compo = styled.div`
-  width: 100%;
-  display: inline-block;
+  display: flex;
+  width: 500px;
+  margin-left: 19.5%;
+  margin-bottom: 8%;
+  // margin-bottom: 2%; *삼항연산자 들어왔을때
 `;
 
 const Terms = styled.button`
@@ -212,9 +205,20 @@ const Terms = styled.button`
 const Mention = styled.div`
   font-family: monospace;
   font-size: 15px;
-  padding-left: 35%;
-  margin-bottom: 2%;
+  margin-left: 21%;
+  margin-bottom: 3%;
   text-align: left;
 `;
+
+/*
+const TrueMention = styled.div`
+  font-family: monospace;
+  font-size: 13px;
+  color: #008c06;
+  margin-left: 21%;
+  margin-bottom: 8%;
+  text-align: left;
+`;
+*/
 
 export default Signup;

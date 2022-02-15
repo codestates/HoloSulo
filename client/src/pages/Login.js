@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import Logo from "../images/logo.png";
 import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
 
@@ -45,7 +46,7 @@ function Logined() {
   return (
     <Total>
       <center>
-        <Logo></Logo>
+        <FontLogo></FontLogo>
 
         <Email
           type="text"
@@ -64,16 +65,18 @@ function Logined() {
           //onChange={handleInputValue("email")}
         ></Password>
 
-        <Link to="/Menu">
+        <Link to="/menu">
           <LoginButton>Login</LoginButton>
         </Link>
 
         <Space></Space>
-        <SocialLoginButton1></SocialLoginButton1>
-        <SocialLoginButton2></SocialLoginButton2>
+        <Compo>
+          <SocialLoginButton1></SocialLoginButton1>
+          <SocialLoginButton2></SocialLoginButton2>
+        </Compo>
 
         <Space></Space>
-        <Link to="/Menu">
+        <Link to="/menu">
           <GestLoginButton>Guest Login</GestLoginButton>
         </Link>
         <Slash>/</Slash>
@@ -85,22 +88,27 @@ function Logined() {
   );
 }
 
-const Total = styled.body`
-  width: 100vw;
-  height: 100vh;
-  padding-top: 25%;
+const Total = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #f3f1f0;
   outline: none;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
 `;
 
 const Space = styled.div`
-  margin-top: 2%;
+  margin-top: 2.5%;
 `;
 
-const Logo = styled.title``;
+const FontLogo = styled.div`
+  width: 260px;
+  height: 260px;
+  background-image: url(${Logo});
+  background-size: cover;
+`;
 
 const LoginButton = styled.button`
   width: 200px;
@@ -108,7 +116,7 @@ const LoginButton = styled.button`
   color: whitesmoke;
   outline: none;
   font-family: monospace;
-  margin-top: 8%;
+  margin-top: 30%;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -130,6 +138,8 @@ const Email = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
+  margin-top: 7%;
+  padding-left: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -146,7 +156,8 @@ const Password = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-top: 2.5%;
+  margin-top: 10%;
+  padding-left: 10px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -157,7 +168,7 @@ const GestLoginButton = styled.button`
   font-family: monospace;
   border: 0;
   background-color: #f3f1f0;
-  margin-top: 3%;
+  margin-bottom: 120%;
   cursor: pointer;
 `;
 
@@ -165,7 +176,7 @@ const SignUpButton = styled.button`
   font-family: monospace;
   border: 0;
   background-color: #f3f1f0;
-  margin-top: 3%;
+  margin-right: 8%;
   cursor: pointer;
 `;
 
@@ -173,27 +184,33 @@ const Slash = styled.span`
   font-family: monospace;
   margin-left: 1%;
   margin-right: 1%;
-  margin-top: 3%;
 `;
 
 const SocialLoginButton1 = styled.div`
   background-image: url(${naverLogo});
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   background-size: cover;
-  margin-top: 6%;
-  flex: auto;
+  margin-top: 25%;
+
   cursor: pointer;
 `;
 
 const SocialLoginButton2 = styled.div`
   background-image: url(${kakaoLogo});
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   background-size: cover;
-  margin-left: 2%;
-  flex: auto;
+  margin-top: 25%;
+  margin-left: 30%;
   cursor: pointer;
+`;
+
+const Compo = styled.div`
+  width: 160px;
+  height: 130px;
+  display: flex;
+  margin-top: 7%;
 `;
 
 export default Logined;
