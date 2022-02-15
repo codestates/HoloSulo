@@ -2,13 +2,13 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn("Play_Tags", "tagId", {
+    await queryInterface.addColumn("Playlist_Tags", "tagId", {
       type: Sequelize.INTEGER,
     });
-    await queryInterface.addColumn("Play_Tags", "playlistId", {
+    await queryInterface.addColumn("Playlist_Tags", "playlistId", {
       type: Sequelize.INTEGER,
     });
-    await queryInterface.addConstraint("Play_Tags", {
+    await queryInterface.addConstraint("Playlist_Tags", {
       fields: ["tagId"],
       type: "foreign key",
       references: {
@@ -18,7 +18,7 @@ module.exports = {
       onDelete: "cascade",
       onUpdate: "cascade",
     });
-    await queryInterface.addConstraint("Play_Tags", {
+    await queryInterface.addConstraint("Playlist_Tags", {
       fields: ["playlistId"],
       type: "foreign key",
       references: {
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("Play_Tags", "tagId");
-    await queryInterface.removeColumn("Play_Tags", "playlistId");
+    await queryInterface.removeColumn("Playlist_Tags", "tagId");
+    await queryInterface.removeColumn("Playlist_Tags", "playlistId");
   },
 };
