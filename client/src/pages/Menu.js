@@ -5,16 +5,16 @@ import styled from "styled-components";
 import { isGlowingAtom } from "../atom";
 import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
+import PlaylistDetail from "../components/PlaylistDetail";
+import Dimmed from "../components/Dimmed";
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
   padding-top: 80px;
   padding-bottom: 80px;
   background: black;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
 `;
 
 const LoadingWrapper = styled.div`
@@ -114,7 +114,9 @@ function Menu() {
   const [activeTimeIndex, setActiveTimeIndex] = useState(0);
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(-1);
   const [showPlaylist, setShowPlaylist] = useState(false);
+  const [showPlaylistDetail, setShowPlaylistDetail] = useState(false);
   const [getTag, setTag] = useState("");
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const tags = [
     "#조용한",
@@ -161,6 +163,19 @@ function Menu() {
       description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
     },
   ];
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    // console.log(scrollPosition);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollPosition]);
 
   useEffect(() => {
     if (isGlowing) {
@@ -212,6 +227,12 @@ function Menu() {
         </LoadingWrapper>
       ) : (
         <Container>
+          {showPlaylistDetail && (
+            <>
+              <Dimmed setShowPlaylistDetail={setShowPlaylistDetail} />
+              <PlaylistDetail scrollPosition={scrollPosition} />
+            </>
+          )}
           <TagContainer>
             <Title>어떤 분위기가 좋으신가요?</Title>
             <TagList isActiveAt={activeTagIndex}>
@@ -231,6 +252,7 @@ function Menu() {
                   playlist={playlist}
                   isActive={index === activePlaylistIndex}
                   handlePlaylistClick={(index) => handlePlaylistClick(index)}
+                  setShowPlaylistDetail={setShowPlaylistDetail}
                 />
               ))}
             </PlayListContainer>

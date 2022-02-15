@@ -40,13 +40,20 @@ const More = styled.span`
   margin-top: 5px;
 `;
 
-function Playlist({ index, playlist, isActive, handlePlaylistClick }) {
+function Playlist({
+  index,
+  playlist,
+  isActive,
+  handlePlaylistClick,
+  setShowPlaylistDetail,
+}) {
   const handleClick = () => {
     handlePlaylistClick(index);
   };
 
   const handleMoreClick = (event) => {
     event.stopPropagation();
+    setShowPlaylistDetail(true);
   };
   return (
     <Container onClick={handleClick} isActive={isActive}>
