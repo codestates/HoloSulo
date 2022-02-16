@@ -24,7 +24,7 @@ app.post("/users/userName", controllers.userName);
 app.delete("/users", controllers.deleteUser);
 app.post("/users/email", controllers.email);
 app.post("/users/logout", controllers.logout);
-app.post("/users/singup", controllers.signup);
+app.post("/users/signup", controllers.signup);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
