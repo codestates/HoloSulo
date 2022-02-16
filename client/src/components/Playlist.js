@@ -54,6 +54,7 @@ function Playlist({
   const handleMoreClick = (event) => {
     event.stopPropagation();
     setShowPlaylistDetail(true);
+    document.body.style.overflow = "hidden";
   };
   return (
     <Container onClick={handleClick} isActive={isActive}>
