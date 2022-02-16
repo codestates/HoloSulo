@@ -4,37 +4,6 @@ import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
 
-function Signup() {
-  return (
-    <Total>
-      <FontLogo></FontLogo>
-
-      <Mention>email을 입력해주세요.</Mention>
-      <Compo>
-        <TypoEmail type="text" placeholder="email"></TypoEmail>
-        <Check>check</Check>
-      </Compo>
-
-      <Mention>password를 입력해주세요.</Mention>
-      <Password type="password" placeholder="password"></Password>
-
-      <Password type="password" placeholder="check password"></Password>
-
-      <Mention>nickname을 입력해주세요.</Mention>
-      <Compo>
-        <TypoNickname type="text" placeholder="nickname"></TypoNickname>
-        <Check>check</Check>
-      </Compo>
-
-      <Terms>회원약관</Terms>
-
-      <Link to="/menu">
-        <Confirm>회원가입</Confirm>
-      </Link>
-    </Total>
-  );
-}
-
 const Total = styled.div`
   display: flex;
   width: 100%;
@@ -45,13 +14,23 @@ const Total = styled.div`
   background-color: #f3f1f0;
 `;
 
+const Part1 = styled.div`
+  margin-bottom: 15%;
+`;
+
+const Part2 = styled.div`
+  margin-left: 5.5%;
+  margin-bottom: 15%;
+`;
+
+const InputInfo = styled.div``;
+
 const FontLogo = styled.div`
-  width: 260px;
-  height: 260px;
-  margin-top: -10%;
+  width: 300px;
+  height: 120px;
   background-image: url(${Logo});
   background-size: cover;
-  background-color: azure;
+  margin-bottom: 5%;
 `;
 
 const TypoEmail = styled.input`
@@ -65,6 +44,7 @@ const TypoEmail = styled.input`
   width: 23em;
   height: 2em;
   padding-left: 10px;
+  margin-right: 2%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -83,9 +63,12 @@ const Confirm = styled.button`
   width: 23em;
   height: 2em;
   align-items: center;
-
   line-height: 25px;
   cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
 `;
 
 const Password = styled.input`
@@ -98,7 +81,7 @@ const Password = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-bottom: 2%;
+  margin-bottom: 4.5%;
   padding-left: 10px;
   display: flex;
   align-items: center;
@@ -117,6 +100,7 @@ const TypoNickname = styled.input`
   width: 23em;
   height: 2em;
   padding-left: 10px;
+  margin-right: 2%;
   display: flex;
 `;
 
@@ -133,6 +117,10 @@ const Check = styled.button`
   height: 2em;
   line-height: 25px;
   cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
 `;
 
 const Compo = styled.div`
@@ -150,21 +138,42 @@ const Terms = styled.button`
   color: whitesmoke;
   outline: none;
   font-family: monospace;
-
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
+  margin-bottom: 0.5%;
+  margin-top: 2%;
   line-height: 25px;
   cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
 `;
 
-const Mention = styled.div`
+const Mention1 = styled.div`
   font-family: monospace;
   font-size: 15px;
-  margin-bottom: 0%;
+  margin-bottom: 2%;
   margin-top: 10px;
-  margin-left: -12%;
+  margin-left: 8%;
+`;
+
+const Mention2 = styled.div`
+  font-family: monospace;
+  font-size: 15px;
+  margin-bottom: 2%;
+  margin-top: 10px;
+  margin-left: 2.7%;
+`;
+
+const Mention3 = styled.div`
+  font-family: monospace;
+  font-size: 15px;
+  margin-bottom: 2%;
+  margin-top: 10px;
+  margin-left: 7.8%;
 `;
 
 /*
@@ -178,4 +187,40 @@ const TrueMention = styled.div`
 `;
 */
 
-export default Signup;
+export default function Signup() {
+  return (
+    <Total>
+      <FontLogo></FontLogo>
+
+      <InputInfo>
+        <Part1>
+          <Mention1>email을 입력해주세요.</Mention1>
+          <Compo>
+            <TypoEmail type="text" placeholder="email"></TypoEmail>
+            <Check>check</Check>
+          </Compo>
+        </Part1>
+
+        <Part2>
+          <Mention2>password를 입력해주세요.</Mention2>
+          <Password type="password" placeholder="password"></Password>
+          <Password type="password" placeholder="check password"></Password>
+        </Part2>
+
+        <Part1>
+          <Mention3>nickname을 입력해주세요.</Mention3>
+          <Compo>
+            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
+            <Check>check</Check>
+          </Compo>
+        </Part1>
+      </InputInfo>
+
+      <Terms>회원약관</Terms>
+
+      <Link to="/menu">
+        <Confirm>회원가입</Confirm>
+      </Link>
+    </Total>
+  );
+}

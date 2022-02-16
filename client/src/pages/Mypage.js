@@ -2,134 +2,138 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import smallLogo from "../images/smallLogo.png";
+import Logo from "../images/logo.png";
 
 function Mypage() {
   return (
-    <Container>
-      <Title>my info</Title>
-      <InfoContainer>
-        <Emailcon>
+    <Total>
+      <TitleBox>
+        <Title>my info</Title>
+      </TitleBox>
+
+      <Part1>
+        <Compo>
           <Email>email</Email>
-          <EmailInfo></EmailInfo>
-        </Emailcon>
-        <Nick>nickname</Nick>
-      </InfoContainer>
-    </Container>
+          <UserEmail>holosulo@gmail.com</UserEmail>
+        </Compo>
+
+        <Compo>
+          <Nickname>nickname</Nickname>
+          <UserNick>holosulo</UserNick>
+        </Compo>
+      </Part1>
+
+      <Part2>
+        <Link to="edit">
+          <Editbut>프로필 수정</Editbut>
+        </Link>
+        <Resignbut>회원 탈퇴</Resignbut>
+      </Part2>
+
+      <Space></Space>
+
+      <Compo>
+        <Link to="edit">
+          <VisitNum>3</VisitNum>
+        </Link>
+        <VisitTimeNum>10</VisitTimeNum>
+      </Compo>
+    </Total>
   );
 }
 
-const Container = styled.div`
+const Total = styled.div`
+  display: flex;
   width: 100%;
   height: 100vh;
-  display: flex;
   flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
   background-color: #f3f1f0;
 `;
 
-const Emailcon = styled.div`
-  width: 100%;
-  height: 10%;
+const Space = styled.div`
+  margin-bottom: 4%;
+`;
+const Part1 = styled.div`
+  margin-bottom: 3%;
 `;
 
-const Title = styled.div`
-  width: 50%;
-  height: 30%;
-  margin-left: 10%;
-  line-height: 700%;
-  font-family: monospace;
-  font-size: 40px;
-`;
-
-const Email = styled.div`
-  width: 70px;
-  height: 40px;
-  font-family: monospace;
-  margin-right: 1px;
-
-  font-size: 20px;
-`;
-
-const Nick = styled.div`
-  width: 70px;
-  height: 40px;
-  font-family: monospace;
-  margin-top: 30px;
-  margin-right: 1px;
-
-  font-size: 20px;
-`;
-
-const InfoContainer = styled.div`
-  width: 80%;
-  height: 80%;
+const Part2 = styled.div`
   display: flex;
+
   margin: 0 auto;
 `;
 
-const Set = styled.div`
-  width: 400px;
-  height: 30px;
-  display: flex;
+const Title = styled.div`
+  font-family: monospace;
+  font-size: 40px;
+  margin-bottom: 5%;
+`;
+
+const TitleBox = styled.div`
+  text-align: center;
 
   margin-bottom: 3%;
 `;
 
-const EmailInfo = styled.div`
-  font-family: monospace;
-  width: 300px;
-  height: 40px;
-
-  font-size: 20px;
-  border-bottom: 2.5px dashed grey;
-  padding-right: 0%;
-  background-color: beige;
-`;
-
-const NicklInfo = styled.div`
-  font-family: monospace;
-  margin-left: 10%;
-  margin-top: 400px;
-  font-size: 20px;
-  border-bottom: 2.5px dashed grey;
-  padding-right: 30%;
-`;
-
 const Editbut = styled.button`
+  width: 100px;
   font-family: monospace;
   border: 0;
-  margin-top: 3%;
   font-size: 16px;
+  font-weight: 600;
+  color: #565656;
   background-color: #f3f1f0;
   cursor: pointer;
 `;
 
 const Resignbut = styled.button`
+  width: 100px;
   font-family: monospace;
   border: 0;
   font-size: 16px;
+  font-weight: 600;
   color: #f06363;
   background-color: #f3f1f0;
-  margin-left: 3%;
+  margin-left: 5%;
   cursor: pointer;
 `;
 
-const Visit = styled.div`
+const Email = styled.div`
   font-family: monospace;
-  border: 0;
-  font-size: 16px;
-  margin-top: 12%;
-  margin-left: -69%;
-  margin-right: 10%;
-  background-color: #f3f1f0;
+  font-size: 19px;
+  padding-left: 10px;
+  display: flex;
 `;
 
-const VisitTime = styled.div`
+const Nickname = styled.div`
   font-family: monospace;
-  border: 0;
-  font-size: 16px;
-  margin-top: 12%;
-  background-color: #f3f1f0;
+  font-size: 19px;
+  padding-left: 10px;
+  display: flex;
+`;
+
+const UserNick = styled.div`
+  font-family: monospace;
+  font-size: 19px;
+  border-bottom: 2.5px dashed grey;
+
+  margin-left: 20px;
+`;
+
+const UserEmail = styled.div`
+  font-family: monospace;
+  font-size: 19px;
+  border-bottom: 2.5px dashed grey;
+
+  margin-left: 55px;
+`;
+
+const Compo = styled.div`
+  display: flex;
+  margin-bottom: 20px;
 `;
 
 const VisitNum = styled.div`
@@ -137,8 +141,6 @@ const VisitNum = styled.div`
   border: 0;
   font-size: 30px;
   font-weight: 700;
-  margin-left: 37%;
-
   color: #a8a8a8;
 `;
 
@@ -147,41 +149,19 @@ const VisitTimeNum = styled.div`
   border: 0;
   font-size: 30px;
   font-weight: 700;
-  margin-left: 20%;
-
+  margin-left: 90%;
   color: #a8a8a8;
 `;
 
-const Percent = styled.div`
+/*
+const TrueMention = styled.div`
   font-family: monospace;
-  font-size: 18px;
-  margin-left: 3%;
-  font-weight: 600;
-  margin: 0 auto;
+  font-size: 13px;
+  color: #008c06;
+  margin-left: 21%;
+  margin-bottom: 8%;
+  text-align: left;
 `;
-
-const SmallLogo = styled.div`
-  width: 130px;
-  height: 130px;
-  background-image: url(${smallLogo});
-  background-size: cover;
-  margin-top: -0.7%;
-  margin-bottom: 100px;
-`;
-
-const Gage = styled.div`
-  width: 80px;
-  height: 80px;
-  background-color: skyblue;
-
-  margin-right: 1px;
-`;
-
-const Part = styled.div`
-  width: 100%;
-  height: 200px;
-  display: flex;
-  margin: 0 auto;
-`;
+*/
 
 export default Mypage;

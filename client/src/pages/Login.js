@@ -24,12 +24,10 @@ const Space = styled.div`
 `;
 
 const FontLogo = styled.div`
-  width: 260px;
-  height: 260px;
-  margin-top: -40%;
+  width: 300px;
+  height: 120px;
   background-image: url(${Logo});
   background-size: cover;
-  background-color: aliceblue;
 `;
 
 const LoginButton = styled.button`
@@ -49,6 +47,10 @@ const LoginButton = styled.button`
   flex-direction: column;
   line-height: 25px;
   cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
 `;
 const Email = styled.input`
   width: 200px;
@@ -60,7 +62,7 @@ const Email = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-top: 4%;
+  margin-top: 22%;
   padding-left: 10px;
   display: flex;
   align-items: center;
