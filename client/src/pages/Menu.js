@@ -10,11 +10,13 @@ import Dimmed from "../components/Dimmed";
 
 const Container = styled.div`
   width: 100%;
+  height: ${(props) => (props.open ? "calc(100vh + 220px)" : "100vh")};
   padding-top: 80px;
   padding-bottom: 80px;
   background: black;
   display: flex;
   flex-direction: column;
+  transition: height, 0.3s;
 `;
 
 const LoadingWrapper = styled.div`
@@ -64,11 +66,12 @@ const PlayListContainer = styled.div`
   padding: 30px;
   height: ${(props) => (props.open ? "300px" : "0")};
   opacity: ${(props) => (props.open ? "1" : "0")};
+  z-index: ${(props) => (props.open ? "default" : "-1")};
   transition: all 0.2s;
 `;
 
 const TimeContainer = styled.div`
-  margin-top: 50px;
+  /* margin-top: 50px; */
   padding: 10px 20px;
   height: 150px;
   width: 100%;
@@ -95,8 +98,6 @@ const Button = styled.div`
   border-radius: 20px;
   margin-top: 50px;
   cursor: ${(props) => (props.isEnable ? "pointer" : "default")};
-  &:hover {
-  }
 `;
 
 const Title = styled.h2`
@@ -171,7 +172,6 @@ function Menu() {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    // console.log(scrollPosition);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -226,7 +226,7 @@ function Menu() {
           <Glowing />
         </LoadingWrapper>
       ) : (
-        <Container>
+        <Container open={showPlaylist}>
           {showPlaylistDetail && (
             <>
               <Dimmed setShowPlaylistDetail={setShowPlaylistDetail} />
@@ -243,20 +243,18 @@ function Menu() {
               ))}
             </TagList>
           </TagContainer>
-          {
-            <PlayListContainer open={showPlaylist}>
-              {playlists.map((playlist, index) => (
-                <Playlist
-                  key={index}
-                  index={index}
-                  playlist={playlist}
-                  isActive={index === activePlaylistIndex}
-                  handlePlaylistClick={(index) => handlePlaylistClick(index)}
-                  setShowPlaylistDetail={setShowPlaylistDetail}
-                />
-              ))}
-            </PlayListContainer>
-          }
+          <PlayListContainer open={showPlaylist}>
+            {playlists.map((playlist, index) => (
+              <Playlist
+                key={index}
+                index={index}
+                playlist={playlist}
+                isActive={index === activePlaylistIndex}
+                handlePlaylistClick={(index) => handlePlaylistClick(index)}
+                setShowPlaylistDetail={setShowPlaylistDetail}
+              />
+            ))}
+          </PlayListContainer>
           <TimeContainer>
             <Title>얼마나 머물렀다 가실건가요?</Title>
             <TimeList isActiveAt={activeTimeIndex}>

@@ -13,6 +13,7 @@ const Container = styled.div`
 function Dimmed({ setShowPlaylistDetail }) {
   const handleClick = () => {
     setShowPlaylistDetail((prev) => !prev);
+    document.body.style.overflow = "auto";
   };
 
   return <Container onClick={handleClick} />;
