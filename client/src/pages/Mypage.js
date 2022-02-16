@@ -6,81 +6,65 @@ import smallLogo from "../images/smallLogo.png";
 
 function Mypage() {
   return (
-    <Total>
-      <center>
-        <MyInfo>my info</MyInfo>
-
-        <Set>
-          <Mention>email</Mention>
-          <EmailInfo>holosulo@gmail.com</EmailInfo>
-        </Set>
-
-        <Set>
-          <Mention>nickname</Mention>
-          <NicklInfo>holosulo</NicklInfo>
-        </Set>
-
-        <Link to="edit">
-          <Editbut>프로필 수정</Editbut>
-        </Link>
-        <Resignbut>회원 탈퇴</Resignbut>
-
-        <Compo>
-          <Compo>
-            <VisitNum>3</VisitNum>
-            <VisitTimeNum>10</VisitTimeNum>
-          </Compo>
-
-          <Visit>총 방문 횟수</Visit>
-          <VisitTime>총 방문 시간</VisitTime>
-        </Compo>
-      </center>
-
-      <Percent>나의 알콜 충전 지수</Percent>
-
-      <Part>
-        <SmallLogo></SmallLogo>
-        <Gage></Gage>
-        <Gage></Gage>
-        <Gage></Gage>
-        <Gage></Gage>
-        <Gage></Gage>
-        <Gage></Gage>
-        <Gage></Gage>
-      </Part>
-    </Total>
+    <Container>
+      <Title>my info</Title>
+      <InfoContainer>
+        <Emailcon>
+          <Email>email</Email>
+          <EmailInfo></EmailInfo>
+        </Emailcon>
+        <Nick>nickname</Nick>
+      </InfoContainer>
+    </Container>
   );
 }
 
-const Total = styled.div`
-  display: flex;
+const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background-color: #f3f1f0;
-  outline: none;
 `;
 
-const MyInfo = styled.div`
+const Emailcon = styled.div`
+  width: 100%;
+  height: 10%;
+`;
+
+const Title = styled.div`
+  width: 50%;
+  height: 30%;
+  margin-left: 10%;
+  line-height: 700%;
   font-family: monospace;
   font-size: 40px;
-  margin-top: 10%;
-  margin-bottom: 7%;
 `;
 
-const Mention = styled.div`
+const Email = styled.div`
+  width: 70px;
+  height: 40px;
   font-family: monospace;
+  margin-right: 1px;
+
   font-size: 20px;
-  margin-left: 10%;
 `;
 
-const Compo = styled.div`
-  width: 600px;
-  height: 200px;
+const Nick = styled.div`
+  width: 70px;
+  height: 40px;
+  font-family: monospace;
+  margin-top: 30px;
+  margin-right: 1px;
+
+  font-size: 20px;
+`;
+
+const InfoContainer = styled.div`
+  width: 80%;
+  height: 80%;
   display: flex;
-  margin-top: 3%;
+  margin: 0 auto;
 `;
 
 const Set = styled.div`
@@ -93,15 +77,19 @@ const Set = styled.div`
 
 const EmailInfo = styled.div`
   font-family: monospace;
-  margin-left: 19%;
+  width: 300px;
+  height: 40px;
+
   font-size: 20px;
   border-bottom: 2.5px dashed grey;
   padding-right: 0%;
+  background-color: beige;
 `;
 
 const NicklInfo = styled.div`
   font-family: monospace;
   margin-left: 10%;
+  margin-top: 400px;
   font-size: 20px;
   border-bottom: 2.5px dashed grey;
   padding-right: 30%;

@@ -1,97 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import styled from "styled-components";
+import { useState, React } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
 import Logo from "../images/logo.png";
 import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
-
-/*
-export default function Login ({ handleResponseSuccess }) {
-  const history = useHistory();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loginInfo, setLoginInfo] = useState({
-    email: "",
-    password: ""
-  });
-  const handleInputValue = (key) => (e) => {
-    setLoginInfo({ ...loginInfo, [key]: e.target.value });
-  };
-
-  const handleLogin = () => {
-    const { email, password } = loginInfo;
-    if (! email || !password) {
-      setErrorMessage("이메일 비밀번호를 모두 입력해주세요.");
-    } else {
-      axios
-      .post(`${process.env.REACT_APP_API_URL}/login`, loginInfo, {
-        headers : { "Content-Type" : "application/json" },
-        withCredentials : true,
-      })
-      .then((res) => {
-        localStorage.setItem("accessToken", res.data.data.access_token);
-        setErrorMessage("");
-        handleResponseSuccess();
-        history.push("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-  }
-};
-*/
-
-function Logined() {
-  return (
-    <Total>
-      <center>
-        <FontLogo></FontLogo>
-
-        <Email
-          type="text"
-          placeholder="email"
-          onfocus="this.placeholder=''"
-          onblur="this.placeholder='email'"
-          //onChange={handleInputValue("email")}
-        ></Email>
-        <Space></Space>
-
-        <Password
-          type="password"
-          placeholder="password"
-          onfocus="this.placeholder=''"
-          onblur="this.placeholder='password'"
-          //onChange={handleInputValue("email")}
-        ></Password>
-
-        <Link to="/menu">
-          <LoginButton>Login</LoginButton>
-        </Link>
-
-        <Space></Space>
-        <Compo>
-          <SocialLoginButton1></SocialLoginButton1>
-          <SocialLoginButton2></SocialLoginButton2>
-        </Compo>
-
-        <Space></Space>
-        <Link to="/menu">
-          <GestLoginButton>Guest Login</GestLoginButton>
-        </Link>
-        <Slash>/</Slash>
-        <Link to="/signup">
-          <SignUpButton>sign Up</SignUpButton>
-        </Link>
-      </center>
-    </Total>
-  );
-}
+import kakaoLoginClickHandler from "../components/KaKaoLogin";
+import naverLoginClickHandler from "../components/NaverLogin";
 
 const Total = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -106,8 +26,10 @@ const Space = styled.div`
 const FontLogo = styled.div`
   width: 260px;
   height: 260px;
+  margin-top: -40%;
   background-image: url(${Logo});
   background-size: cover;
+  background-color: aliceblue;
 `;
 
 const LoginButton = styled.button`
@@ -138,7 +60,7 @@ const Email = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-top: 7%;
+  margin-top: 4%;
   padding-left: 10px;
   display: flex;
   align-items: center;
@@ -164,11 +86,10 @@ const Password = styled.input`
   justify-content: center;
 `;
 
-const GestLoginButton = styled.button`
+const GuestLoginbut = styled.button`
   font-family: monospace;
   border: 0;
   background-color: #f3f1f0;
-  margin-bottom: 120%;
   cursor: pointer;
 `;
 
@@ -213,4 +134,112 @@ const Compo = styled.div`
   margin-top: 7%;
 `;
 
-export default Logined;
+export default function Login() {
+  const [isCorrect, setIsCorrect] = useState(true);
+  const [userInfo, setUserInfo] = useState({
+    email: null,
+    password: null,
+  });
+
+  const handleChange = (e) => {
+    setUserInfo({
+      ...userInfo,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const guestLogin = () => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_API}/guest`, "", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (!res.data.data) {
+          setIsCorrect(false);
+        } else if (res.data.data) {
+          window.location.replace("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleLogin = async () => {
+    const { email, password } = userInfo;
+    if (userInfo) {
+      await axios
+        .post(
+          `${process.env.REACT_APP_SERVER_API}/login`,
+          {
+            email: email,
+            password: password,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          if (!res.data.data) {
+            setIsCorrect(false);
+          } else if (res.data.data) {
+            console.log("로그인성공");
+
+            window.location.replace("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const EnterLogin = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+
+  return (
+    <>
+      <Total>
+        <center>
+          <FontLogo></FontLogo>
+
+          <Email
+            type="text"
+            placeholder="email"
+            onChange={handleChange}
+          ></Email>
+          <Space></Space>
+
+          <Password
+            type="password"
+            placeholder="password"
+            onChange={handleChange}
+            onKeyPress={EnterLogin}
+          ></Password>
+
+          <Link to="/menu">
+            <LoginButton onClick={handleLogin}>Login</LoginButton>
+          </Link>
+
+          <Space></Space>
+          <Compo>
+            <SocialLoginButton1></SocialLoginButton1>
+            <SocialLoginButton2
+              onClick={kakaoLoginClickHandler}
+            ></SocialLoginButton2>
+          </Compo>
+
+          <Space></Space>
+          <Link to="/menu">
+            <GuestLoginbut onClick={guestLogin}>Guest Login</GuestLoginbut>
+          </Link>
+          <Slash>/</Slash>
+          <Link to="/signup">
+            <SignUpButton>sign Up</SignUpButton>
+          </Link>
+        </center>
+      </Total>
+    </>
+  );
+}
