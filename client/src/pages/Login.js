@@ -204,7 +204,9 @@ export default function Login() {
     <>
       <Total>
         <center>
-          <FontLogo></FontLogo>
+          <Link to="/">
+            <FontLogo></FontLogo>
+          </Link>
 
           <Email
             type="text"
