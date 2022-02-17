@@ -1,9 +1,11 @@
 require("dotenv").config();
 const { User } = require("../../models");
+const bcrypt = require("bcrypt");
 const { generateAccessToken } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
   console.log(req.body);
+
   const userInfo = await User.findOne({
     where: { email: req.body.email, password: req.body.password },
   });
