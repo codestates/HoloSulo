@@ -6,6 +6,8 @@ import {
   faPlay,
   faPause,
   faForward,
+  faPencil,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import song1 from "../static/naked.mp3";
@@ -109,6 +111,55 @@ const SongTitle = styled.span`
   font-size: 14px;
 `;
 
+const FloatingButton = styled.div`
+  position: absolute;
+  bottom: 100px;
+  right: 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  @media only screen and (max-width: 800px) {
+    right: 20px;
+  }
+`;
+
+const MemoContainer = styled.div`
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  right: 50px;
+  bottom: 180px;
+  background-color: #f2e68a;
+  display: ${(props) => (props.isMemoOpen ? "flex" : "none")};
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  @media only screen and (max-width: 800px) {
+    right: 20px;
+  }
+`;
+
+const Memo = styled.textarea`
+  width: 100%;
+  height: 90%;
+  background-color: #f2e68a;
+  border: none;
+  resize: none;
+  outline: none;
+`;
+
+const DeleteMemo = styled.span`
+  color: red;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
+`;
+
 function Main({
   songs = [
     { url: song1, title: "Naked" },
@@ -121,15 +172,13 @@ function Main({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const songIndex = useRef(0);
-
+  const [isMemoOpen, setIsMemoOpen] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  // const [isTimeOver, setIsTimeOver] = useState(false);
   const isTimeOver = useRef(false);
+  const memoTextareaRef = useRef();
 
   useEffect(() => {
     audio.addEventListener("ended", () => {
-      console.log("ended song", currentSongIndex, audio);
-
       audio.pause();
       if (!isTimeOver.current) {
         songIndex.current = (songIndex.current + 1) % songs.length;
@@ -137,7 +186,6 @@ function Main({
         audio.play();
         setCurrentSongIndex(songIndex.current);
       }
-      console.log("next song", currentSongIndex, audio);
     });
     setTimeout(() => {
       audio.pause();
@@ -164,10 +212,6 @@ function Main({
   };
   const playPrevSong = () => {
     audio.pause();
-    // audio.src =
-    //   songs[
-    //     songIndex.current !== 0 ? songIndex.current - 1 : songs.length - 1
-    //   ].url;
     audio.src =
       songs[
         currentSongIndex !== 0 ? currentSongIndex - 1 : songs.length - 1
@@ -179,19 +223,25 @@ function Main({
     setCurrentSongIndex((prev) => (prev !== 0 ? prev - 1 : songs.length - 1));
   };
   const playNextSong = () => {
-    console.log("current", currentSongIndex);
-    console.log("is Playing? ", isPlaying);
     audio.pause();
-    // audio.src = songs[(songIndex.current + 1) % songs.length].url;
     songIndex.current = (songIndex.current + 1) % songs.length;
     audio.src = songs[songIndex.current].url;
     if (isPlaying) {
       audio.play();
     }
     setCurrentSongIndex(songIndex.current);
-    console.log("after play next", currentSongIndex);
   };
 
+  const handleFloatBtnClick = () => {
+    setIsMemoOpen((prev) => !prev);
+    if (isMemoOpen && memoTextareaRef.current.value === "") {
+      memoTextareaRef.current.value = "하고싶은 말이 있었나요?";
+    }
+  };
+
+  const handleDeleteMemoClick = () => {
+    memoTextareaRef.current.value = "";
+  };
   return (
     <Container>
       <VideoBackground src={video} autoPlay={true} muted={true} loop={true} />
@@ -227,6 +277,13 @@ function Main({
           <SongTitle>{songs[currentSongIndex].title}</SongTitle>
         </>
       </MusicPlayerContainer>
+      <MemoContainer isMemoOpen={isMemoOpen}>
+        <Memo ref={memoTextareaRef} />
+        <DeleteMemo onClick={handleDeleteMemoClick}>지우기</DeleteMemo>
+      </MemoContainer>
+      <FloatingButton onClick={handleFloatBtnClick}>
+        <FontAwesomeIcon icon={isMemoOpen ? faXmark : faPencil} />
+      </FloatingButton>
     </Container>
   );
 }
