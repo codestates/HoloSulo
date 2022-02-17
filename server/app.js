@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const cors = require("cors");
 
 app.use(express.json());
@@ -27,6 +27,7 @@ app.post("/users/logout", controllers.logout);
 app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get("/playlists", controllers.playlist);
+app.get("/users/:id", controllers.userinfo);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
