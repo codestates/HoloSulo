@@ -7,13 +7,15 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 70%);
-  cursor: pointer;
+  cursor: ${(props) => (props.isClickedAllowed ? "pointer" : "default")};
 `;
 
-function Dimmed({ setShowPlaylistDetail }) {
+function Dimmed({ setShowPlaylistDetail, isClickedAllowed = true }) {
   const handleClick = () => {
-    setShowPlaylistDetail((prev) => !prev);
-    document.body.style.overflow = "auto";
+    if (isClickedAllowed) {
+      setShowPlaylistDetail((prev) => !prev);
+      document.body.style.overflow = "auto";
+    }
   };
 
   return <Container onClick={handleClick} />;
