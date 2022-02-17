@@ -241,7 +241,7 @@ function Main() {
         audio.play();
         isTimeOver.current = true;
         setIsEndModalOpened(true);
-      }, 1000 * 5);
+      }, time);
     }
 
     // show random modal view every 15 minute
@@ -249,7 +249,7 @@ function Main() {
       if (!isTimeOver.current) {
         setIsModalOpened(true);
       }
-    }, 1000 * 3);
+    }, 1000 * 60 * 15);
 
     return () => {
       audio.pause();
