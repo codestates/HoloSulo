@@ -7,7 +7,9 @@ import Logo from "../images/logo.png";
 function EditMypage() {
   return (
     <Total>
-      <FontLogo></FontLogo>
+      <Link to="/">
+        <FontLogo></FontLogo>
+      </Link>
 
       <InputInfo>
         <Part2>
@@ -26,7 +28,10 @@ function EditMypage() {
       </InputInfo>
 
       <Link to="/mypage">
-        <Terms>회원정보 저장</Terms>
+        <Edit>회원정보 저장</Edit>
+      </Link>
+      <Link to="/mypage">
+        <Cancle>취소</Cancle>
       </Link>
     </Total>
   );
@@ -58,7 +63,7 @@ const FontLogo = styled.div`
   height: 120px;
   background-image: url(${Logo});
   background-size: cover;
-  margin-bottom: 5%;
+  margin-bottom: 15%;
   margin-top: -10%;
 `;
 
@@ -123,7 +128,7 @@ const Compo = styled.div`
   // margin-bottom: 2%; *삼항연산자 들어왔을때
 `;
 
-const Terms = styled.button`
+const Edit = styled.button`
   width: 200px;
   background-color: #8c8c8c;
   color: whitesmoke;
@@ -133,8 +138,27 @@ const Terms = styled.button`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-bottom: 0.5%;
+  margin-bottom: 5%;
   margin-top: 2%;
+  line-height: 25px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
+`;
+
+const Cancle = styled.button`
+  width: 200px;
+  background-color: #8c8c8c;
+  color: whitesmoke;
+  outline: none;
+  font-family: monospace;
+  border: 0.2em;
+  border-radius: 0.9em;
+  width: 23em;
+  height: 2em;
+  align-items: center;
   line-height: 25px;
   cursor: pointer;
   transition: background-color 0.2s linear;
