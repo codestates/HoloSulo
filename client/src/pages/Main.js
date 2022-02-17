@@ -15,7 +15,8 @@ import song2 from "../static/lately.mp3";
 import song3 from "../static/toMe.mp3";
 import endingSong from "../static/emotion.mp3";
 import Dimmed from "../components/Dimmed";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import cheeers from "../images/cheers.jpg";
 
 const Container = styled.div`
   width: 100%;
@@ -34,13 +35,21 @@ const ModalContainer = styled.div`
   bottom: 0;
   margin: auto;
   width: 60%;
-  height: 60%;
+  height: 80%;
+  /* height: 60%; */
   padding: 20px;
-  border: 1px solid white;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
+  background-color: rgb(50, 50, 50);
+  opacity: 0.9;
+  @media only screen and (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+  }
+  z-index: 1;
 `;
 const Title = styled.h2`
   font-size: 32px;
@@ -50,11 +59,15 @@ const ButtonContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+  @media only screen and (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const Button = styled.div`
   color: white;
   width: 200px;
-  background-color: rgba(48, 48, 48, 60%);
+  background-color: rgba(0, 0, 0);
   padding: 15px 30px;
   border-radius: 20px;
   margin-top: 50px;
@@ -64,6 +77,9 @@ const Button = styled.div`
   margin-left: 5px;
   margin-right: 5px;
   cursor: pointer;
+  @media only screen and (max-width: 800px) {
+    margin-top: 10px;
+  }
 `;
 
 const VideoBackground = styled.video`
@@ -160,22 +176,49 @@ const DeleteMemo = styled.span`
   cursor: pointer;
 `;
 
-function Main({
-  songs = [
-    { url: song1, title: "Naked" },
-    { url: song2, title: "Lately" },
-    { url: song3, title: "To Me" },
-  ],
-  time = 1000 * 60 * 60,
-}) {
+const RandomImage = styled.img`
+  width: 80%;
+  height: auto;
+  margin-top: 10px;
+`;
+
+function Main() {
+  const songs = [
+    {
+      url:
+        process.env.NODE_ENV === "development"
+          ? song1
+          : `${process.env.REACT_APP_S3_DOMAIN}/naked.mp3`,
+      title: "Naked",
+    },
+    {
+      url:
+        process.env.NODE_ENV === "development"
+          ? song2
+          : `${process.env.REACT_APP_S3_DOMAIN}/lately.mp3`,
+      title: "Lately",
+    },
+    {
+      url:
+        process.env.NODE_ENV === "development"
+          ? song3
+          : `${process.env.REACT_APP_S3_DOMAIN}/toMe.mp3`,
+      title: "To Me",
+    },
+  ];
+
   const [audio, setAudio] = useState(new Audio(songs[0].url));
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const songIndex = useRef(0);
   const [isMemoOpen, setIsMemoOpen] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const isTimeOver = useRef(false);
   const memoTextareaRef = useRef();
+  const {
+    state: { time },
+  } = useLocation();
 
   useEffect(() => {
     audio.addEventListener("ended", () => {
@@ -187,14 +230,27 @@ function Main({
         setCurrentSongIndex(songIndex.current);
       }
     });
-    setTimeout(() => {
-      audio.pause();
-      // play ending song
-      audio.src = endingSong;
-      audio.play();
-      isTimeOver.current = true;
-      setIsModalOpened(true);
-    }, time);
+    // play ending song when time passed.
+    if (time) {
+      setTimeout(() => {
+        audio.pause();
+        audio.src =
+          process.env.NODE_ENV === "development"
+            ? endingSong
+            : `${process.env.REACT_APP_S3_DOMAIN}/ending_song.mp3`;
+        audio.play();
+        isTimeOver.current = true;
+        setIsEndModalOpened(true);
+      }, 1000 * 5);
+    }
+
+    // show random modal view every 15 minute
+    setInterval(() => {
+      if (!isTimeOver.current) {
+        setIsModalOpened(true);
+      }
+    }, 1000 * 3);
+
     return () => {
       audio.pause();
       setAudio(null);
@@ -242,10 +298,23 @@ function Main({
   const handleDeleteMemoClick = () => {
     memoTextareaRef.current.value = "";
   };
+
+  const handleCloseModal = () => {
+    setIsModalOpened(false);
+  };
   return (
     <Container>
-      <VideoBackground src={video} autoPlay={true} muted={true} loop={true} />
-      {isModalOpened && (
+      <VideoBackground
+        src={
+          process.env.NODE_ENV === "development"
+            ? video
+            : `${process.env.REACT_APP_S3_DOMAIN}/video.mp4`
+        }
+        autoPlay={true}
+        muted={true}
+        loop={true}
+      />
+      {isEndModalOpened && (
         <>
           <Dimmed isClickedAllowed={false} />
           <ModalContainer>
@@ -257,6 +326,18 @@ function Main({
               <Link to="/">
                 <Button>홈으로 이동</Button>
               </Link>
+            </ButtonContainer>
+          </ModalContainer>
+        </>
+      )}
+      {isModalOpened && !isEndModalOpened && (
+        <>
+          <Dimmed isClickedAllowed={false} />
+          <ModalContainer>
+            <Title>짠!</Title>
+            <RandomImage src={cheeers} />
+            <ButtonContainer>
+              <Button onClick={handleCloseModal}>닫기</Button>
             </ButtonContainer>
           </ModalContainer>
         </>
