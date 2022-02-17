@@ -116,7 +116,8 @@ function Menu() {
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(-1);
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [showPlaylistDetail, setShowPlaylistDetail] = useState(false);
-  const [getTag, setTag] = useState("");
+  const [tag, setTag] = useState("");
+  const [time, setTime] = useState("1시간");
   const [scrollPosition, setScrollPosition] = useState(0);
 
   const tags = [
@@ -129,7 +130,7 @@ function Menu() {
     "#시끌벅적한",
     "#일렉트로닉",
   ];
-  const times = ["30분", "1시간", "2시간", "3시간", "무제한"];
+  const TIMES = ["30분", "1시간", "2시간", "3시간", "무제한"];
 
   // TODO: Remove Dummy data
   const playlists = [
@@ -190,18 +191,18 @@ function Menu() {
   }, []);
 
   const handleTagClick = (event, index) => {
-    const tag = event.target.innerText;
     setActiveTagIndex((prev) => (prev === index + 1 ? 0 : index + 1));
-    if (tag === getTag) {
+    if (tag === event.target.innerText) {
       setShowPlaylist(false);
       setTag("");
     } else {
       setShowPlaylist(true);
-      setTag(tag);
+      setTag(event.target.innerText);
     }
   };
 
   const handleTimeClick = (event, index) => {
+    setTime(event.target.innerText);
     setActiveTimeIndex((prev) => (prev === index + 1 ? 0 : index + 1));
   };
 
@@ -210,12 +211,29 @@ function Menu() {
   };
 
   const handleOrderClick = () => {
+    let selectedTime;
     if (
       activeTagIndex !== 0 &&
       activeTimeIndex !== 0 &&
       activePlaylistIndex !== -1
     ) {
-      navigate("/main");
+      switch (time) {
+        case TIMES[0]:
+          selectedTime = 1000 * 60 * 30;
+          break;
+        case TIMES[1]:
+          selectedTime = 1000 * 60 * 60 * 1;
+          break;
+        case TIMES[2]:
+          selectedTime = 1000 * 60 * 60 * 2;
+          break;
+        case TIMES[3]:
+          selectedTime = 1000 * 60 * 60 * 3;
+          break;
+        default:
+          break;
+      }
+      navigate("/main", { state: { time: selectedTime } });
     }
   };
 
@@ -258,7 +276,7 @@ function Menu() {
           <TimeContainer>
             <Title>얼마나 머물렀다 가실건가요?</Title>
             <TimeList isActiveAt={activeTimeIndex}>
-              {times.map((time, index) => (
+              {TIMES.map((time, index) => (
                 <Text onClick={(e) => handleTimeClick(e, index)} key={index}>
                   {time}
                 </Text>

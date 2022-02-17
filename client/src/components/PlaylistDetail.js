@@ -18,6 +18,7 @@ const Container = styled.div`
   flex-direction: column;
   padding: 20px;
   border-radius: 10px;
+  z-index: 1;
   @media only screen and (max-width: 400px) {
     width: 80%;
     height: 80%;
