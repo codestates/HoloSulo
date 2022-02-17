@@ -7,6 +7,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 70%);
+  z-index: 1;
   cursor: ${(props) => (props.isClickedAllowed ? "pointer" : "default")};
 `;
 
@@ -18,7 +19,9 @@ function Dimmed({ setShowPlaylistDetail, isClickedAllowed = true }) {
     }
   };
 
-  return <Container onClick={handleClick} />;
+  return (
+    <Container onClick={handleClick} isClickedAllowed={isClickedAllowed} />
+  );
 }
 
 export default Dimmed;

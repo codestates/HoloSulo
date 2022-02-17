@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Song, Playlist, Tag, Playlist_Tag } = require("../../models");
+const { Song, Playlist, Tag, Playlist_Tag, User } = require("../../models");
 
 module.exports = {
   findSong: async (playlistId) => {
@@ -21,5 +21,11 @@ module.exports = {
       where: { tagId: tagId },
     });
     return findTagId;
+  },
+  findUserByEmail: async (email) => {
+    const findUserByEmail = await User.findOne({
+      where: { email: email },
+    });
+    return findUserByEmail;
   },
 };

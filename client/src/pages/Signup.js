@@ -30,7 +30,7 @@ const FontLogo = styled.div`
   height: 120px;
   background-image: url(${Logo});
   background-size: cover;
-  margin-bottom: 5%;
+  margin-bottom: 10%;
 `;
 
 const TypoEmail = styled.input`
@@ -57,7 +57,27 @@ const Confirm = styled.button`
   color: whitesmoke;
   outline: none;
   font-family: monospace;
-  margin-top: 3%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  border: 0.2em;
+  border-radius: 0.9em;
+  width: 23em;
+  height: 2em;
+  align-items: center;
+  line-height: 25px;
+  cursor: pointer;
+  transition: background-color 0.2s linear;
+  &:hover {
+    background-color: #565656;
+  }
+`;
+
+const Cancle = styled.button`
+  width: 200px;
+  background-color: #8c8c8c;
+  color: whitesmoke;
+  outline: none;
+  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -142,8 +162,7 @@ const Terms = styled.button`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-bottom: 0.5%;
-  margin-top: 2%;
+  margin-top: 1.5%;
   line-height: 25px;
   cursor: pointer;
   transition: background-color 0.2s linear;
@@ -190,7 +209,9 @@ const TrueMention = styled.div`
 export default function Signup() {
   return (
     <Total>
-      <FontLogo></FontLogo>
+      <Link to="/">
+        <FontLogo></FontLogo>
+      </Link>
 
       <InputInfo>
         <Part1>
@@ -221,6 +242,141 @@ export default function Signup() {
       <Link to="/menu">
         <Confirm>회원가입</Confirm>
       </Link>
+      <Link to="/login">
+        <Cancle>취소</Cancle>
+      </Link>
     </Total>
   );
 }
+
+/*
+const [frontEmail, setFrontEmail] = useState("");
+const [backEmail, setBackEmail] = useState(""); // Domain
+const [email, setEmail] = useState("");
+
+useEffect(() => {
+  setEmail(frontEmail + "@" + backEmail);
+}, [frontEmail]);
+
+useEffect(() => {
+  setEmail(frontEmail + "@" + backEmail);
+}, [backEmail]);
+
+useEffect(() => {}, [email]);
+
+const [userInfo, setUserInfo] = useState({
+  nickname: "",
+  password: "",
+  passwordCheck: "",
+});
+
+// password 유효성 검사
+  useEffect(() => {
+    validPassword(userInfo.password);
+    equalPassword(userInfo.password, userInfo.passwordCheck);
+  }, [userInfo]);
+  
+
+const userData = {
+  email: email,
+  nickname: userInfo.nickname,
+  password: userInfo.password,
+};
+
+// check State
+const [isEmail, setIsEmail] = useState(false);
+const [isDupEmail, setIsDupEmail] = useState(false); //이메일 중복 check State
+const [isDupNickname, setIsDupNickname] = useState(false); // nickname 중복 check State
+const [isPassword, setIsPassword] = useState(false);
+const [isPwdCheck, setIsPwdCheck] = useState(false);
+
+// 가입 상태 State
+const [isComplete, setIsComplete] = useState(false);
+
+// message State
+const [emailMessage, setEmailMessage] = useState("");
+const [nicknameMessage, setNicknameMessage] = useState("");
+const [passwordMessage, setPasswordMessage] = useState("");
+const [passwordCheckMessage, setPasswordCheckMessage] = useState("");
+const [checkMessage, setCheckMessage] = useState("");
+
+// password check
+ // 비밀번호 유효성
+  const validPassword = (password) => {
+    const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,25}$/;
+    if (!regPassword.test(password)) {
+      setIsPassword(false);
+      setPasswordMessage(
+        "숫자, 영문, 특수문자가 포함 된 7자리 이상 비밀번호를 입력해 주세요"
+      );
+    } else {
+      setIsPassword(true);
+      setPasswordMessage("사용가능한 비밀번호입니다");
+    }
+  };
+  
+
+const equalPassword = (password, cheeckPassword) => {
+  if (password === cheeckPassword) {
+    setIsPwdCheck(true);
+    setPasswordCheckMessage("비밀번호가 일치합니다");
+  } else {
+    setIsPwdCheck(false);
+    setPasswordCheckMessage("비밀번호가 일치하지 않습니다");
+  }
+};
+
+// email 중복 check
+const checkEmail = () => {
+  if (frontEmail.length === 0 || backEmail.length === 0) {
+    setIsDupEmail(false);
+    setEmailMessage("사용 불가능 한 이메일 입니다");
+  } else {
+    axios
+      .post("/email", { email: userData.email })
+      .then((res) => {
+        setIsEmail(true);
+        setIsDupEmail(true);
+        setEmailMessage("사용 가능한 이메일입니다");
+      })
+      .catch((err) => {
+        const resMsg = err.response.data;
+        if (resMsg === "Overlap") {
+          setIsEmail(false);
+          setIsDupEmail(false);
+          setEmailMessage("이미 회원가입된 이메일입니다");
+        } else if (resMsg === "Empty body") {
+          setIsEmail(false);
+          setIsDupEmail(false);
+          setEmailMessage("사용 불가능 한 이메일 입니다");
+        }
+      });
+  }
+};
+
+const checkNickname = () => {
+  axios
+    .post("/nickname", { nickname: userData.nickname })
+    .then((res) => {
+      setIsDupNickname(true);
+      setNicknameMessage("사용 가능한 닉네임입니다");
+    })
+    .catch((err) => {
+      const resMsg = err.response.data;
+      if (resMsg === "Overlap") {
+        setIsDupNickname(false);
+        setNicknameMessage("이미 사용 중인 닉네임입니다");
+      } else if (resMsg === "Empty body") {
+        setIsDupNickname(false);
+        setNicknameMessage("사용 불가능한 닉네임입니다 ");
+      }
+    });
+};
+
+const handleComplete = () => {
+  axios.post("/signup", userData).then((res) => {
+    const resMsg = res.data;
+  });
+  setIsComplete(true);
+};
+*/
