@@ -5,4 +5,6 @@ module.exports = {
   signup: require("./user/singup.js"),
   logout: require("./user/logout.js"),
   email: require("./user/email.js"),
+  order: require("./order/order"),
+  playlist: require("./playlist/playlist"),
 };

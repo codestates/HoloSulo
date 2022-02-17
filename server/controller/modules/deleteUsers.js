@@ -1,17 +1,10 @@
 require("dotenv").config();
-const { verify } = require("jsonwebtoken");
+const { isAuthorized } = require("./tokenFunction");
 const { User } = require("../../models");
 
 module.exports = {
   deleteUser: async (userInfo) => {
-    const checkUser = await verify(
-      userInfo,
-      process.env.ACCESS_SECRET,
-      (err, decode) => {
-        if (err) throw err;
-        else return decode;
-      }
-    );
+    const checkUser = await isAuthorized(userInfo);
 
     if (!checkUser) {
       return;

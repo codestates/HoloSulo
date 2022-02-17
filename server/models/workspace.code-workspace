@@ -2,6 +2,12 @@
   "folders": [
 	{
 		"path": "../.."
+	},
+	{
+		"path": "../../../../first_project/Pinch-Hitter"
+	},
+	{
+		"path": "../../../../Sturdy/Section3.ver2/im-ha-section-3"
 	}
 ],
   "settings": {}
