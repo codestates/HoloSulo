@@ -8,7 +8,7 @@ const Container = styled.div`
   margin-right: 40px;
   padding: 10px;
   background-color: rgba(48, 48, 48, 60%);
-  border: 2px solid ${(props) => (props.isActive ? "#38b5fb;" : "black;")}
+  border: 2px solid ${(props) => (props.isActive ? "#38b5fb;" : "black;")};
   border-radius: 10px;
   cursor: pointer;
   transition: border 0.2s;
