@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import video from "../static/video.mp4";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBackward,
@@ -10,10 +9,6 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import song1 from "../static/naked.mp3";
-import song2 from "../static/lately.mp3";
-import song3 from "../static/toMe.mp3";
-import endingSong from "../static/emotion.mp3";
 import Dimmed from "../components/Dimmed";
 import { Link, useLocation } from "react-router-dom";
 import cheeers from "../images/cheers.jpg";
@@ -187,21 +182,21 @@ function Main() {
     {
       url:
         process.env.NODE_ENV === "development"
-          ? song1
+          ? "/static/naked.mp3"
           : `${process.env.REACT_APP_S3_DOMAIN}/naked.mp3`,
       title: "Naked",
     },
     {
       url:
         process.env.NODE_ENV === "development"
-          ? song2
+          ? "/static/lately.mp3"
           : `${process.env.REACT_APP_S3_DOMAIN}/lately.mp3`,
       title: "Lately",
     },
     {
       url:
         process.env.NODE_ENV === "development"
-          ? song3
+          ? "/static/toMe.mp3"
           : `${process.env.REACT_APP_S3_DOMAIN}/toMe.mp3`,
       title: "To Me",
     },
@@ -236,7 +231,7 @@ function Main() {
         audio.pause();
         audio.src =
           process.env.NODE_ENV === "development"
-            ? endingSong
+            ? "/static/ending_song.mp3"
             : `${process.env.REACT_APP_S3_DOMAIN}/ending_song.mp3`;
         audio.play();
         isTimeOver.current = true;
@@ -307,7 +302,7 @@ function Main() {
       <VideoBackground
         src={
           process.env.NODE_ENV === "development"
-            ? video
+            ? "/static/video.mp4"
             : `${process.env.REACT_APP_S3_DOMAIN}/video.mp4`
         }
         autoPlay={true}
