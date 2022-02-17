@@ -2,13 +2,14 @@ require("dotenv").config();
 const finder = require("../modules/finder");
 
 module.exports = async (req, res) => {
-  const { tag } = req.params;
+  const { tag } = req.query;
   const findTag = await finder.findTag(tag);
   const findTagId = await finder.findTagId(findTag.dataValues.id);
   const findPlaylist = await finder.findPlaylist(
-    findTagId.dataValues.playlistId
+    findTagId.dataValues.playlistID
   );
-  const song = await finder.findSong(findPlaylist);
+  console.log(findPlaylist);
+  const song = await finder.findSong(findPlaylist.dataValues.id);
 
   if (!findPlaylist || !song) {
     return res.status(400).send({ response: "err" });
