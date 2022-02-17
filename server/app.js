@@ -24,7 +24,7 @@ app.post("/users/userName", controllers.userName);
 app.delete("/users/:id", controllers.deleteUser);
 app.post("/users/email", controllers.email);
 app.post("/users/logout", controllers.logout);
-app.post("/users/singup", controllers.signup);
+app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get(`/playlists?tag=${tag}`, controllers.playlist);
 

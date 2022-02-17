@@ -20,22 +20,8 @@ function Router() {
           // </Layout>
         }
       />
-      <Route
-        path="/login"
-        element={
-          <Layout>
-            <Login />
-          </Layout>
-        }
-      />
-      <Route
-        path="/signup"
-        element={
-          <Layout>
-            <Signup />
-          </Layout>
-        }
-      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route
         path="/menu"
         element={
@@ -68,14 +54,7 @@ function Router() {
           </Layout>
         }
       />
-      <Route
-        path="/mypage/edit"
-        element={
-          <Layout>
-            <EditMypage />
-          </Layout>
-        }
-      />
+      <Route path="/mypage/edit" element={<EditMypage />} />
     </Routes>
   );
 }
