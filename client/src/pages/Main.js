@@ -7,6 +7,9 @@ import {
   faForward,
   faPencil,
   faXmark,
+  faVolumeOff,
+  faVolumeMute,
+  faVolumeUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import Dimmed from "../components/Dimmed";
@@ -117,9 +120,13 @@ const NextButton = styled(PlayerBtn)`
   /* background-color: red; */
 `;
 
+const VolumeSlider = styled.input``;
+
 const SongTitle = styled.span`
   color: black;
   font-size: 14px;
+  width: 30%;
+  margin-left: 20px;
 `;
 
 const FloatingButton = styled.div`
@@ -208,6 +215,7 @@ function Main() {
   const [isModalOpened, setIsModalOpened] = useState(false);
   const songIndex = useRef(0);
   const [isMemoOpen, setIsMemoOpen] = useState(false);
+  const [volume, setVolume] = useState(1);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const isTimeOver = useRef(false);
   const memoTextareaRef = useRef();
@@ -283,6 +291,21 @@ function Main() {
     setCurrentSongIndex(songIndex.current);
   };
 
+  const handleVolumeChange = (event) => {
+    audio.volume = event.target.value;
+    setVolume(event.target.value);
+  };
+
+  const handleMuteClick = () => {
+    if (audio.muted) {
+      audio.muted = false;
+      setVolume(audio.volume);
+    } else {
+      audio.muted = true;
+      setVolume(0);
+    }
+  };
+
   const handleFloatBtnClick = () => {
     setIsMemoOpen((prev) => !prev);
     if (isMemoOpen && memoTextareaRef.current.value === "") {
@@ -308,6 +331,7 @@ function Main() {
         autoPlay={true}
         muted={true}
         loop={true}
+        playsinline={true}
       />
       {isEndModalOpened && (
         <>
@@ -348,6 +372,20 @@ function Main() {
           <NextButton onClick={playNextSong}>
             <FontAwesomeIcon icon={faForward} />
           </NextButton>
+          {/* <FontAwesomeIcon icon={faVolumeMute} /> */}
+        </>
+        <>
+          <PlayerBtn onClick={handleMuteClick}>
+            <FontAwesomeIcon icon={volume > 0 ? faVolumeUp : faVolumeOff} />
+          </PlayerBtn>
+          <VolumeSlider
+            onChange={(e) => handleVolumeChange(e)}
+            type="range"
+            min="0"
+            max="1"
+            step="0.1"
+            value={volume}
+          />
         </>
         <>
           <SongTitle>{songs[currentSongIndex].title}</SongTitle>
