@@ -32,6 +32,8 @@ app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get("/playlists", controllers.playlist);
 app.get("/users/:id", controllers.userinfo);
+app.patch("/users/password", controllers.passwordchange);
+app.patch("/users/username", controllers.namechange);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
