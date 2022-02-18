@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Tag extends Model {
     /**
@@ -10,14 +8,26 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // this.belongsTo(models.Playlist_Tag);
     }
   }
-  Tag.init({
-    tag: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Tag',
-  });
+  Tag.init(
+    {
+      tag: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "Tag",
+    }
+  );
   return Tag;
 };
+
+/**
+ * , {
+        foreignKey: "tagId",
+        targetKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+ */

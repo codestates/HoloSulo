@@ -8,9 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // this.hasMany(models.Oder);
     }
   }
+  //User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id', onDelete: 'cascade', onUpdate: 'cascade' });
   User.init(
     {
       email: DataTypes.STRING,
@@ -26,3 +27,12 @@ module.exports = (sequelize, DataTypes) => {
   );
   return User;
 };
+
+/**
+ * , {
+        foreignKey: "userId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+ */
