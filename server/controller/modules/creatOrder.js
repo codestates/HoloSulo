@@ -1,8 +1,8 @@
-const { Oder } = require("../../models");
+const { Order } = require("../../models");
 
 module.exports = {
   creatOrder: async (tag, time) => {
-    await Oder.create({
+    await Order.create({
       theme: tag,
       time: time,
     });

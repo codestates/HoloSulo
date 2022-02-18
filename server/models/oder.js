@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Oder extends Model {
+  class Order extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   //    db.Comment.belongsTo(db.User, { foreignKey: 'commenter', targetKey: 'id', onDelete: 'cascade', onUpdate: 'cascade'});
-  Oder.init(
+  Order.init(
     {
       theme: DataTypes.STRING,
       time: DataTypes.DATE,
@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Oder",
     }
   );
-  return Oder;
+  return Order;
 };
