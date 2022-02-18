@@ -4,39 +4,6 @@ import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
 
-function EditMypage() {
-  return (
-    <Total>
-      <Link to="/">
-        <FontLogo></FontLogo>
-      </Link>
-
-      <InputInfo>
-        <Part2>
-          <Mention2>password 변경</Mention2>
-          <Password type="password" placeholder="change password"></Password>
-          <Password type="password" placeholder="check password"></Password>
-        </Part2>
-
-        <Part1>
-          <Mention3>nickname 변경</Mention3>
-          <Compo>
-            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
-            <Check>check</Check>
-          </Compo>
-        </Part1>
-      </InputInfo>
-
-      <Link to="/mypage">
-        <Edit>회원정보 저장</Edit>
-      </Link>
-      <Link to="/mypage">
-        <Cancle>취소</Cancle>
-      </Link>
-    </Total>
-  );
-}
-
 const Total = styled.div`
   display: flex;
   width: 100%;
@@ -193,5 +160,38 @@ const TrueMention = styled.div`
   text-align: left;
 `;
 */
+
+function EditMypage() {
+  return (
+    <Total>
+      <Link to="/">
+        <FontLogo></FontLogo>
+      </Link>
+
+      <InputInfo>
+        <Part2>
+          <Mention2>password 변경</Mention2>
+          <Password type="password" placeholder="change password"></Password>
+          <Password type="password" placeholder="check password"></Password>
+        </Part2>
+
+        <Part1>
+          <Mention3>nickname 변경</Mention3>
+          <Compo>
+            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
+            <Check>check</Check>
+          </Compo>
+        </Part1>
+      </InputInfo>
+
+      <Link to="/mypage">
+        <Edit>회원정보 저장</Edit>
+      </Link>
+      <Link to="/mypage">
+        <Cancle>취소</Cancle>
+      </Link>
+    </Total>
+  );
+}
 
 export default EditMypage;

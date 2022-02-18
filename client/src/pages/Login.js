@@ -185,7 +185,7 @@ export default function Login() {
           } else if (res.data.data) {
             console.log("로그인성공");
 
-            window.location.replace("/");
+            window.location.replace("/menu");
           }
         })
         .catch((err) => {
@@ -222,9 +222,7 @@ export default function Login() {
             onKeyPress={EnterLogin}
           ></Password>
 
-          <Link to="/menu">
-            <LoginButton onClick={handleLogin}>Login</LoginButton>
-          </Link>
+          <LoginButton onClick={handleLogin}>Login</LoginButton>
 
           <Space></Space>
           <Compo>
