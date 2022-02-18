@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import PropTypes from "prop-types";
 import Modal from "../components/Modal";
+
 // import smallLogo from "../images/smallLogo.png";
 
 const Total = styled.div`
@@ -174,6 +176,14 @@ const Gage = styled.div`
 `;
 
 export default function Mypage() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const openModal = () => {
+    setModalVisible(true);
+  };
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <>
       <Total>
@@ -197,7 +207,16 @@ export default function Mypage() {
           <Link to="edit">
             <Editbut>프로필 수정</Editbut>
           </Link>
-          <Resignbut>회원 탈퇴</Resignbut>
+
+          <Resignbut onClick={openModal}>회원 탈퇴</Resignbut>
+          {modalVisible && (
+            <Modal
+              visible={modalVisible}
+              closable={true}
+              maskClosable={true}
+              onClose={closeModal}
+            ></Modal>
+          )}
         </Part2>
 
         <Space></Space>

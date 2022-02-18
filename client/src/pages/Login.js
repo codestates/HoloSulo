@@ -150,6 +150,7 @@ export default function Login() {
     });
   };
 
+  /*
   const guestLogin = () => {
     axios
       .post(`${process.env.REACT_APP_SERVER_API}/guest`, "", {
@@ -166,6 +167,7 @@ export default function Login() {
         console.log(err);
       });
   };
+  */
 
   const handleLogin = async () => {
     const { email, password } = userInfo;
@@ -234,7 +236,7 @@ export default function Login() {
 
           <Space></Space>
           <Link to="/menu">
-            <GuestLoginbut onClick={guestLogin}>Guest Login</GuestLoginbut>
+            <GuestLoginbut>Guest Login</GuestLoginbut>
           </Link>
           <Slash>/</Slash>
           <Link to="/signup">
