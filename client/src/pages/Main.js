@@ -308,6 +308,7 @@ function Main() {
         autoPlay={true}
         muted={true}
         loop={true}
+        playsinline={true}
       />
       {isEndModalOpened && (
         <>
