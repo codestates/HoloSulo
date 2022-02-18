@@ -150,6 +150,7 @@ export default function Login() {
     });
   };
 
+  /*
   const guestLogin = () => {
     axios
       .post(`${process.env.REACT_APP_SERVER_API}/guest`, "", {
@@ -166,6 +167,7 @@ export default function Login() {
         console.log(err);
       });
   };
+  */
 
   const handleLogin = async () => {
     const { email, password } = userInfo;
@@ -185,7 +187,7 @@ export default function Login() {
           } else if (res.data.data) {
             console.log("로그인성공");
 
-            window.location.replace("/");
+            window.location.replace("/menu");
           }
         })
         .catch((err) => {
@@ -222,9 +224,7 @@ export default function Login() {
             onKeyPress={EnterLogin}
           ></Password>
 
-          <Link to="/menu">
-            <LoginButton onClick={handleLogin}>Login</LoginButton>
-          </Link>
+          <LoginButton onClick={handleLogin}>Login</LoginButton>
 
           <Space></Space>
           <Compo>
@@ -236,7 +236,7 @@ export default function Login() {
 
           <Space></Space>
           <Link to="/menu">
-            <GuestLoginbut onClick={guestLogin}>Guest Login</GuestLoginbut>
+            <GuestLoginbut>Guest Login</GuestLoginbut>
           </Link>
           <Slash>/</Slash>
           <Link to="/signup">
