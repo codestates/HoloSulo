@@ -8,18 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Playlist_Tag, {
-        foreignKey: "playlistId",
-        targetKey: "id",
-        onDelete: "cascade",
-        onDelete: "cascade",
-      });
-      this.hasMany(models.Song, {
-        foreignKey: "playlistId",
-        sourceKey: "id",
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      });
+      // this.belongsTo(models.Playlist_Tag);
     }
   }
   //User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id', onDelete: 'cascade', onUpdate: 'cascade' });
@@ -36,3 +25,18 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Playlist;
 };
+
+/*
+, {
+        foreignKey: "playlistId",
+        targetKey: "id",
+        onDelete: "cascade",
+        onDelete: "cascade",
+      });
+      this.hasMany(models.Song, {
+        foreignKey: "playlistId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+      */

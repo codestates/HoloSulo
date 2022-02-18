@@ -8,12 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Oder, {
-        foreignKey: "userId",
-        sourceKey: "id",
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      });
+      // this.hasMany(models.Oder);
     }
   }
   //User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id', onDelete: 'cascade', onUpdate: 'cascade' });
@@ -32,3 +27,12 @@ module.exports = (sequelize, DataTypes) => {
   );
   return User;
 };
+
+/**
+ * , {
+        foreignKey: "userId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+ */

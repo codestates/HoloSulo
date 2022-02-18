@@ -8,12 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.User, {
-        foreignKey: "userId",
-        targetKey: "id",
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      });
+      // this.belongsTo(models.User);
     }
   }
   //    db.Comment.belongsTo(db.User, { foreignKey: 'commenter', targetKey: 'id', onDelete: 'cascade', onUpdate: 'cascade'});
@@ -29,3 +24,11 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Order;
 };
+/**
+ * , {
+        foreignKey: "userId",
+        targetKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+ */

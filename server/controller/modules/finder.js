@@ -3,7 +3,10 @@ const { Song, Playlist, Tag, Playlist_Tag, User } = require("../../models");
 
 module.exports = {
   findSong: async (playlistId) => {
-    const findSong = Song.findAll({ where: { playlistId: playlistId } });
+    if (playlistId === null) {
+      return "ERR";
+    }
+    const findSong = Song.findOne({ where: { playlistId: playlistId } });
     return findSong;
   },
   findPlaylist: async (playlistId) => {

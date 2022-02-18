@@ -8,18 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Tag, {
-        foreignKey: "tagId",
-        sourceKey: "id",
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      });
-      this.hasMany(models.Playlist, {
-        foreignKey: "playlistId",
-        sourceKey: "id",
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      });
+      // this.hasMany(models.Tag);
+      // this.hasMany(models.Playlist);
     }
   }
   Playlist_Tag.init(
@@ -34,3 +24,18 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Playlist_Tag;
 };
+/**
+ * , {
+        foreignKey: "playlistId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }
+ */
+
+/**, {
+        foreignKey: "tagId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      } */
