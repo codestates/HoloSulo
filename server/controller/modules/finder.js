@@ -6,7 +6,9 @@ module.exports = {
     if (playlistId === null) {
       return "ERR";
     }
-    const findSong = Song.findOne({ where: { playlistId: playlistId } });
+    const findSong = Song.findAll({
+      where: { playlistId: playlistId },
+    });
     return findSong;
   },
   findPlaylist: async (playlistId) => {

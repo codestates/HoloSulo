@@ -9,8 +9,9 @@ module.exports = async (req, res) => {
     const findPlaylist = await finder.findPlaylist(
       findTagId.dataValues.playlistID
     );
-    console.log(findPlaylist);
-    const song = await finder.findSong(findPlaylist.dataValues.id);
+
+    const song = await finder.findSong(1);
+    console.log(song);
 
     if (!findPlaylist || !song) {
       return res.status(400).send({ response: "err" });
@@ -29,12 +30,12 @@ module.exports = async (req, res) => {
             coverUrl: payload.coverUrl,
             title: payload.title,
             description: payload.description,
-            song: [
-              {
+            song: song.map((song) => {
+              return {
                 songUrl: song.dataValues.songUrl,
                 songTitle: song.dataValues.songTitle,
-              },
-            ],
+              };
+            }),
           },
         ],
         response: "ok",
