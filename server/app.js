@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = process.env.PORT;
@@ -14,6 +15,9 @@ app.use(
     methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
   })
 );
+if (process.env.NODE_ENV === "development") {
+  app.use("/static", express.static("static"));
+}
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
