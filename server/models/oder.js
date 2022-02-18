@@ -8,9 +8,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.User, {
+        foreignKey: "userId",
+        targetKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      });
     }
   }
+  //    db.Comment.belongsTo(db.User, { foreignKey: 'commenter', targetKey: 'id', onDelete: 'cascade', onUpdate: 'cascade'});
   Oder.init(
     {
       theme: DataTypes.STRING,

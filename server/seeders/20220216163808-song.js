@@ -6,7 +6,6 @@ module.exports = {
       {
         songUrl: "ddd/ddd.com",
         songTitle: "happyhappy",
-        playlistId: 13,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
