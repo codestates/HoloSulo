@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { sign } = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 
 module.exports = {
   generateAccessToken: (data) => {
