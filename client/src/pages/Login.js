@@ -149,7 +149,6 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userLoginError, setUserLoginError] = useState("");
-  const [userInfo, setUserInfo] = useState({});
 
   const history = useNavigate();
 
@@ -182,41 +181,13 @@ export default function Login(props) {
 
         // 로컬스토리지 accessToken 담기
         localStorage.setItem("accessToken", accessToken);
+        history("/menu");
 
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
         console.log(res.data);
-
-        // 해당 accesstoken이 유효하면 GET 요청으로 로그인 회원 정보를 받아옴
-        axios(`${process.env.REACT_APP_API_URL}/users/{userId}`, {
-          method: "GET",
-          headers: {
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Credentials": "true",
-          },
-          withCredentials: true,
-        })
-          .then((res) => {
-            // id, pw가 맞고 토큰이 유효하면 받아온 데이터를 userInfo에 저장
-
-            props.setUserInfo(res.data);
-            setUserInfo(props.userInfo);
-            console.log(userInfo);
-
-            // useNavigate를 사용하여 로그인 성공시 menu로 이동
-            setUserEmail("");
-            setUserPassword("");
-            setUserLoginError("");
-            history.push("/menu");
-            props.setLoginOn(true);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
       })
       .catch((err) => {
         console.error(err);
