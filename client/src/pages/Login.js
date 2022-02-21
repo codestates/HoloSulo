@@ -166,7 +166,7 @@ export default function Login(props) {
     console.log(userData);
 
     // 로그인 JWT 인증 처리 (API POST : /login)
-    await axios(`${process.env.REACT_APP_API_URL}/login`, {
+    await axios(`${process.env.REACT_APP_API_URL}/users/login`, {
       method: "POST",
       data: userData,
       headers: {
@@ -189,9 +189,8 @@ export default function Login(props) {
         ] = `Bearer ${accessToken}`;
         console.log(res.data);
 
-        // 윗 줄에 기본 헤더로 `Bearer ${accessToken}`를 넣었기 때문에
         // 해당 accesstoken이 유효하면 GET 요청으로 로그인 회원 정보를 받아옴
-        axios(`${process.env.REACT_APP_API_URL}/token-valid-check`, {
+        axios(`${process.env.REACT_APP_API_URL}/users/{userId}`, {
           method: "GET",
           headers: {
             "Access-Control-Allow-Headers": "Content-Type",
@@ -208,7 +207,7 @@ export default function Login(props) {
             setUserInfo(props.userInfo);
             console.log(userInfo);
 
-            // useHistory를 사용하여 로그인 성공시 menu로 이동
+            // useNavigate를 사용하여 로그인 성공시 menu로 이동
             setUserEmail("");
             setUserPassword("");
             setUserLoginError("");
@@ -226,9 +225,9 @@ export default function Login(props) {
         );
 
         if (userData.email === "" && userData.password === "") {
-          setUserLoginError("email 또는 password 를 입력해주세요.");
+          setUserLoginError("email 또는 password를 입력해주세요.");
         } else {
-          setUserLoginError("emaill 또는 password 가 잘못 입력되었습니다.");
+          setUserLoginError("emaill 또는 password가 잘못 입력되었습니다.");
         }
         if (err.response) {
           // 에러에 response가 있으면 해당 data를 출력

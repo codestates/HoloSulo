@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -197,6 +197,13 @@ const Mention3 = styled.div`
   margin-left: 7.8%;
 `;
 
+const Msg = styled.div`
+  color: #f06363;
+  margin-top: 5%;
+  font-size: 13px;
+  font-family: monospace;
+`;
+
 /*
 const TrueMention = styled.div`
   font-family: monospace;
@@ -214,6 +221,119 @@ export default function Signup() {
     password: "",
     nickname: "",
   });
+  const [emailValidation, setEmailValidation] = useState("");
+  const [passwordValidation, setPasswordValidation] = useState("");
+  const [nicknameValidation, setNicknameValidation] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const handleInputValue = (key) => (e) => {
+    setuserinfo({ ...userinfo, [key]: e.target.value });
+  };
+
+  //  const emailForm =
+  //    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  const history = useNavigate();
+
+  // 회원가입
+  async function confirm() {
+    if (
+      userinfo.email === "" ||
+      userinfo.password === "" ||
+      userinfo.nickname === ""
+    ) {
+      setErrorMessage("모든 내용을 작성해 주세요");
+      return null;
+    }
+    if (!(passwordValidation && nicknameValidation && emailValidation)) {
+      setErrorMessage("다시 확인해주세요");
+      return null;
+    }
+    setErrorMessage("");
+
+    await axios(
+      (`${process.env.REACT_APP_API_URL}/signup`,
+      {
+        method: "POST",
+        data: {
+          email: userinfo.email,
+          password: userinfo.password,
+          nickname: userinfo.nickname,
+        },
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Credentials": "true",
+        },
+        withCredentials: true,
+      })
+        .then((res) => {
+          history.push("/login");
+        })
+        .catch((e) => {
+          setErrorMessage("회원가입에 실패하였습니다");
+        })
+    );
+  }
+
+  const checkingPassword = (e) => {
+    console.log(e.target.value);
+    if (userinfo.password !== e.target.value) {
+      setErrorMessage("비밀번호가 일치하지 않습니다");
+      setPasswordValidation(false);
+    } else {
+      setErrorMessage("");
+      setPasswordValidation(true);
+    }
+  };
+  //중복 email 찾기
+  async function emailValidationCheck(e) {
+    // if (!emailRule.test(String(userinfo.email))) {
+    //   setEmailValidation(false);
+    // }
+
+    await axios(
+      (`${process.env.REACT_APP_API_URL}/users/email` + userinfo.email,
+      {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Credentials": "true",
+        },
+        withCredentials: true,
+      })
+        .then((res) => {
+          setEmailValidation(true);
+        })
+        .catch((e) => {
+          setEmailValidation(false);
+        })
+    );
+  }
+  //중복 닉네임 찾기
+  async function nicknameValidationCheck() {
+    await axios(
+      (`${process.env.REACT_APP_API_URL}/users/userName` + userinfo.nickname,
+      {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST",
+          "Access-Control-Allow-Credentials": "true",
+        },
+        withCredentials: true,
+      })
+        .then((res) => {
+          setNicknameValidation(true);
+        })
+        .catch((e) => {
+          setNicknameValidation(false);
+        })
+    );
+  }
 
   return (
     <Total>
@@ -225,34 +345,62 @@ export default function Signup() {
         <Part1>
           <Mention1>email을 입력해주세요.</Mention1>
           <Compo>
-            <TypoEmail type="text" placeholder="email"></TypoEmail>
-            <Check>check</Check>
+            <TypoEmail
+              type="text"
+              placeholder="email"
+              onChange={handleInputValue("email")}
+            ></TypoEmail>
+            <Check onClick={emailValidationCheck}>check</Check>
           </Compo>
+          {emailValidation === "" || emailValidation === true ? (
+            <Msg></Msg>
+          ) : (
+            <Msg>중복이거나 사용 불가능한 email입니다.</Msg>
+          )}
         </Part1>
 
         <Part2>
           <Mention2>password를 입력해주세요.</Mention2>
-          <Password type="password" placeholder="password"></Password>
-          <Password type="password" placeholder="check password"></Password>
+          <Password
+            type="password"
+            placeholder="password"
+            onChange={handleInputValue("password")}
+          ></Password>
+          <Password
+            type="password"
+            placeholder="check password"
+            onChange={checkingPassword}
+          ></Password>
         </Part2>
 
         <Part1>
           <Mention3>nickname을 입력해주세요.</Mention3>
           <Compo>
-            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
-            <Check>check</Check>
+            <TypoNickname
+              type="text"
+              placeholder="nickname"
+              onChange={handleInputValue("nickname")}
+            ></TypoNickname>
+
+            <Check onClick={nicknameValidationCheck}>check</Check>
           </Compo>
+
+          {nicknameValidation === "" || nicknameValidation === true ? (
+            <Msg></Msg>
+          ) : (
+            <Msg>이미 사용중인 닉네임입니다.</Msg>
+          )}
         </Part1>
       </InputInfo>
 
       <Terms>회원약관</Terms>
 
-      <Link to="/menu">
-        <Confirm>회원가입</Confirm>
-      </Link>
+      <Confirm onClick={confirm}>회원가입</Confirm>
+
       <Link to="/login">
         <Cancle>취소</Cancle>
       </Link>
+      {errorMessage === "" ? null : <Msg>{errorMessage}</Msg>}
     </Total>
   );
 }
@@ -293,7 +441,7 @@ const userData = {
 
 // check State
 const [isEmail, setIsEmail] = useState(false);
-const [isDupEmail, setIsDupEmail] = useState(false); //이메일 중복 check State
+const [isDupEmail, setIsDupEmail] = useState(false); //email 중복 check State
 const [isDupNickname, setIsDupNickname] = useState(false); // nickname 중복 check State
 const [isPassword, setIsPassword] = useState(false);
 const [isPwdCheck, setIsPwdCheck] = useState(false);
@@ -338,25 +486,25 @@ const equalPassword = (password, cheeckPassword) => {
 const checkEmail = () => {
   if (frontEmail.length === 0 || backEmail.length === 0) {
     setIsDupEmail(false);
-    setEmailMessage("사용 불가능 한 이메일 입니다");
+    setEmailMessage("사용 불가능 한 email 입니다");
   } else {
     axios
       .post("/email", { email: userData.email })
       .then((res) => {
         setIsEmail(true);
         setIsDupEmail(true);
-        setEmailMessage("사용 가능한 이메일입니다");
+        setEmailMessage("사용 가능한 email입니다");
       })
       .catch((err) => {
         const resMsg = err.response.data;
         if (resMsg === "Overlap") {
           setIsEmail(false);
           setIsDupEmail(false);
-          setEmailMessage("이미 회원가입된 이메일입니다");
+          setEmailMessage("이미 회원가입된 email입니다");
         } else if (resMsg === "Empty body") {
           setIsEmail(false);
           setIsDupEmail(false);
-          setEmailMessage("사용 불가능 한 이메일 입니다");
+          setEmailMessage("사용 불가능 한 email 입니다");
         }
       });
   }
