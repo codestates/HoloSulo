@@ -13,12 +13,18 @@ module.exports = async (req, res) => {
     if (!findTag || !findSong) {
       return res.status(400).send("not find tag");
     }
-    const userInfo = await isAuthorized(Authorization);
-    await User.increment({ visitCount: 1 }, { where: { id: userInfo.id } });
-    await creatOrder(tag, time);
-    return res
-      .status(200)
-      .send({ data: { tag: tag, song: findSong }, response: "ok" });
+    if (!Authorization) {
+      return res
+        .status(200)
+        .send({ data: { tag: tag, song: findSong }, response: "ok" });
+    } else {
+      const userInfo = await isAuthorized(Authorization);
+      await User.increment({ visitCount: 1 }, { where: { id: userInfo.id } });
+      await creatOrder(tag, time);
+      return res
+        .status(200)
+        .send({ data: { tag: tag, song: findSong }, response: "ok" });
+    }
   } catch (error) {
     res.status(500).send({ error: error });
   }
