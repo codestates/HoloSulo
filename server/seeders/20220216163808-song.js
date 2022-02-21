@@ -2,7 +2,7 @@
 const playlistIds = [1, 2, 3, 4, 5, 6, 7, 8];
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.bulkInsert(
+    return await queryInterface.bulkInsert(
       "Songs",
       playlistIds.map((id) => {
         return {
@@ -17,6 +17,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.bulkDelete("Songs", null, {});
+    return await queryInterface.bulkDelete("Songs", null, {});
   },
 };
