@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
+
+axios.defaults.withCredentials = true;
 
 const Total = styled.div`
   display: flex;
@@ -207,6 +209,12 @@ const TrueMention = styled.div`
 */
 
 export default function Signup() {
+  const [userinfo, setuserinfo] = useState({
+    email: "",
+    password: "",
+    nickname: "",
+  });
+
   return (
     <Total>
       <Link to="/">

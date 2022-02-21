@@ -15,12 +15,16 @@ const Total = styled.div`
 `;
 
 const Part1 = styled.div`
-  margin-bottom: 15%;
+  margin-bottom: 13%;
 `;
 
 const Part2 = styled.div`
   margin-left: 5.5%;
   margin-bottom: 15%;
+`;
+
+const Space = styled.div`
+  margin-top: 15%;
 `;
 
 const InputInfo = styled.div``;
@@ -105,7 +109,7 @@ const Edit = styled.button`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-bottom: 5%;
+  margin-bottom: 1.5%;
   margin-top: 2%;
   line-height: 25px;
   cursor: pointer;
@@ -173,6 +177,8 @@ function EditMypage() {
           <Mention2>password 변경</Mention2>
           <Password type="password" placeholder="change password"></Password>
           <Password type="password" placeholder="check password"></Password>
+          <Space></Space>
+          <Edit>password 변경 저장</Edit>
         </Part2>
 
         <Part1>
@@ -183,10 +189,8 @@ function EditMypage() {
           </Compo>
         </Part1>
       </InputInfo>
+      <Edit>nickname 변경 저장</Edit>
 
-      <Link to="/mypage">
-        <Edit>회원정보 저장</Edit>
-      </Link>
       <Link to="/mypage">
         <Cancle>취소</Cancle>
       </Link>
