@@ -133,15 +133,10 @@ function PlaylistDetail({
     description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
   },
 }) {
-  const songs = [
-    { title: "abcdefg" },
-    { title: "abcdefg" },
-    { title: "abcdefg" },
-  ];
   return (
     <Container scrollPosition={scrollPosition + ""}>
       <PlaylistContainer>
-        <Cover src={playlist.cover} />
+        <Cover src={playlist.coverUrl} />
         <PlaylistInfoContainer>
           <SubTitle>Playlist</SubTitle>
           <Title>{playlist.title}</Title>
@@ -153,10 +148,10 @@ function PlaylistDetail({
           <Number>#</Number>
           <SongTitle>노래</SongTitle>
         </SonglistHeader>
-        {songs.map((song, index) => (
+        {playlist.song.map((item, index) => (
           <SongRow key={index}>
             <Number>{index + 1}</Number>
-            <SongTitle>{song.title}</SongTitle>
+            <SongTitle>{item.songTitle}</SongTitle>
           </SongRow>
         ))}
       </SonglistContainer>

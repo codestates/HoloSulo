@@ -8,7 +8,6 @@ import {
   faPencil,
   faXmark,
   faVolumeOff,
-  faVolumeMute,
   faVolumeUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
@@ -185,31 +184,11 @@ const RandomImage = styled.img`
 `;
 
 function Main() {
-  const songs = [
-    {
-      url:
-        process.env.NODE_ENV === "development"
-          ? "/static/naked.mp3"
-          : `${process.env.REACT_APP_S3_DOMAIN}/naked.mp3`,
-      title: "Naked",
-    },
-    {
-      url:
-        process.env.NODE_ENV === "development"
-          ? "/static/lately.mp3"
-          : `${process.env.REACT_APP_S3_DOMAIN}/lately.mp3`,
-      title: "Lately",
-    },
-    {
-      url:
-        process.env.NODE_ENV === "development"
-          ? "/static/toMe.mp3"
-          : `${process.env.REACT_APP_S3_DOMAIN}/toMe.mp3`,
-      title: "To Me",
-    },
-  ];
-
-  const [audio, setAudio] = useState(new Audio(songs[0].url));
+  const {
+    state: { time, songs },
+  } = useLocation();
+  console.log(songs);
+  const [audio, setAudio] = useState(new Audio(songs[0].songUrl));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -219,21 +198,18 @@ function Main() {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const isTimeOver = useRef(false);
   const memoTextareaRef = useRef();
-  const {
-    state: { time },
-  } = useLocation();
 
   useEffect(() => {
     audio.addEventListener("ended", () => {
       audio.pause();
       if (!isTimeOver.current) {
         songIndex.current = (songIndex.current + 1) % songs.length;
-        audio.src = songs[songIndex.current].url;
+        audio.src = songs[songIndex.current].songUrl;
         audio.play();
         setCurrentSongIndex(songIndex.current);
       }
     });
-    // play ending song when time passed.
+    // play ending song when time is over.
     if (time) {
       setTimeout(() => {
         audio.pause();
@@ -274,7 +250,7 @@ function Main() {
     audio.src =
       songs[
         currentSongIndex !== 0 ? currentSongIndex - 1 : songs.length - 1
-      ].url;
+      ].songUrl;
     audio.play();
 
     songIndex.current =
@@ -284,7 +260,7 @@ function Main() {
   const playNextSong = () => {
     audio.pause();
     songIndex.current = (songIndex.current + 1) % songs.length;
-    audio.src = songs[songIndex.current].url;
+    audio.src = songs[songIndex.current].songUrl;
     if (isPlaying) {
       audio.play();
     }
@@ -331,7 +307,7 @@ function Main() {
         autoPlay={true}
         muted={true}
         loop={true}
-        playsinline={true}
+        playsInline={true}
       />
       {isEndModalOpened && (
         <>
@@ -388,7 +364,7 @@ function Main() {
           />
         </>
         <>
-          <SongTitle>{songs[currentSongIndex].title}</SongTitle>
+          <SongTitle>{songs[currentSongIndex].songTitle}</SongTitle>
         </>
       </MusicPlayerContainer>
       <MemoContainer isMemoOpen={isMemoOpen}>
