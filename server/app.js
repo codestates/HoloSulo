@@ -32,6 +32,9 @@ app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get("/playlists", controllers.playlist);
 app.get("/users/:id", controllers.userinfo);
+app.post("/naver/login", controllers.naverLogin);
+app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
+app.get("/naver/callback", controllers.naverLoginVer2.getNaverCallback);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

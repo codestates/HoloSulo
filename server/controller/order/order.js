@@ -16,7 +16,6 @@ module.exports = async (req, res) => {
     const userInfo = await isAuthorized(Authorization);
     await User.increment({ visitCount: 1 }, { where: { id: userInfo.id } });
     await creatOrder(tag, time);
-    console.log(userInfo);
     return res
       .status(200)
       .send({ data: { tag: tag, song: findSong }, response: "ok" });

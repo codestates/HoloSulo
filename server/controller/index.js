@@ -8,4 +8,6 @@ module.exports = {
   order: require("./order/order"),
   playlist: require("./playlist/playlist"),
   userinfo: require("./user/userInfo"),
+  naverLogin: require("./user/naverLoginVer1"),
+  naverLoginVer2: require("./user/naverLoginVer2"),
 };
