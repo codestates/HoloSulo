@@ -14,29 +14,27 @@ module.exports = async (req, res) => {
     const song = await finder.findSong(
       findPlaylist.map((list) => list.dataValues.id)
     );
-    console.log(song);
     if (!findPlaylist || !song) {
       return res.status(400).send({ response: "err" });
     } else {
       return res.status(200).send({
-        data: [
-          {
-            playlist: findPlaylist.map((list) => {
-              return {
-                id: list.dataValues.id,
-                coverUrl: list.dataValues.coverUrl,
-                title: list.dataValues.title,
-                description: list.dataValues.description,
-              };
-            }),
-            song: song.map((song) => {
-              return {
-                songUrl: song.dataValues.songUrl,
-                songTitle: song.dataValues.songTitle,
-              };
-            }),
-          },
-        ],
+        data: findPlaylist.map((list) => {
+          return {
+            id: list.dataValues.id,
+            coverUrl: list.dataValues.coverUrl,
+            title: list.dataValues.title,
+            description: list.dataValues.description,
+            songs: song.filter(
+              (item) => item.dataValues.playlistId === list.dataValues.id
+            ),
+          };
+        }),
+        // song: song.map((song) => {
+        //   return {
+        //     songUrl: song.dataValues.songUrl,
+        //     songTitle: song.dataValues.songTitle,
+        //   };
+        // }),
         response: "ok",
       });
     }

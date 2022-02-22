@@ -187,7 +187,6 @@ function Main() {
   const {
     state: { time, songs },
   } = useLocation();
-  console.log(songs);
   const [audio, setAudio] = useState(new Audio(songs[0].songUrl));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);

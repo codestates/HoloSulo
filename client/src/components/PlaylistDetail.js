@@ -86,7 +86,9 @@ const Title = styled.h1`
 
 const TitleInput = styled(Title).attrs({
   as: "input",
-})``;
+})`
+  border: none;
+`;
 
 const Description = styled.p`
   font-size: 14px;
@@ -104,6 +106,7 @@ const DescriptionTextarea = styled(Description).attrs({
   height: 80px;
   max-height: 100px;
   resize: none;
+  border: none;
 `;
 
 const SonglistContainer = styled.div`
@@ -150,9 +153,11 @@ const SongTitle = styled.span`
 
 const SongTitleInput = styled.input`
   flex-basis: 40%;
+  border: none;
 `;
 const SongUrlInput = styled.input`
   flex-basis: 40%;
+  border: none;
 `;
 
 const SongDelete = styled.span`
@@ -179,11 +184,8 @@ const Button = styled.button`
 `;
 
 function PlaylistDetail({ scrollPosition, playlist }) {
-  const {
-    pathname,
-    state: { tag },
-  } = useLocation();
-  console.log(tag);
+  const { pathname, state } = useLocation();
+
   const [cover, setCover] = useState();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -231,7 +233,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     // TODO: call POST /playlists
     const formData = new FormData();
 
-    formData.append("tag", tag);
+    formData.append("tag", state.tag);
     formData.append("title", title);
     formData.append("description", description);
     formData.append("coverFile", cover);
@@ -299,7 +301,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
                 </SongDelete>
               </SongRow>
             ))
-          : playlist.song.map((item, index) => (
+          : playlist.songs.map((item, index) => (
               <SongRow key={index}>
                 <Number>{index + 1}</Number>
                 <SongTitle>{item.songTitle}</SongTitle>
