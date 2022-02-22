@@ -7,7 +7,7 @@ export default function kakaoLoginClickHandler() {
     success: function (authObj) {
       console.log(authObj);
       Kakao.API.request({
-        url: "/v2/user/me",
+        //        url: "/v2/user/me",
         data: {
           property_keys: [
             "kakao_account.email",

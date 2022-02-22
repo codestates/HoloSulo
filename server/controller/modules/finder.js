@@ -8,6 +8,7 @@ module.exports = {
     }
     const findSong = await Song.findAll({
       where: { playlistId: playlistId },
+      attributes: ["songUrl", "songTitle", "playlistId"],
     });
     return findSong;
   },

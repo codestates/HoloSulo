@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -19,6 +21,7 @@ const Container = styled.div`
   padding: 20px;
   border-radius: 10px;
   z-index: 1;
+  overflow-y: scroll;
   @media only screen and (max-width: 400px) {
     width: 80%;
     height: 80%;
@@ -47,6 +50,10 @@ const Cover = styled.img`
     height: 50px;
   }
 `;
+
+const CoverInput = styled(Cover).attrs({
+  as: "input",
+})``;
 
 const PlaylistInfoContainer = styled.div`
   display: flex;
@@ -77,6 +84,12 @@ const Title = styled.h1`
   }
 `;
 
+const TitleInput = styled(Title).attrs({
+  as: "input",
+})`
+  border: none;
+`;
+
 const Description = styled.p`
   font-size: 14px;
   @media only screen and (max-width: 600px) {
@@ -87,11 +100,20 @@ const Description = styled.p`
   }
 `;
 
+const DescriptionTextarea = styled(Description).attrs({
+  as: "textarea",
+})`
+  height: 80px;
+  max-height: 100px;
+  resize: none;
+  border: none;
+`;
+
 const SonglistContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
-
+  /* overflow-y: scroll; */
   @media only screen and (max-width: 800px) {
     margin-top: 20px;
   }
@@ -102,6 +124,7 @@ const SonglistHeader = styled.div`
   border-bottom: 1px solid rgb(200, 200, 200);
   color: #717171;
   padding: 5px 0;
+  display: flex;
   @media only screen and (max-width: 600px) {
     font-size: 12px;
   }
@@ -111,6 +134,7 @@ const SongRow = styled.div`
   border-bottom: 1px solid rgb(200, 200, 200);
   color: #717171;
   padding: 8px 0;
+  display: flex;
   @media only screen and (max-width: 600px) {
     font-size: 12px;
   }
@@ -120,46 +144,180 @@ const Number = styled.span`
   width: 80px;
   margin-left: 10px;
   display: inline-block;
+  flex-basis: 10%;
 `;
 
-const SongTitle = styled.span``;
+const SongTitle = styled.span`
+  flex-basis: 40%;
+`;
 
-function PlaylistDetail({
-  scrollPosition,
-  playlist = {
-    cover:
-      "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-    title: "행복을 드려요",
-    description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-  },
-}) {
-  const songs = [
-    { title: "abcdefg" },
-    { title: "abcdefg" },
-    { title: "abcdefg" },
-  ];
+const SongTitleInput = styled.input`
+  flex-basis: 40%;
+  border: none;
+`;
+const SongUrlInput = styled.input`
+  flex-basis: 40%;
+  border: none;
+`;
+
+const SongDelete = styled.span`
+  flex-basis: 10%;
+  text-align: center;
+  cursor: pointer;
+`;
+
+const Button = styled.button`
+  border: none;
+  padding: 10px;
+  width: 100px;
+  display: block;
+  margin: 0 auto;
+  background: #666666;
+  color: white;
+  margin-top: ${(props) => props.marginTop || 0};
+  &:hover {
+    background: black;
+    color: white;
+  }
+  transition: background-color 0.2s;
+  cursor: pointer;
+`;
+
+function PlaylistDetail({ scrollPosition, playlist }) {
+  const { pathname, state } = useLocation();
+
+  const [cover, setCover] = useState();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [songlist, setSonglist] = useState([{ title: "", url: "" }]);
+
+  const handleTitleInputChange = (event) => {
+    event.preventDefault();
+
+    setTitle(event.target.value);
+  };
+
+  const handleTextareaChange = (event) => {
+    setDescription(event.target.value);
+  };
+  const handleUpload = (event) => {
+    event.preventDefault();
+
+    const file = event.target.files[0];
+    setCover(file);
+  };
+
+  const handleSongTitleChange = (event, index) => {
+    event.preventDefault();
+
+    const newSonglist = [...songlist];
+    newSonglist[index].title = event.target.value;
+    setSonglist(newSonglist);
+  };
+  const handleSongUrlChange = (event, index) => {
+    event.preventDefault();
+
+    const newSonglist = [...songlist];
+    newSonglist[index].url = event.target.value;
+    setSonglist(newSonglist);
+  };
+  const handleAddClick = () => {
+    setSonglist((prev) => [...prev, { title: "", url: "" }]);
+  };
+  const handleDeleteSong = (event, index) => {
+    const newSonglist = [...songlist];
+    newSonglist.splice(index, 1);
+    setSonglist(newSonglist);
+  };
+  const handleSubmitClick = () => {
+    // TODO: call POST /playlists
+    const formData = new FormData();
+
+    formData.append("tag", state.tag);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("coverFile", cover);
+    formData.append("songs", JSON.stringify(songlist));
+    // const response = await axios.post(`${process.env.REACT_APP_API_URL}/playlists`, formData,
+    //   {headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true});
+    // TODO: Update playlists states
+    // TODO: Go back to Menu with new playlist info
+  };
+
   return (
     <Container scrollPosition={scrollPosition + ""}>
       <PlaylistContainer>
-        <Cover src={playlist.cover} />
+        {pathname === "/playlists" ? (
+          <>
+            <CoverInput type="file" accept="image/*" onChange={handleUpload} />
+          </>
+        ) : (
+          <Cover src={playlist.coverUrl} />
+        )}
         <PlaylistInfoContainer>
           <SubTitle>Playlist</SubTitle>
-          <Title>{playlist.title}</Title>
-          <Description>{playlist.description}</Description>
+          {pathname === "/playlists" ? (
+            <TitleInput
+              placeholder="플레이리스트 제목을 입력하세요"
+              onChange={handleTitleInputChange}
+              value={title}
+            />
+          ) : (
+            <Title>{playlist.title}</Title>
+          )}
+          {pathname === "/playlists" ? (
+            <DescriptionTextarea
+              placeholder="플레이리스트 상세 설명을 입력하세요"
+              onChange={handleTextareaChange}
+              value={description}
+            />
+          ) : (
+            <Description>{playlist.description}</Description>
+          )}
         </PlaylistInfoContainer>
       </PlaylistContainer>
       <SonglistContainer>
         <SonglistHeader>
           <Number>#</Number>
           <SongTitle>노래</SongTitle>
+          {pathname === "/playlists" && <SongTitle>URL</SongTitle>}
         </SonglistHeader>
-        {songs.map((song, index) => (
-          <SongRow key={index}>
-            <Number>{index + 1}</Number>
-            <SongTitle>{song.title}</SongTitle>
-          </SongRow>
-        ))}
+        {pathname === "/playlists"
+          ? songlist.map((song, index) => (
+              <SongRow>
+                <Number>{index + 1}</Number>
+                <SongTitleInput
+                  placeholder="노래 제목을 입력하세요."
+                  onChange={(e) => handleSongTitleChange(e, index)}
+                  value={song.title}
+                />
+                <SongUrlInput
+                  placeholder="유튜브 영상 링크를 입력하세요."
+                  value={song.url}
+                  onChange={(e) => handleSongUrlChange(e, index)}
+                />
+                <SongDelete onClick={(e) => handleDeleteSong(e, index)}>
+                  삭제
+                </SongDelete>
+              </SongRow>
+            ))
+          : playlist.songs.map((item, index) => (
+              <SongRow key={index}>
+                <Number>{index + 1}</Number>
+                <SongTitle>{item.songTitle}</SongTitle>
+              </SongRow>
+            ))}
+        {pathname === "/playlists" && (
+          <Button onClick={handleAddClick} marginTop="10px">
+            노래 추가
+          </Button>
+        )}
       </SonglistContainer>
+      {pathname === "/playlists" && (
+        <Button onClick={handleSubmitClick} marginTop="50px">
+          생성하하기
+        </Button>
+      )}
     </Container>
   );
 }
