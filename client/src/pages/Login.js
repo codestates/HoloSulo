@@ -1,5 +1,5 @@
-import { useState, React } from "react";
-import { Link } from "react-router-dom";
+import { React, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import Logo from "../images/logo.png";
@@ -7,6 +7,8 @@ import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
 import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
+
+axios.defaults.withCredentials = true;
 
 const Total = styled.div`
   display: flex;
@@ -136,70 +138,85 @@ const Compo = styled.div`
   margin-top: 7%;
 `;
 
-export default function Login() {
-  const [isCorrect, setIsCorrect] = useState(true);
-  const [userInfo, setUserInfo] = useState({
-    email: null,
-    password: null,
-  });
+const LoginErr = styled.div`
+  color: #f06363;
+  margin-top: 5%;
+  font-size: 13px;
+  font-family: monospace;
+`;
 
-  const handleChange = (e) => {
-    setUserInfo({
-      ...userInfo,
-      [e.target.name]: e.target.value,
-    });
-  };
+export default function Login(props) {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userLoginError, setUserLoginError] = useState("");
 
-  /*
-  const guestLogin = () => {
-    axios
-      .post(`${process.env.REACT_APP_SERVER_API}/guest`, "", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (!res.data.data) {
-          setIsCorrect(false);
-        } else if (res.data.data) {
-          window.location.replace("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  */
+  const history = useNavigate();
 
   const handleLogin = async () => {
-    const { email, password } = userInfo;
-    if (userInfo) {
-      await axios
-        .post(
-          `${process.env.REACT_APP_SERVER_API}/login`,
-          {
-            email: email,
-            password: password,
-          },
-          { withCredentials: true }
-        )
-        .then((res) => {
-          if (!res.data.data) {
-            setIsCorrect(false);
-          } else if (res.data.data) {
-            console.log("로그인성공");
+    const userData = {
+      email: userEmail,
+      password: userPassword,
+    };
 
-            window.location.replace("/menu");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    // id, pw 입력란 초기화
+    setUserEmail("");
+    setUserPassword("");
+
+    console.log(userData);
+
+    // 로그인 JWT 인증 처리 (API POST : /login)
+    await axios(`${process.env.REACT_APP_API_URL}/users/login`, {
+      method: "POST",
+      data: userData,
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST",
+        "Access-Control-Allow-Credentials": "true",
+      },
+      withCredentials: true,
+    })
+      .then((res) => {
+        const { accessToken } = res.data;
+
+        // 로컬스토리지 accessToken 담기
+        localStorage.setItem("accessToken", accessToken);
+        history("/menu");
+
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        console.log(
+          `email = ${userData.email}, password = ${userData.password}`
+        );
+
+        if (userData.email === "" && userData.password === "") {
+          setUserLoginError("email 또는 password를 입력해주세요.");
+        } else {
+          setUserLoginError("emaill 또는 password가 잘못 입력되었습니다.");
+        }
+        if (err.response) {
+          // 에러에 response가 있으면 해당 data를 출력
+          console.log(err.response.data);
+        }
+      });
   };
 
-  const EnterLogin = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
-    }
+  // 이메일 입력 상태관리
+  const handleChangeEmail = (e) => {
+    setUserEmail(e.target.value);
+    console.log(userEmail);
+  };
+
+  // 비밀번호 입력 상태관리
+  const handleChangePassword = (e) => {
+    setUserPassword(e.target.value);
+    console.log(userPassword);
   };
 
   return (
@@ -213,20 +230,19 @@ export default function Login() {
           <Email
             type="text"
             placeholder="email"
-            onChange={handleChange}
+            onChange={handleChangeEmail}
           ></Email>
           <Space></Space>
 
           <Password
             type="password"
             placeholder="password"
-            onChange={handleChange}
-            onKeyPress={EnterLogin}
+            onChange={handleChangePassword}
           ></Password>
+          <LoginErr>{userLoginError}</LoginErr>
 
           <LoginButton onClick={handleLogin}>Login</LoginButton>
 
-          <Space></Space>
           <Compo>
             <SocialLoginButton1></SocialLoginButton1>
             <SocialLoginButton2
