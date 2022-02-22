@@ -1,5 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { isLoggedInAtom } from "../atom";
 import logo from "../images/logo.png";
 
 const Container = styled.div`
@@ -16,7 +18,7 @@ const Container = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 80px;
+  height: 50px;
   src: ${logo};
 `;
 
@@ -29,8 +31,9 @@ const Item = styled.li`
   text-decoration: ${(props) => props.active};
 `;
 
-function Header({ isLoggedIn = false }) {
+function Header() {
   const { pathname } = useLocation();
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   return (
     <Container>

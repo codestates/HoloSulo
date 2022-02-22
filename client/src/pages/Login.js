@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -7,6 +7,8 @@ import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
 import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isLoggedInAtom } from "../atom";
 
 axios.defaults.withCredentials = true;
 
@@ -149,8 +151,17 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userLoginError, setUserLoginError] = useState("");
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+  const setIsLoggedInAtom = useSetRecoilState(isLoggedInAtom);
 
   const history = useNavigate();
+
+  useEffect(() => {
+    // 로그인 된 상태이면 "/menu"로 이동
+    if (localStorage.getItem("accessToken") && isLoggedIn) {
+      history("/menu");
+    }
+  }, []);
 
   const handleLogin = async () => {
     const userData = {
@@ -162,7 +173,7 @@ export default function Login(props) {
     setUserEmail("");
     setUserPassword("");
 
-    console.log(userData);
+    // console.log(userData);
 
     // 로그인 JWT 인증 처리 (API POST : /login)
     await axios(`${process.env.REACT_APP_API_URL}/users/login`, {
@@ -177,17 +188,17 @@ export default function Login(props) {
       withCredentials: true,
     })
       .then((res) => {
-        const { accessToken } = res.data;
-
+        const { accessToken } = res.data.data;
         // 로컬스토리지 accessToken 담기
         localStorage.setItem("accessToken", accessToken);
+        setIsLoggedInAtom(true);
         history("/menu");
 
         // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-        console.log(res.data);
+        // axios.defaults.headers.common[
+        //   "Authorization"
+        // ] = `Bearer ${accessToken}`;
+        // console.log(res.data);
       })
       .catch((err) => {
         console.error(err);
@@ -210,13 +221,13 @@ export default function Login(props) {
   // 이메일 입력 상태관리
   const handleChangeEmail = (e) => {
     setUserEmail(e.target.value);
-    console.log(userEmail);
+    // console.log(userEmail);
   };
 
   // 비밀번호 입력 상태관리
   const handleChangePassword = (e) => {
     setUserPassword(e.target.value);
-    console.log(userPassword);
+    // console.log(userPassword);
   };
 
   return (
