@@ -7,10 +7,11 @@ import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
 import Dimmed from "../components/Dimmed";
+import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
-  height: ${(props) => (props.open ? "calc(100vh + 220px)" : "100vh")};
+  height: 100%;
   padding-top: 80px;
   padding-bottom: 80px;
   background: black;
@@ -61,13 +62,11 @@ const TagList = styled.ul`
 const PlayListContainer = styled.div`
   overflow-x: scroll;
   display: flex;
-  justify-content: flex-start;
+  justify-content: ${(props) => (props.isEmpty ? "center" : "flex-start")};
+  color: white;
   align-items: center;
-  padding: 30px;
-  height: ${(props) => (props.open ? "300px" : "0")};
-  opacity: ${(props) => (props.open ? "1" : "0")};
-  z-index: ${(props) => (props.open ? "default" : "-1")};
-  transition: all 0.2s;
+  padding: 20px;
+  height: 300px;
 `;
 
 const TimeContainer = styled.div`
@@ -107,64 +106,30 @@ const Title = styled.h2`
   margin-bottom: 10px;
 `;
 
+const TAGS = [
+  "#조용한",
+  "#재즈",
+  "#모던한",
+  "#차분한",
+  "#뉴에이지",
+  "#신나는",
+  "#시끌벅적한",
+  "#일렉트로닉",
+];
+const TIMES = ["30분", "1시간", "2시간", "3시간", "무제한"];
+
 function Menu() {
   const navigate = useNavigate();
   const isGlowing = useRecoilValue(isGlowingAtom);
   const setGlowingAtom = useSetRecoilState(isGlowingAtom);
-  const [activeTagIndex, setActiveTagIndex] = useState(0);
-  const [activeTimeIndex, setActiveTimeIndex] = useState(0);
-  const [activePlaylistIndex, setActivePlaylistIndex] = useState(-1);
-  const [showPlaylist, setShowPlaylist] = useState(false);
+  const [activeTagIndex, setActiveTagIndex] = useState(1);
+  const [activeTimeIndex, setActiveTimeIndex] = useState(2);
+  const [activePlaylistIndex, setActivePlaylistIndex] = useState(0);
+  const [playlists, setPlaylists] = useState([]);
   const [showPlaylistDetail, setShowPlaylistDetail] = useState(false);
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState(TAGS[0]);
   const [time, setTime] = useState("1시간");
   const [scrollPosition, setScrollPosition] = useState(0);
-
-  const tags = [
-    "#조용한",
-    "#재즈",
-    "#모던한",
-    "#차분한",
-    "#뉴에이지",
-    "#신나는",
-    "#시끌벅적한",
-    "#일렉트로닉",
-  ];
-  const TIMES = ["30분", "1시간", "2시간", "3시간", "무제한"];
-
-  // TODO: Remove Dummy data
-  const playlists = [
-    {
-      cover:
-        "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-      title: "행복을 드려요",
-      description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-    },
-    {
-      cover:
-        "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-      title: "행복을 드려요",
-      description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-    },
-    {
-      cover:
-        "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-      title: "행복을 드려요",
-      description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-    },
-    {
-      cover:
-        "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-      title: "행복을 드려요",
-      description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-    },
-    {
-      cover:
-        "https://images.unsplash.com/photo-1513151233558-d860c5398176?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80",
-      title: "행복을 드려요",
-      description: "듣고만 있어도 행복한 노래들과 더더욱 행복하세요 :)",
-    },
-  ];
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -179,6 +144,16 @@ function Menu() {
   }, [scrollPosition]);
 
   useEffect(() => {
+    // Playlist 호출
+    (async () => {
+      let response = await axios.get(
+        `http://localhost:4000/playlists?tag=${encodeURIComponent(TAGS[0])}`
+      );
+      if (response.data.response === "ok") {
+        setPlaylists(response.data.data);
+      }
+    })();
+
     if (isGlowing) {
       setTimeout(() => {
         setGlowingAtom(false);
@@ -190,14 +165,28 @@ function Menu() {
     };
   }, []);
 
-  const handleTagClick = (event, index) => {
-    setActiveTagIndex((prev) => (prev === index + 1 ? 0 : index + 1));
-    if (tag === event.target.innerText) {
-      setShowPlaylist(false);
-      setTag("");
-    } else {
-      setShowPlaylist(true);
+  const handleTagClick = async (event, index) => {
+    // setActiveTagIndex((prev) => (prev === index + 1 ? 0 : index + 1));
+    setActiveTagIndex(index + 1);
+    if (tag !== event.target.innerText) {
+      setActivePlaylistIndex(-1);
       setTag(event.target.innerText);
+      // /playlists?tag api 호출
+      try {
+        const response = await axios.get(
+          `http://localhost:4000/playlists?tag=${encodeURIComponent(
+            event.target.innerText
+          )}`
+        );
+        if (response.data.response === "ok") {
+          setPlaylists(response.data.data);
+        } else {
+          console.log("erro asdasd");
+          setPlaylists([]);
+        }
+      } catch (err) {
+        setPlaylists([]);
+      }
     }
   };
 
@@ -210,7 +199,7 @@ function Menu() {
     setActivePlaylistIndex(index);
   };
 
-  const handleOrderClick = () => {
+  const handleOrderClick = async () => {
     let selectedTime;
     if (
       activeTagIndex !== 0 &&
@@ -219,7 +208,7 @@ function Menu() {
     ) {
       switch (time) {
         case TIMES[0]:
-          selectedTime = 1000 * 60 * 30;
+          selectedTime = 1000 * 60 * 60 * 0.5;
           break;
         case TIMES[1]:
           selectedTime = 1000 * 60 * 60 * 1;
@@ -233,7 +222,21 @@ function Menu() {
         default:
           break;
       }
-      navigate("/main", { state: { time: selectedTime } });
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:4000/orders",
+        data: {
+          tag,
+          playlistId: 1,
+          time: selectedTime / (1000 * 60 * 60),
+        },
+      });
+
+      if (response.data.response === "ok") {
+        navigate("/main", {
+          state: { time: selectedTime, songs: response.data.data.song },
+        });
+      }
     }
   };
 
@@ -244,34 +247,39 @@ function Menu() {
           <Glowing />
         </LoadingWrapper>
       ) : (
-        <Container open={showPlaylist}>
+        <Container>
           {showPlaylistDetail && (
             <>
               <Dimmed setShowPlaylistDetail={setShowPlaylistDetail} />
-              <PlaylistDetail scrollPosition={scrollPosition} />
+              <PlaylistDetail
+                scrollPosition={scrollPosition}
+                playlist={playlists[0]}
+              />
             </>
           )}
           <TagContainer>
             <Title>어떤 분위기가 좋으신가요?</Title>
             <TagList isActiveAt={activeTagIndex}>
-              {tags.map((tag, index) => (
+              {TAGS.map((tag, index) => (
                 <Text key={index} onClick={(e) => handleTagClick(e, index)}>
                   {tag}
                 </Text>
               ))}
             </TagList>
           </TagContainer>
-          <PlayListContainer open={showPlaylist}>
-            {playlists.map((playlist, index) => (
-              <Playlist
-                key={index}
-                index={index}
-                playlist={playlist}
-                isActive={index === activePlaylistIndex}
-                handlePlaylistClick={(index) => handlePlaylistClick(index)}
-                setShowPlaylistDetail={setShowPlaylistDetail}
-              />
-            ))}
+          <PlayListContainer isEmpty={playlists.length === 0}>
+            {playlists.length === 0
+              ? "플레이리스트가 없습니다"
+              : playlists.map((playlist, index) => (
+                  <Playlist
+                    key={index}
+                    index={index}
+                    playlist={playlist}
+                    isActive={index === activePlaylistIndex}
+                    handlePlaylistClick={(index) => handlePlaylistClick(index)}
+                    setShowPlaylistDetail={setShowPlaylistDetail}
+                  />
+                ))}
           </PlayListContainer>
           <TimeContainer>
             <Title>얼마나 머물렀다 가실건가요?</Title>

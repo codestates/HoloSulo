@@ -58,7 +58,7 @@ function Playlist({
   };
   return (
     <Container onClick={handleClick} isActive={isActive}>
-      <Cover src={playlist.cover} />
+      <Cover src={playlist.coverUrl} />
       <Title>{playlist.title}</Title>
       <Description>{playlist.description}</Description>
       <More onClick={(e) => handleMoreClick(e)}>자세히보기 &rarr;</More>
