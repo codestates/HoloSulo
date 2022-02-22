@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -11,10 +12,16 @@ const Container = styled.div`
   cursor: ${(props) => (props.isClickedAllowed ? "pointer" : "default")};
 `;
 
-function Dimmed({ setShowPlaylistDetail, isClickedAllowed = true }) {
+function Dimmed({ toggleDimmed, isClickedAllowed = true }) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
   const handleClick = () => {
     if (isClickedAllowed) {
-      setShowPlaylistDetail((prev) => !prev);
+      toggleDimmed((prev) => !prev);
+      if (pathname === "/playlists") {
+        navigate(-1);
+      }
       document.body.style.overflow = "auto";
     }
   };
