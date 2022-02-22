@@ -135,7 +135,6 @@ const Compo = styled.div`
   display: flex;
   margin-top: 7%;
 `;
-
 export default function Login() {
   const [isCorrect, setIsCorrect] = useState(true);
   const [userInfo, setUserInfo] = useState({
@@ -201,7 +200,6 @@ export default function Login() {
       handleLogin();
     }
   };
-
   return (
     <>
       <Total>
@@ -228,7 +226,9 @@ export default function Login() {
 
           <Space></Space>
           <Compo>
-            <SocialLoginButton1></SocialLoginButton1>
+            <SocialLoginButton1
+              onClick={naverLoginClickHandler}
+            ></SocialLoginButton1>
             <SocialLoginButton2
               onClick={kakaoLoginClickHandler}
             ></SocialLoginButton2>
