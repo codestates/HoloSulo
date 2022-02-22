@@ -4,7 +4,6 @@ const { User } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
-    console.log(req.body);
     const userData = req.body;
     if (
       userData.email === "" ||

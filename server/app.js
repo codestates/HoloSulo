@@ -10,7 +10,7 @@ const controllers = require("./controller");
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:8080"],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
   })
@@ -34,6 +34,9 @@ app.get("/playlists", controllers.playlist);
 app.get("/users/:id", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
+app.post("/naver/login", controllers.naverLogin);
+app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
+app.get("/naver/callback", controllers.naverLoginVer2.getNaverCallback);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -6,13 +6,13 @@ module.exports = {
     if (playlistId === null) {
       return "ERR";
     }
-    const findSong = Song.findAll({
+    const findSong = await Song.findAll({
       where: { playlistId: playlistId },
     });
     return findSong;
   },
   findPlaylist: async (playlistId) => {
-    const findPlaylist = await Playlist.findOne({
+    const findPlaylist = await Playlist.findAll({
       where: { id: playlistId },
     });
     return findPlaylist;
@@ -22,7 +22,7 @@ module.exports = {
     return findTag;
   },
   findTagId: async (tagId) => {
-    const findTagId = await Playlist_Tag.findOne({
+    const findTagId = await Playlist_Tag.findAll({
       where: { tagId: tagId },
     });
     return findTagId;

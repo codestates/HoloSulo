@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   } else {
     const findUser = await User.findOne({ where: { id: userData.id } });
     const saltRounds = 10;
-    bcrypt.hash(userData.password, saltRounds, (err, hash) => {
+    bcrypt.hash(userData.password, saltRounds, async (err, hash) => {
       try {
         await findUser.update({ password: hash });
         res.status(200).send({ response: "ok" });
