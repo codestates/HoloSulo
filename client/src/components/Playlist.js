@@ -46,14 +46,16 @@ function Playlist({
   isActive,
   handlePlaylistClick,
   setShowPlaylistDetail,
+  setPlaylistId,
 }) {
   const handleClick = () => {
     handlePlaylistClick(index);
   };
 
-  const handleMoreClick = (event) => {
+  const handleMoreClick = (event, index) => {
     event.stopPropagation();
     setShowPlaylistDetail(true);
+    setPlaylistId(index);
     document.body.style.overflow = "hidden";
   };
   return (
@@ -61,7 +63,7 @@ function Playlist({
       <Cover src={playlist.coverUrl} />
       <Title>{playlist.title}</Title>
       <Description>{playlist.description}</Description>
-      <More onClick={(e) => handleMoreClick(e)}>자세히보기 &rarr;</More>
+      <More onClick={(e) => handleMoreClick(e, index)}>자세히보기 &rarr;</More>
     </Container>
   );
 }

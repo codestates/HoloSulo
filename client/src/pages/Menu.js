@@ -64,7 +64,7 @@ const TagList = styled.ul`
 const PlayListContainer = styled.div`
   overflow-x: scroll;
   display: flex;
-  justify-content: ${(props) => (props.isEmpty ? "center" : "flex-start")};
+  justify-content: "flex-start";
   color: white;
   align-items: center;
   padding: 20px;
@@ -156,6 +156,7 @@ function Menu() {
   const [time, setTime] = useState("1시간");
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
+  const [playlistId, setPlaylistId] = useState();
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -207,7 +208,6 @@ function Menu() {
         if (response.data.response === "ok") {
           setPlaylists(response.data.data);
         } else {
-          console.log("erro asdasd");
           setPlaylists([]);
         }
       } catch (err) {
@@ -253,14 +253,17 @@ function Menu() {
         url: "http://localhost:4000/orders",
         data: {
           tag,
-          playlistId: 1,
+          playlistId: activePlaylistIndex,
           time: selectedTime / (1000 * 60 * 60),
         },
       });
 
       if (response.data.response === "ok") {
         navigate("/main", {
-          state: { time: selectedTime, songs: response.data.data.song },
+          state: {
+            time: selectedTime,
+            songs: playlists[activePlaylistIndex].songs,
+          },
         });
       }
     }
@@ -285,7 +288,7 @@ function Menu() {
               <Dimmed toggleDimmed={setShowPlaylistDetail} />
               <PlaylistDetail
                 scrollPosition={scrollPosition}
-                playlist={playlists[0]}
+                playlist={playlists[playlistId]}
               />
             </>
           )}
@@ -312,8 +315,9 @@ function Menu() {
                 index={index}
                 playlist={playlist}
                 isActive={index === activePlaylistIndex}
-                handlePlaylistClick={(index) => handlePlaylistClick(index)}
+                handlePlaylistClick={() => handlePlaylistClick(index)}
                 setShowPlaylistDetail={setShowPlaylistDetail}
+                setPlaylistId={setPlaylistId}
               />
             ))}
             <EmptyPlaylist onClick={handleCreatePlaylistClick}>
