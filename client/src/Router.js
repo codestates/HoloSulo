@@ -31,6 +31,14 @@ function Router() {
         }
       />
       <Route
+        path="/playlists"
+        element={
+          <Layout>
+            <Menu />
+          </Layout>
+        }
+      />
+      <Route
         path="/main"
         element={
           <Layout>

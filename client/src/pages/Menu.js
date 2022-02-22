@@ -8,6 +8,8 @@ import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
 import Dimmed from "../components/Dimmed";
 import axios from "axios";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Container = styled.div`
   width: 100%;
@@ -106,6 +108,29 @@ const Title = styled.h2`
   margin-bottom: 10px;
 `;
 
+const EmptyPlaylist = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 220px;
+  margin-right: 40px;
+  padding: 10px;
+  background-color: rgba(48, 48, 48, 60%);
+  border: 2px solid ${(props) => (props.isActive ? "#38b5fb;" : "black;")};
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(225, 225, 225, 60%);
+  }
+  transition: background-color 0.2s;
+`;
+
+const EmptyMessage = styled.span`
+  margin-top: 20px;
+`;
+
 const TAGS = [
   "#조용한",
   "#재즈",
@@ -130,6 +155,7 @@ function Menu() {
   const [tag, setTag] = useState(TAGS[0]);
   const [time, setTime] = useState("1시간");
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -240,6 +266,12 @@ function Menu() {
     }
   };
 
+  const handleCreatePlaylistClick = () => {
+    setShowCreatePlaylist(true);
+    document.body.style.overflow = "hidden";
+    navigate("/playlists", { state: { tag: tag } });
+  };
+
   return (
     <>
       {isGlowing ? (
@@ -250,11 +282,17 @@ function Menu() {
         <Container>
           {showPlaylistDetail && (
             <>
-              <Dimmed setShowPlaylistDetail={setShowPlaylistDetail} />
+              <Dimmed toggleDimmed={setShowPlaylistDetail} />
               <PlaylistDetail
                 scrollPosition={scrollPosition}
                 playlist={playlists[0]}
               />
+            </>
+          )}
+          {showCreatePlaylist && (
+            <>
+              <Dimmed toggleDimmed={setShowCreatePlaylist} />
+              <PlaylistDetail scrollPosition={scrollPosition} />
             </>
           )}
           <TagContainer>
@@ -268,18 +306,20 @@ function Menu() {
             </TagList>
           </TagContainer>
           <PlayListContainer isEmpty={playlists.length === 0}>
-            {playlists.length === 0
-              ? "플레이리스트가 없습니다"
-              : playlists.map((playlist, index) => (
-                  <Playlist
-                    key={index}
-                    index={index}
-                    playlist={playlist}
-                    isActive={index === activePlaylistIndex}
-                    handlePlaylistClick={(index) => handlePlaylistClick(index)}
-                    setShowPlaylistDetail={setShowPlaylistDetail}
-                  />
-                ))}
+            {playlists.map((playlist, index) => (
+              <Playlist
+                key={index}
+                index={index}
+                playlist={playlist}
+                isActive={index === activePlaylistIndex}
+                handlePlaylistClick={(index) => handlePlaylistClick(index)}
+                setShowPlaylistDetail={setShowPlaylistDetail}
+              />
+            ))}
+            <EmptyPlaylist onClick={handleCreatePlaylistClick}>
+              <FontAwesomeIcon icon={faPlus} />
+              <EmptyMessage>플레이리스트 추가</EmptyMessage>
+            </EmptyPlaylist>
           </PlayListContainer>
           <TimeContainer>
             <Title>얼마나 머물렀다 가실건가요?</Title>
