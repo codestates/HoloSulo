@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     const userData = req.body;
     if (
       userData.email === "" ||
-      userData.username === "" ||
+      userData.nickname === "" ||
       userData.password === ""
     ) {
       res.status(400).send({ message: "빈 항목 존재" });
