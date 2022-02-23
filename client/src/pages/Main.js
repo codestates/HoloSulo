@@ -187,105 +187,129 @@ function Main() {
   const {
     state: { time, songs },
   } = useLocation();
-  const [audio, setAudio] = useState(new Audio(songs[0].songUrl));
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const songIndex = useRef(0);
   const [isMemoOpen, setIsMemoOpen] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [volume, setVolume] = useState(100);
   const isTimeOver = useRef(false);
   const memoTextareaRef = useRef();
+  const player = useRef();
+  const youtubeIndex = useRef(0);
+  const [currentYoutubeIndex, setCurrentYoutubeIndex] = useState(0);
 
   useEffect(() => {
-    audio.addEventListener("ended", () => {
-      audio.pause();
+    const tag = document.createElement("script");
+
+    tag.src = "https://www.youtube.com/iframe_api?origin=http://localhost:3000";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      player.current = new window.YT.Player("player", {
+        height: "360",
+        width: "640",
+        videoId: songs[youtubeIndex.current].songUrl,
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    };
+
+    function onPlayerReady(event) {
+      event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
       if (!isTimeOver.current) {
-        songIndex.current = (songIndex.current + 1) % songs.length;
-        audio.src = songs[songIndex.current].songUrl;
-        audio.play();
-        setCurrentSongIndex(songIndex.current);
+        if (event.data === window.YT.PlayerState.ENDED) {
+          youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
+          setCurrentYoutubeIndex(youtubeIndex.current);
+          event.target.loadVideoById(songs[youtubeIndex.current].songUrl);
+        } else if (event.data === window.YT.PlayerState.PLAYING) {
+          setIsPlaying(true);
+        }
       }
-    });
-    // play ending song when time is over.
+    }
+    let timer;
     if (time) {
-      setTimeout(() => {
-        audio.pause();
-        audio.src =
-          process.env.NODE_ENV === "development"
-            ? "/static/ending_song.mp3"
-            : `${process.env.REACT_APP_S3_DOMAIN}/ending_song.mp3`;
-        audio.play();
+      timer = setTimeout(() => {
+        player.current.pauseVideo();
+        player.current.loadVideoById("ZD64BtQYNGw");
+        player.current.playVideo();
         isTimeOver.current = true;
         setIsEndModalOpened(true);
       }, time);
     }
-
     // show random modal view every 15 minute
-    setInterval(() => {
+    const interval = setInterval(() => {
       if (!isTimeOver.current) {
         setIsModalOpened(true);
       }
     }, 1000 * 60 * 15);
 
     return () => {
-      audio.pause();
-      setAudio(null);
+      clearInterval(interval);
+      clearTimeout(timer);
+      window.onYouTubeIframeAPIReady = null;
+      window.YT = null;
+      player.current.getIframe().remove();
+      player.current.destroy();
+      player.current = null;
     };
   }, []);
 
   const handlePlayClick = () => {
-    if (isPlaying) {
-      audio.pause();
+    if (player.current.getPlayerState() === 1) {
+      player.current.pauseVideo();
       setIsPlaying(false);
-    } else {
-      audio.play();
+    } else if (
+      player.current.getPlayerState() === -1 ||
+      player.current.getPlayerState() === 2
+    ) {
+      player.current.playVideo();
       setIsPlaying(true);
     }
   };
   const playPrevSong = () => {
-    audio.pause();
-    audio.src =
-      songs[
-        currentSongIndex !== 0 ? currentSongIndex - 1 : songs.length - 1
-      ].songUrl;
-    audio.play();
-
-    songIndex.current =
-      songIndex.current !== 0 ? songIndex.current - 1 : songs.length - 1;
-    setCurrentSongIndex((prev) => (prev !== 0 ? prev - 1 : songs.length - 1));
+    player.current.pauseVideo();
+    youtubeIndex.current =
+      youtubeIndex.current !== 0 ? youtubeIndex.current - 1 : songs.length - 1;
+    setCurrentYoutubeIndex(youtubeIndex.current);
+    player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
+    if (player.current.getPlayerState() === 1) {
+      player.current.playVideo();
+    }
   };
   const playNextSong = () => {
-    audio.pause();
-    songIndex.current = (songIndex.current + 1) % songs.length;
-    audio.src = songs[songIndex.current].songUrl;
-    if (isPlaying) {
-      audio.play();
+    player.current.pauseVideo();
+    youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
+    setCurrentYoutubeIndex(youtubeIndex.current);
+    player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
+    if (player.current.getPlayerState() === 1) {
+      player.current.playVideo();
     }
-    setCurrentSongIndex(songIndex.current);
   };
 
   const handleVolumeChange = (event) => {
-    audio.volume = event.target.value;
+    player.current.setVolume(event.target.value);
     setVolume(event.target.value);
   };
 
   const handleMuteClick = () => {
-    if (audio.muted) {
-      audio.muted = false;
-      setVolume(audio.volume);
+    if (player.current.isMute()) {
+      player.current.unMute();
+      setVolume(player.current.getVolume());
     } else {
-      audio.muted = true;
+      player.current.mute();
       setVolume(0);
     }
   };
 
   const handleFloatBtnClick = () => {
     setIsMemoOpen((prev) => !prev);
-    if (isMemoOpen && memoTextareaRef.current.value === "") {
-      memoTextareaRef.current.value = "하고싶은 말이 있었나요?";
-    }
   };
 
   const handleDeleteMemoClick = () => {
@@ -337,6 +361,7 @@ function Main() {
         </>
       )}
       <MusicPlayerContainer>
+        <div id="player" style={{ display: "none" }} />
         <>
           <PrevButton onClick={playPrevSong}>
             <FontAwesomeIcon icon={faBackward} />
@@ -347,7 +372,6 @@ function Main() {
           <NextButton onClick={playNextSong}>
             <FontAwesomeIcon icon={faForward} />
           </NextButton>
-          {/* <FontAwesomeIcon icon={faVolumeMute} /> */}
         </>
         <>
           <PlayerBtn onClick={handleMuteClick}>
@@ -357,17 +381,18 @@ function Main() {
             onChange={(e) => handleVolumeChange(e)}
             type="range"
             min="0"
-            max="1"
-            step="0.1"
+            max="100"
+            step="10"
             value={volume}
           />
         </>
         <>
-          <SongTitle>{songs[currentSongIndex].songTitle}</SongTitle>
+          {/* <SongTitle>{songs[currentSongIndex].songTitle}</SongTitle> */}
+          <SongTitle>{songs[currentYoutubeIndex].songTitle}</SongTitle>
         </>
       </MusicPlayerContainer>
       <MemoContainer isMemoOpen={isMemoOpen}>
-        <Memo ref={memoTextareaRef} />
+        <Memo ref={memoTextareaRef} placeholder="하고싶은 말이 있었나요?" />
         <DeleteMemo onClick={handleDeleteMemoClick}>지우기</DeleteMemo>
       </MemoContainer>
       <FloatingButton onClick={handleFloatBtnClick}>

@@ -141,7 +141,7 @@ const TAGS = [
   "#시끌벅적한",
   "#일렉트로닉",
 ];
-const TIMES = ["30분", "1시간", "2시간", "3시간", "무제한"];
+const TIMES = ["30분", "1시간", "2시간", "3시간", "24시간"];
 
 function Menu() {
   const navigate = useNavigate();
@@ -173,12 +173,21 @@ function Menu() {
   useEffect(() => {
     // Playlist 호출
     (async () => {
-      let response = await axios.get(
-        `http://localhost:4000/playlists?tag=${encodeURIComponent(TAGS[0])}`
-      );
-      if (response.data.response === "ok") {
-        setPlaylists(response.data.data);
-      }
+      await Promise.all(
+        TAGS.map((tag) =>
+          axios.get(
+            `${
+              process.env.REACT_APP_API_URL
+            }/playlists?tag=${encodeURIComponent(tag)}`
+          )
+        )
+      ).then((responses) => {
+        const obj = {};
+        responses.forEach((response) => {
+          obj[response.data.data[0].tag] = response.data.data;
+        });
+        setPlaylists(obj);
+      });
     })();
 
     if (isGlowing) {
@@ -191,28 +200,11 @@ function Menu() {
       setGlowingAtom(true);
     };
   }, []);
-
   const handleTagClick = async (event, index) => {
-    // setActiveTagIndex((prev) => (prev === index + 1 ? 0 : index + 1));
     setActiveTagIndex(index + 1);
     if (tag !== event.target.innerText) {
       setActivePlaylistIndex(-1);
       setTag(event.target.innerText);
-      // /playlists?tag api 호출
-      try {
-        const response = await axios.get(
-          `http://localhost:4000/playlists?tag=${encodeURIComponent(
-            event.target.innerText
-          )}`
-        );
-        if (response.data.response === "ok") {
-          setPlaylists(response.data.data);
-        } else {
-          setPlaylists([]);
-        }
-      } catch (err) {
-        setPlaylists([]);
-      }
     }
   };
 
@@ -245,12 +237,15 @@ function Menu() {
         case TIMES[3]:
           selectedTime = 1000 * 60 * 60 * 3;
           break;
+        case TIMES[4]:
+          selectedTime = 1000 * 60 * 60 * 24;
+          break;
         default:
           break;
       }
       const response = await axios({
         method: "post",
-        url: "http://localhost:4000/orders",
+        url: `${process.env.REACT_APP_API_URL}/orders`,
         data: {
           tag,
           playlistId: activePlaylistIndex,
@@ -262,7 +257,7 @@ function Menu() {
         navigate("/main", {
           state: {
             time: selectedTime,
-            songs: playlists[activePlaylistIndex].songs,
+            songs: playlists[tag][activePlaylistIndex].songs,
           },
         });
       }
@@ -274,7 +269,6 @@ function Menu() {
     document.body.style.overflow = "hidden";
     navigate("/playlists", { state: { tag: tag } });
   };
-
   return (
     <>
       {isGlowing ? (
@@ -288,7 +282,7 @@ function Menu() {
               <Dimmed toggleDimmed={setShowPlaylistDetail} />
               <PlaylistDetail
                 scrollPosition={scrollPosition}
-                playlist={playlists[playlistId]}
+                playlist={playlists[tag][playlistId]}
               />
             </>
           )}
@@ -308,8 +302,8 @@ function Menu() {
               ))}
             </TagList>
           </TagContainer>
-          <PlayListContainer isEmpty={playlists.length === 0}>
-            {playlists.map((playlist, index) => (
+          <PlayListContainer isEmpty={playlists[tag].length === 0}>
+            {playlists[tag].map((playlist, index) => (
               <Playlist
                 key={index}
                 index={index}
