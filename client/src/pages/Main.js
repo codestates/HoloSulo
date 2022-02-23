@@ -280,7 +280,6 @@ function Main() {
     setCurrentYoutubeIndex(youtubeIndex.current);
     player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
     if (player.current.getPlayerState() === 1) {
-      console.log("keep play! Prev");
       player.current.playVideo();
     }
   };
@@ -290,7 +289,6 @@ function Main() {
     setCurrentYoutubeIndex(youtubeIndex.current);
     player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
     if (player.current.getPlayerState() === 1) {
-      console.log("keep play! Next");
       player.current.playVideo();
     }
   };
@@ -312,9 +310,6 @@ function Main() {
 
   const handleFloatBtnClick = () => {
     setIsMemoOpen((prev) => !prev);
-    if (isMemoOpen && memoTextareaRef.current.value === "") {
-      memoTextareaRef.current.value = "하고싶은 말이 있었나요?";
-    }
   };
 
   const handleDeleteMemoClick = () => {
@@ -397,7 +392,7 @@ function Main() {
         </>
       </MusicPlayerContainer>
       <MemoContainer isMemoOpen={isMemoOpen}>
-        <Memo ref={memoTextareaRef} />
+        <Memo ref={memoTextareaRef} placeholder="하고싶은 말이 있었나요?" />
         <DeleteMemo onClick={handleDeleteMemoClick}>지우기</DeleteMemo>
       </MemoContainer>
       <FloatingButton onClick={handleFloatBtnClick}>
