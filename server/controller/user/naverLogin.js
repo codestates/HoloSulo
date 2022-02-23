@@ -2,7 +2,6 @@ require("dotenv").config();
 const axios = require("axios");
 const clientId = process.env.NAVER_CLIENT_ID;
 const clientSecret = process.env.NAVER_CLIENT_SECRET;
-const callback = "http://localhost:8080/naver/callback";
 const state = "qwe123";
 module.exports = {
   getNaverCallback: async (req, res) => {

@@ -28,7 +28,6 @@ module.exports = async (req, res) => {
         const payload = {
           id: userInfo.dataValues.id,
           email: userInfo.dataValues.email,
-          password: userInfo.dataValues.password,
           username: userInfo.dataValues.username,
           visitCount: userInfo.dataValues.visitCount,
           createdAt: userInfo.dataValues.createdAt,
