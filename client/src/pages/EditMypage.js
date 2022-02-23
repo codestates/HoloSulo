@@ -348,7 +348,7 @@ function EditMypage() {
           <Password
             type="password"
             placeholder="check password"
-            onChange={handleInputValue2("checkNewPassword")}
+            onChange={handleInputValue("checkNewPassword")}
             onBlur={() => {
               checkPassword(
                 passwordInfo.newPassword,
@@ -373,7 +373,7 @@ function EditMypage() {
             <TypoNickname
               type="text"
               placeholder="nickname"
-              onChange={handleInputValue("nickname")}
+              onChange={handleInputValue2("nickname")}
               onBlur={() => {}}
             ></TypoNickname>
             <Check
