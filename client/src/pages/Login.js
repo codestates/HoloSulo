@@ -229,7 +229,6 @@ export default function Login(props) {
     setUserPassword(e.target.value);
     // console.log(userPassword);
   };
-
   return (
     <>
       <Total>
@@ -255,7 +254,9 @@ export default function Login(props) {
           <LoginButton onClick={handleLogin}>Login</LoginButton>
 
           <Compo>
-            <SocialLoginButton1></SocialLoginButton1>
+            <SocialLoginButton1
+              onClick={naverLoginClickHandler}
+            ></SocialLoginButton1>
             <SocialLoginButton2
               onClick={kakaoLoginClickHandler}
             ></SocialLoginButton2>
