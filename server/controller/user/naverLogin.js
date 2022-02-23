@@ -18,11 +18,37 @@ module.exports = {
         client_secret: clientSecret,
         code: query.code,
       },
-    }).then((el) => {
-      return res.status(200).send({
-        accessToken: el.data,
-        state: query.state,
+    }).then(async (el) => {
+      await axios({
+        method: "get",
+        url: "https://openapi.naver.com/v1/nid/me",
+        headers: {
+          Authorization: `Bearer ${el.data.access_token}`,
+        },
+      }).then((el) => {
+        console.log(el);
+        return res.status(200).send({
+          data: {
+            email: el.data.response.email,
+            nickname: el.data.response.nickname,
+            mobile: el.data.response.mobile,
+          },
+          state: state,
+        });
       });
     });
   },
 };
+/**
+ *       
+      return res.status(200).send({
+        accessToken: el.data,
+        state: query.state,
+      });
+
+            await axios({
+        method:"post",
+        url:"https://openapi.naver.com/v1/nid/me",
+        
+      }
+ */
