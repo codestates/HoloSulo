@@ -141,7 +141,7 @@ const TAGS = [
   "#시끌벅적한",
   "#일렉트로닉",
 ];
-const TIMES = ["30분", "1시간", "2시간", "3시간", "무제한"];
+const TIMES = ["30분", "1시간", "2시간", "3시간", "24시간"];
 
 function Menu() {
   const navigate = useNavigate();
@@ -244,6 +244,9 @@ function Menu() {
           break;
         case TIMES[3]:
           selectedTime = 1000 * 60 * 60 * 3;
+          break;
+        case TIMES[4]:
+          selectedTime = 1000 * 60 * 60 * 24;
           break;
         default:
           break;
