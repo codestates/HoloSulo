@@ -22,7 +22,6 @@ function Router() {
         }
       />
       <Route path="/login" element={<Login />} />
-      <Route path="/naver/callback" element={<NaverLoginCallback />} />
       <Route path="/signup" element={<Signup />} />
       <Route
         path="/menu"
@@ -65,6 +64,7 @@ function Router() {
         }
       />
       <Route path="/mypage/edit" element={<EditMypage />} />
+      <Route path="/naver/callback" element={<NaverLoginCallback />} />
     </Routes>
   );
 }
