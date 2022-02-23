@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import PropTypes from "prop-types";
 import Modal from "../components/Modal";
 
 // import smallLogo from "../images/smallLogo.png";
