@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -46,14 +46,25 @@ const Cover = styled.img`
     height: 100px;
   }
   @media only screen and (max-width: 400px) {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
   }
 `;
 
-const CoverInput = styled(Cover).attrs({
-  as: "input",
-})``;
+const CoverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CoverInput = styled.input`
+  width: 150px;
+  @media only screen and (max-width: 800px) {
+    width: 100px;
+  }
+  @media only screen and (max-width: 400px) {
+    width: 80px;
+  }
+`;
 
 const PlaylistInfoContainer = styled.div`
   display: flex;
@@ -88,6 +99,12 @@ const TitleInput = styled(Title).attrs({
   as: "input",
 })`
   border: none;
+  @media only screen and (max-width: 800px) {
+    flex-basis: 1;
+  }
+  @media only screen and (max-width: 420px) {
+    flex-basis: 50%;
+  }
 `;
 
 const Description = styled.p`
@@ -107,6 +124,12 @@ const DescriptionTextarea = styled(Description).attrs({
   max-height: 100px;
   resize: none;
   border: none;
+  @media only screen and (max-width: 800px) {
+    flex-basis: 40%;
+  }
+  @media only screen and (max-width: 450px) {
+    width: auto;
+  }
 `;
 
 const SonglistContainer = styled.div`
@@ -154,10 +177,16 @@ const SongTitle = styled.span`
 const SongTitleInput = styled.input`
   flex-basis: 40%;
   border: none;
+  @media only screen and (max-width: 800px) {
+    width: 80px;
+  }
 `;
 const SongUrlInput = styled.input`
   flex-basis: 40%;
   border: none;
+  @media only screen and (max-width: 800px) {
+    width: 80px;
+  }
 `;
 
 const SongDelete = styled.span`
@@ -166,12 +195,17 @@ const SongDelete = styled.span`
   cursor: pointer;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+`;
 const Button = styled.button`
   border: none;
   padding: 10px;
   width: 100px;
-  display: block;
-  margin: 0 auto;
+  margin: 0 30px;
   background: #666666;
   color: white;
   margin-top: ${(props) => props.marginTop || 0};
@@ -181,6 +215,13 @@ const Button = styled.button`
   }
   transition: background-color 0.2s;
   cursor: pointer;
+  @media only screen and (max-width: 800px) {
+    width: 200px;
+  }
+  @media only screen and (max-width: 600px) {
+    padding: 10px 5px;
+    width: 80px;
+  }
 `;
 
 function PlaylistDetail({ scrollPosition, playlist }) {
@@ -190,7 +231,14 @@ function PlaylistDetail({ scrollPosition, playlist }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [songlist, setSonglist] = useState([{ title: "", url: "" }]);
+  const [coverUrl, setCoverUrl] = useState();
 
+  useEffect(() => {
+    if (cover) {
+      const url = URL.createObjectURL(cover);
+      setCoverUrl(url);
+    }
+  }, [cover]);
   const handleTitleInputChange = (event) => {
     event.preventDefault();
 
@@ -248,9 +296,10 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     <Container scrollPosition={scrollPosition + ""}>
       <PlaylistContainer>
         {pathname === "/playlists" ? (
-          <>
+          <CoverContainer>
+            <Cover src={coverUrl} />
             <CoverInput type="file" accept="image/*" onChange={handleUpload} />
-          </>
+          </CoverContainer>
         ) : (
           <Cover src={playlist.coverUrl} />
         )}
@@ -307,16 +356,12 @@ function PlaylistDetail({ scrollPosition, playlist }) {
                 <SongTitle>{item.songTitle}</SongTitle>
               </SongRow>
             ))}
-        {pathname === "/playlists" && (
-          <Button onClick={handleAddClick} marginTop="10px">
-            노래 추가
-          </Button>
-        )}
       </SonglistContainer>
       {pathname === "/playlists" && (
-        <Button onClick={handleSubmitClick} marginTop="50px">
-          생성하하기
-        </Button>
+        <ButtonContainer>
+          <Button onClick={handleAddClick}>노래 추가</Button>
+          <Button onClick={handleSubmitClick}>생성</Button>
+        </ButtonContainer>
       )}
     </Container>
   );
