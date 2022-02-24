@@ -202,7 +202,7 @@ function Main() {
   useEffect(() => {
     const tag = document.createElement("script");
 
-    tag.src = "https://www.youtube.com/iframe_api?origin=http://localhost:3000";
+    tag.src = `https://www.youtube.com/iframe_api?origin=${process.env.REACT_APP_HOST_DOMAIN}`;
     const firstScriptTag = document.getElementsByTagName("script")[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
