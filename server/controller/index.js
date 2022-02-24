@@ -7,6 +7,7 @@ module.exports = {
   email: require("./user/email.js"),
   order: require("./order/order"),
   playlist: require("./playlist/playlist"),
+  youtubePlaylist: require("./playlist/youtubePlaylist"),
   userinfo: require("./user/userInfo"),
   passwordchange: require("./user/passwordChange"),
   namechange: require("./user/nameChange"),

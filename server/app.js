@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT;
 const cors = require("cors");
+const multer = require("multer");
+const upload = multer({ dest: "static/" });
 
 app.use(express.json());
 const controllers = require("./controller");
@@ -31,11 +33,16 @@ app.post("/users/logout", controllers.logout);
 app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get("/playlists", controllers.playlist);
+app.post(
+  "/playlists",
+  upload.single("coverFile"),
+  controllers.youtubePlaylist.createPlaylist
+);
+app.patch("/playlists", controllers.youtubePlaylist.updatePlaylist);
+app.delete("/playlists", controllers.youtubePlaylist.deletePlaylist);
 app.get("/users/:id", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
-// app.get("/naver/callback", controllers.naverLogin);
-// app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
 app.post("/naver/api/callback", controllers.naverLogin.getNaverCallback);
 
 app.listen(port, () => {

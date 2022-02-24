@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   position: absolute;
@@ -277,7 +278,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     newSonglist.splice(index, 1);
     setSonglist(newSonglist);
   };
-  const handleSubmitClick = () => {
+  const handleSubmitClick = async () => {
     // TODO: call POST /playlists
     const formData = new FormData();
 
@@ -286,8 +287,14 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     formData.append("description", description);
     formData.append("coverFile", cover);
     formData.append("songs", JSON.stringify(songlist));
-    // const response = await axios.post(`${process.env.REACT_APP_API_URL}/playlists`, formData,
-    //   {headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true});
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/playlists`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
     // TODO: Update playlists states
     // TODO: Go back to Menu with new playlist info
   };
