@@ -14,15 +14,12 @@ module.exports = {
         title: playlist.title,
         description: playlist.description,
       }),
-        Tag.create({
-          tag: playlist.tag,
+        songsParser.map(async (data) => {
+          Song.create({
+            songUrl: data.url,
+            songTitle: data.title,
+          });
         });
-      songsParser.map(async (data) => {
-        Song.create({
-          songUrl: data.url,
-          songTitle: data.title,
-        });
-      });
     } catch (error) {
       console.log("error : ", error);
     }
