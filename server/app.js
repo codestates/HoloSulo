@@ -35,8 +35,10 @@ app.get("/users/:id", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
 app.post("/naver/login", controllers.naverLogin);
-app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
-app.get("/naver/callback", controllers.naverLoginVer2.getNaverCallback);
+//app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
+//app.get("/naver/callback", controllers.naverLoginVer2.getNaverCallback);
+app.post("/kakao/callback", controllers.kakaoLogin.kakaocallback);
+app.get("/kakao/login", controllers.kakaoLogin.kakao);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

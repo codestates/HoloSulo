@@ -8,6 +8,9 @@ module.exports = {
   refreshToken: (data) => {
     return sign(data, process.env.ACCESS_SECRET, { expiresIn: "14d" });
   },
+  sendAccessToken: (res, accessToken) => {
+    res.cookie("jwt", accessToken);
+  },
   isAuthorized: (token) => {
     return verify(token, process.env.ACCESS_SECRET, (err, decode) => {
       if (err) throw err;
