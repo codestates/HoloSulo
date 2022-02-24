@@ -21,6 +21,7 @@ module.exports = async (req, res) => {
         data: findPlaylist.map((list) => {
           return {
             id: list.dataValues.id,
+            tag,
             coverUrl: list.dataValues.coverUrl,
             title: list.dataValues.title,
             description: list.dataValues.description,

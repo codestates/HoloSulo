@@ -158,9 +158,9 @@ export default function Login(props) {
 
   useEffect(() => {
     // 로그인 된 상태이면 "/menu"로 이동
-    if (localStorage.getItem("accessToken") && isLoggedIn) {
-      history("/menu");
-    }
+    // if (localStorage.getItem("accessToken") && isLoggedIn) {
+    //   history("/menu");
+    // }
   }, []);
 
   const handleLogin = async () => {
@@ -229,7 +229,6 @@ export default function Login(props) {
     setUserPassword(e.target.value);
     // console.log(userPassword);
   };
-
   return (
     <>
       <Total>
@@ -255,7 +254,9 @@ export default function Login(props) {
           <LoginButton onClick={handleLogin}>Login</LoginButton>
 
           <Compo>
-            <SocialLoginButton1></SocialLoginButton1>
+            <SocialLoginButton1
+              onClick={naverLoginClickHandler}
+            ></SocialLoginButton1>
             <SocialLoginButton2
               onClick={kakaoLoginClickHandler}
             ></SocialLoginButton2>

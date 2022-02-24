@@ -10,6 +10,5 @@ module.exports = {
   userinfo: require("./user/userInfo"),
   passwordchange: require("./user/passwordChange"),
   namechange: require("./user/nameChange"),
-  naverLogin: require("./user/naverLoginVer1"),
-  kakaoLogin: require("./user/kakaoLogin"),
+  naverLogin: require("./user/naverLogin"),
 };

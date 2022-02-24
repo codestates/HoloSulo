@@ -7,6 +7,6 @@ module.exports = async (req, res) => {
   if (check === true) {
     return res.status(409).json({ message: "user email conflict" });
   } else {
-    return res.status(200).json({ message: "ok" });
+    return res.status(200).json("ok");
   }
 };

@@ -10,7 +10,6 @@ for (let i = 1; i < 25; i++) {
     updatedAt: new Date(),
   });
 }
-console.log(playlistTags);
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert("Playlist_Tags", playlistTags);

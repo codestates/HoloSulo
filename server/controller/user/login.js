@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   const userInfo = await User.findOne({
     where: { email: user.email },
   });
-  console.log(userInfo);
+  // console.log(userInfo);
   try {
     if (!userInfo) {
       return res.status(404).send("이메일 혹은 비밀번호가 일치하지 않습니다.");
@@ -28,7 +28,6 @@ module.exports = async (req, res) => {
         const payload = {
           id: userInfo.dataValues.id,
           email: userInfo.dataValues.email,
-          password: userInfo.dataValues.password,
           username: userInfo.dataValues.username,
           visitCount: userInfo.dataValues.visitCount,
           createdAt: userInfo.dataValues.createdAt,

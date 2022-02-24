@@ -17,12 +17,29 @@ const Total = styled.div`
 `;
 
 const Part1 = styled.div`
-  margin-bottom: 15%;
+  margin-bottom: 10%;
 `;
 
 const Part2 = styled.div`
   margin-left: 5.5%;
-  margin-bottom: 15%;
+  margin-bottom: 10%;
+`;
+
+const Part3 = styled.div`
+  margin-left: 7.5%;
+  margin-top: -3%;
+`;
+
+const Part4 = styled.div`
+  margin-left: 1.9%;
+  margin-top: -5.5%;
+  margin-bottom: 1%;
+`;
+
+const Part5 = styled.div`
+  margin-left: 7.5%;
+  margin-top: -3%;
+  margin-bottom: 1%;
 `;
 
 const InputInfo = styled.div``;
@@ -59,8 +76,8 @@ const Confirm = styled.button`
   color: whitesmoke;
   outline: none;
   font-family: monospace;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 2%;
+  margin-bottom: 2%;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -103,7 +120,7 @@ const Password = styled.input`
   border-radius: 0.9em;
   width: 23em;
   height: 2em;
-  margin-bottom: 4.5%;
+  margin-bottom: 7%;
   padding-left: 10px;
   display: flex;
   align-items: center;
@@ -149,9 +166,8 @@ const Compo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3%;
+  // margin-bottom: 3%;
   padding-left: 5.5%;
-  // margin-bottom: 2%; *삼항연산자 들어왔을때
 `;
 
 const Terms = styled.button`
@@ -200,140 +216,185 @@ const Mention3 = styled.div`
 const Msg = styled.div`
   color: #f06363;
   margin-top: 5%;
-  font-size: 13px;
+  font-size: 12px;
   font-family: monospace;
+  font-weight: 500;
 `;
 
-/*
-const TrueMention = styled.div`
+const Msg2 = styled.div`
+  color: #117326;
+  margin-top: 5%;
+  font-size: 12px;
   font-family: monospace;
-  font-size: 13px;
-  color: #008c06;
-  margin-left: 21%;
-  margin-bottom: 8%;
-  text-align: left;
+  font-weight: 500;
 `;
-*/
 
 export default function Signup() {
-  const [userinfo, setuserinfo] = useState({
+  const [userinfo, setUserinfo] = useState({
     email: "",
-    password: "",
     nickname: "",
+    password: "",
+    passwordCheck: "",
   });
-  const [emailValidation, setEmailValidation] = useState("");
-  const [passwordValidation, setPasswordValidation] = useState("");
-  const [nicknameValidation, setNicknameValidation] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const handleInputValue = (key) => (e) => {
-    setuserinfo({ ...userinfo, [key]: e.target.value });
-  };
 
-  //  const emailForm =
-  //    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // State Msg
+  const [emailMessage, setEmailMessage] = useState("");
+  const [nicknameMessage, setNicknameMessage] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordCheckMessage, setPasswordCheckMessage] = useState("");
 
-  const history = useNavigate();
+  // Validation
+  const [isEmail, setIsEmail] = useState(false);
+  const [isDupEmail, setIsDupEmail] = useState(false); // 이메일 중복 State
+  const [isDupNickname, setIsDupNickname] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
+  const [isPwdCheck, setIsPwdCheck] = useState(false);
 
-  // 회원가입
-  async function confirm() {
-    if (
-      userinfo.email === "" ||
-      userinfo.password === "" ||
-      userinfo.nickname === ""
-    ) {
-      setErrorMessage("모든 내용을 작성해 주세요");
-      return null;
-    }
-    if (!(passwordValidation && nicknameValidation && emailValidation)) {
-      setErrorMessage("다시 확인해주세요");
-      return null;
-    }
-    setErrorMessage("");
+  // 회원가입 상태 state
+  const [isComplete, setIsComplete] = useState(false);
+  const navigate = useNavigate();
 
-    await axios(
-      (`${process.env.REACT_APP_API_URL}/signup`,
-      {
-        method: "POST",
-        data: {
+  const handleComplete = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/users/signup`,
+        {
           email: userinfo.email,
           password: userinfo.password,
           nickname: userinfo.nickname,
         },
-        headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Credentials": "true",
-        },
-        withCredentials: true,
+        { httpOnly: true, withCredentials: true }
+      )
+      .then((res) => {
+        const successMsg = res.data.response;
+        if (successMsg) {
+          setIsComplete(true);
+          // setTimeout(() => {
+          navigate("/login");
+          // }, 3000);
+        }
       })
-        .then((res) => {
-          history.push("/login");
-        })
-        .catch((e) => {
-          setErrorMessage("회원가입에 실패하였습니다");
-        })
-    );
-  }
+      .catch((err) => {
+        throw err;
+      });
+  };
 
-  const checkingPassword = (e) => {
-    console.log(e.target.value);
-    if (userinfo.password !== e.target.value) {
-      setErrorMessage("비밀번호가 일치하지 않습니다");
-      setPasswordValidation(false);
+  const handleInputValue = (key) => (e) => {
+    setUserinfo({ ...userinfo, [key]: e.target.value });
+  };
+
+  // email validation
+  const validEmail = (email) => {
+    const regEmail =
+      /^([0-9a-zA-Z_.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+    if (regEmail.test(email) === false) {
+      setIsEmail(false);
+      setEmailMessage("email 형식이 올바르지 않습니다.");
     } else {
-      setErrorMessage("");
-      setPasswordValidation(true);
+      setIsEmail(true);
+      setEmailMessage("올바른 email 형식입니다. 중복 체크를 해주세요.");
     }
   };
-  //중복 email 찾기
-  async function emailValidationCheck(e) {
-    // if (!emailRule.test(String(userinfo.email))) {
-    //   setEmailValidation(false);
-    // }
+  // password validation
+  const validPassword = (password) => {
+    const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    if (!regPassword.test(password)) {
+      setIsPassword(false);
+      setPasswordMessage(
+        "숫자+영문+특수문자 조합으로 8자리 이상 입력해주세요!"
+      );
+    } else {
+      setIsPassword(true);
+      setPasswordMessage("사용가능한 비밀번호 입니다.");
+    }
+  };
+  // password confirm validation
+  const checkPassword = (password, cheeckPassword) => {
+    if (password === cheeckPassword) {
+      setIsPwdCheck(true);
+      setPasswordCheckMessage("비밀번호가 일치합니다.");
+    } else {
+      setIsPwdCheck(false);
+      setPasswordCheckMessage("비밀번호가 일치하지 않습니다.");
+    }
+  };
 
-    await axios(
-      (`${process.env.REACT_APP_API_URL}/users/email` + userinfo.email,
-      {
-        method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Credentials": "true",
-        },
-        withCredentials: true,
+  // email 중복 체크
+  const dupEmail = (email) => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/users/email`,
+        { email: userinfo.email },
+        { httpOnly: true, withCredentials: true }
+      )
+      .then((res) => {
+        // const resMsg = res.data.message;
+        if (res.data.response === "ok") {
+          setIsDupEmail(true);
+          setEmailMessage("사용가능한 이메일입니다.");
+        }
       })
-        .then((res) => {
-          setEmailValidation(true);
-        })
-        .catch((e) => {
-          setEmailValidation(false);
-        })
-    );
-  }
-  //중복 닉네임 찾기
-  async function nicknameValidationCheck() {
-    await axios(
-      (`${process.env.REACT_APP_API_URL}/users/userName` + userinfo.nickname,
-      {
-        method: "GET",
-        headers: {
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST",
-          "Access-Control-Allow-Credentials": "true",
-        },
-        withCredentials: true,
+      .catch((err) => {
+        console.log(err.response);
+        if (err.response.data.message === "user email conflict") {
+          setIsDupEmail(false);
+          setEmailMessage("이미 회원가입된 이메일입니다.");
+        }
+        throw err;
+      });
+  };
+
+  // nickName 중복 체크
+  const dupNickname = (nickname) => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/users/userName`,
+        { username: userinfo.nickname },
+        { httpOnly: true, withCredentials: true }
+      )
+      .then((res) => {
+        //const resMsg = res.data.message;
+        if (res.data.response === "ok") {
+          setIsDupNickname(true);
+          setNicknameMessage("사용가능한 닉네임입니다.");
+        }
       })
-        .then((res) => {
-          setNicknameValidation(true);
-        })
-        .catch((e) => {
-          setNicknameValidation(false);
-        })
-    );
-  }
+      .catch((err) => {
+        console.log(err.response);
+        if (err.response.data.message === "user name conflict") {
+          setIsDupNickname(false);
+          setNicknameMessage("이미 사용중인 닉네임입니다.");
+        }
+        throw err;
+      });
+  };
+
+  const submitAll = () => {
+    const { email, nickname, password, passwordCheck } = userinfo;
+    const stateInfo = [
+      { email, nickname, password, passwordCheck },
+      {
+        isEmail,
+        isDupEmail,
+        isDupNickname,
+        isPassword,
+        isPwdCheck,
+      },
+    ];
+    if (
+      isEmail &&
+      isDupEmail &&
+      isDupNickname &&
+      isPassword &&
+      isPwdCheck === true
+    ) {
+      handleComplete();
+      console.log("회원가입 요청이 성공적으로 전달되었습니다.");
+    } else {
+      console.log("회원가입 요청이 실패하였습니다.");
+    }
+    console.log(stateInfo);
+  };
 
   return (
     <Total>
@@ -349,14 +410,26 @@ export default function Signup() {
               type="text"
               placeholder="email"
               onChange={handleInputValue("email")}
+              onBlur={() => {
+                validEmail(userinfo.email);
+              }}
             ></TypoEmail>
-            <Check onClick={emailValidationCheck}>check</Check>
+            <Check
+              disabled={isEmail ? false : "disabled"}
+              onClick={() => {
+                dupEmail(userinfo.email);
+              }}
+            >
+              check
+            </Check>
           </Compo>
-          {emailValidation === "" || emailValidation === true ? (
-            <Msg></Msg>
-          ) : (
-            <Msg>중복이거나 사용 불가능한 email입니다.</Msg>
-          )}
+          <Part3>
+            {isDupEmail === true ? (
+              <Msg2>{emailMessage}</Msg2>
+            ) : userinfo.email.length === 0 ? null : (
+              <Msg>{emailMessage}</Msg>
+            )}
+          </Part3>
         </Part1>
 
         <Part2>
@@ -365,12 +438,35 @@ export default function Signup() {
             type="password"
             placeholder="password"
             onChange={handleInputValue("password")}
+            onBlur={() => {
+              validPassword(userinfo.password);
+            }}
           ></Password>
+          <Part4>
+            {isPassword ? (
+              <Msg2>{passwordMessage}</Msg2>
+            ) : userinfo.password.length === 0 ? null : (
+              <Msg>{passwordMessage}</Msg>
+            )}
+          </Part4>
+
           <Password
             type="password"
             placeholder="check password"
-            onChange={checkingPassword}
+            onChange={handleInputValue("passwordCheck")}
+            onBlur={() => {
+              checkPassword(userinfo.password, userinfo.passwordCheck);
+            }}
           ></Password>
+          <Part4>
+            {isPwdCheck ? (
+              userinfo.passwordCheck.length === 0 ? null : (
+                <Msg2>{passwordCheckMessage}</Msg2>
+              )
+            ) : userinfo.passwordCheck.length === 0 ? null : (
+              <Msg>{passwordCheckMessage}</Msg>
+            )}
+          </Part4>
         </Part2>
 
         <Part1>
@@ -380,159 +476,35 @@ export default function Signup() {
               type="text"
               placeholder="nickname"
               onChange={handleInputValue("nickname")}
+              onBlur={() => {}}
             ></TypoNickname>
 
-            <Check onClick={nicknameValidationCheck}>check</Check>
+            <Check
+              disabled={userinfo.nickname.length !== 0 ? false : "disabled"}
+              onClick={() => {
+                dupNickname(userinfo.nickname);
+              }}
+            >
+              check
+            </Check>
           </Compo>
-
-          {nicknameValidation === "" || nicknameValidation === true ? (
-            <Msg></Msg>
-          ) : (
-            <Msg>이미 사용중인 닉네임입니다.</Msg>
-          )}
+          <Part5>
+            {isDupNickname ? (
+              <Msg2>{nicknameMessage}</Msg2>
+            ) : userinfo.nickname.length === 0 ? null : (
+              <Msg>{nicknameMessage}</Msg>
+            )}
+          </Part5>
         </Part1>
       </InputInfo>
 
       <Terms>회원약관</Terms>
 
-      <Confirm onClick={confirm}>회원가입</Confirm>
+      <Confirm onClick={submitAll}>회원가입</Confirm>
 
       <Link to="/login">
         <Cancle>취소</Cancle>
       </Link>
-      {errorMessage === "" ? null : <Msg>{errorMessage}</Msg>}
     </Total>
   );
 }
-
-/*
-const [frontEmail, setFrontEmail] = useState("");
-const [backEmail, setBackEmail] = useState(""); // Domain
-const [email, setEmail] = useState("");
-
-useEffect(() => {
-  setEmail(frontEmail + "@" + backEmail);
-}, [frontEmail]);
-
-useEffect(() => {
-  setEmail(frontEmail + "@" + backEmail);
-}, [backEmail]);
-
-useEffect(() => {}, [email]);
-
-const [userInfo, setUserInfo] = useState({
-  nickname: "",
-  password: "",
-  passwordCheck: "",
-});
-
-// password 유효성 검사
-  useEffect(() => {
-    validPassword(userInfo.password);
-    equalPassword(userInfo.password, userInfo.passwordCheck);
-  }, [userInfo]);
-  
-
-const userData = {
-  email: email,
-  nickname: userInfo.nickname,
-  password: userInfo.password,
-};
-
-// check State
-const [isEmail, setIsEmail] = useState(false);
-const [isDupEmail, setIsDupEmail] = useState(false); //email 중복 check State
-const [isDupNickname, setIsDupNickname] = useState(false); // nickname 중복 check State
-const [isPassword, setIsPassword] = useState(false);
-const [isPwdCheck, setIsPwdCheck] = useState(false);
-
-// 가입 상태 State
-const [isComplete, setIsComplete] = useState(false);
-
-// message State
-const [emailMessage, setEmailMessage] = useState("");
-const [nicknameMessage, setNicknameMessage] = useState("");
-const [passwordMessage, setPasswordMessage] = useState("");
-const [passwordCheckMessage, setPasswordCheckMessage] = useState("");
-const [checkMessage, setCheckMessage] = useState("");
-
-// password check
- // 비밀번호 유효성
-  const validPassword = (password) => {
-    const regPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{7,25}$/;
-    if (!regPassword.test(password)) {
-      setIsPassword(false);
-      setPasswordMessage(
-        "숫자, 영문, 특수문자가 포함 된 7자리 이상 비밀번호를 입력해 주세요"
-      );
-    } else {
-      setIsPassword(true);
-      setPasswordMessage("사용가능한 비밀번호입니다");
-    }
-  };
-  
-
-const equalPassword = (password, cheeckPassword) => {
-  if (password === cheeckPassword) {
-    setIsPwdCheck(true);
-    setPasswordCheckMessage("비밀번호가 일치합니다");
-  } else {
-    setIsPwdCheck(false);
-    setPasswordCheckMessage("비밀번호가 일치하지 않습니다");
-  }
-};
-
-// email 중복 check
-const checkEmail = () => {
-  if (frontEmail.length === 0 || backEmail.length === 0) {
-    setIsDupEmail(false);
-    setEmailMessage("사용 불가능 한 email 입니다");
-  } else {
-    axios
-      .post("/email", { email: userData.email })
-      .then((res) => {
-        setIsEmail(true);
-        setIsDupEmail(true);
-        setEmailMessage("사용 가능한 email입니다");
-      })
-      .catch((err) => {
-        const resMsg = err.response.data;
-        if (resMsg === "Overlap") {
-          setIsEmail(false);
-          setIsDupEmail(false);
-          setEmailMessage("이미 회원가입된 email입니다");
-        } else if (resMsg === "Empty body") {
-          setIsEmail(false);
-          setIsDupEmail(false);
-          setEmailMessage("사용 불가능 한 email 입니다");
-        }
-      });
-  }
-};
-
-const checkNickname = () => {
-  axios
-    .post("/nickname", { nickname: userData.nickname })
-    .then((res) => {
-      setIsDupNickname(true);
-      setNicknameMessage("사용 가능한 닉네임입니다");
-    })
-    .catch((err) => {
-      const resMsg = err.response.data;
-      if (resMsg === "Overlap") {
-        setIsDupNickname(false);
-        setNicknameMessage("이미 사용 중인 닉네임입니다");
-      } else if (resMsg === "Empty body") {
-        setIsDupNickname(false);
-        setNicknameMessage("사용 불가능한 닉네임입니다 ");
-      }
-    });
-};
-
-const handleComplete = () => {
-  axios.post("/signup", userData).then((res) => {
-    const resMsg = res.data;
-  });
-  setIsComplete(true);
-};
-*/

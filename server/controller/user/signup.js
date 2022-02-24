@@ -4,10 +4,11 @@ const { User } = require("../../models");
 
 module.exports = async (req, res) => {
   try {
+    console.log(req.body);
     const userData = req.body;
     if (
       userData.email === "" ||
-      userData.username === "" ||
+      userData.nickname === "" ||
       userData.password === ""
     ) {
       res.status(400).send({ message: "빈 항목 존재" });
@@ -18,7 +19,7 @@ module.exports = async (req, res) => {
           where: {
             email: userData.email,
             password: hash,
-            username: userData.username,
+            username: userData.nickname,
           },
         }).then(([User, created]) => {
           if (created) {
