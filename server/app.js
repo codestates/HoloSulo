@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 80;
 const cors = require("cors");
 const multer = require("multer");
 const upload = multer({ dest: "static/" });
@@ -12,7 +12,7 @@ const controllers = require("./controller");
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", process.env.HOLOSULO_HOST_DOMAIN],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
   })
