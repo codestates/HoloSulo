@@ -1,13 +1,10 @@
-import axios from "axios";
 export default async function naverLoginClickHandler() {
-  const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=q4rVdqPg4Nfjz9ZZ89a0&redirect_uri=http://localhost:3000/naver/callback&state=qwe123`;
+  const min = 1;
+  const max = 1000000;
+  const random = Math.floor(min + Math.random() * (min + max));
+  // const client_id = process.env.NAVER_CLIENT_ID;
+  localStorage.setItem("state", random);
+  const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=q4rVdqPg4Nfjz9ZZ89a0&redirect_uri=${process.env.REACT_APP_API_CALLBACK_URL}&state=${random}`;
 
   window.location.href = url;
-
-  // await axios
-  //   .post("http://localhost:8080/naver/callback", {
-  //     authorization: code,
-  //     state: state,
-  //   })
-  //   .then(console.log("ok"));
 }
