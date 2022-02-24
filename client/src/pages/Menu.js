@@ -258,6 +258,7 @@ function Menu() {
           state: {
             time: selectedTime,
             songs: playlists[tag][activePlaylistIndex].songs,
+            coverUrl: playlists[tag][activePlaylistIndex].coverUrl,
           },
         });
       }
