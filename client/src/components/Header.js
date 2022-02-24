@@ -8,9 +8,11 @@ const Container = styled.div`
   width: 100%;
   height: 80px;
   position: fixed;
-  background-color: #f1eded;
+  background-color: ${(props) =>
+    props.isTransparent ? "rgba(0,0,0,0)" : "#f1eded"};
   left: 0;
   top: 0;
+  color: ${(props) => (props.isTransparent ? "white" : "black")};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,12 +33,12 @@ const Item = styled.li`
   text-decoration: ${(props) => props.active};
 `;
 
-function Header() {
+function Header({ isTransparent = false }) {
   const { pathname } = useLocation();
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   return (
-    <Container>
+    <Container isTransparent={isTransparent}>
       <Link to="/">
         <Logo src={logo} />
       </Link>

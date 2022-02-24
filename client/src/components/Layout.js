@@ -6,12 +6,14 @@ import { useLocation } from "react-router-dom";
 
 const Container = styled.div``;
 
-function Layout({ children }) {
+function Layout({ isTransparent, children }) {
   const { pathname } = useLocation();
   const isGlowing = useRecoilValue(isGlowingAtom);
   return (
     <Container>
-      {isGlowing && pathname === "/menu" ? null : <Header />}
+      {isGlowing && pathname === "/menu" ? null : (
+        <Header isTransparent={isTransparent} />
+      )}
       {children}
     </Container>
   );
