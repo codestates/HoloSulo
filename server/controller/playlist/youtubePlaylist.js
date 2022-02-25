@@ -5,8 +5,7 @@ module.exports = {
   createPlaylist: async (req, res) => {
     const playlist = req.body;
     const coverFileUrl = req.file.path;
-    // const songsParser = JSON.parse(playlist.songs);
-    const testSong = req.body.songs;
+    const songsParser = JSON.parse(playlist.songs);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
     if (!playlist) {
@@ -19,8 +18,7 @@ module.exports = {
         description: playlist.description,
         userId: userId.id,
       });
-      console.log(createPlaylist.dataValues.id);
-      const createSong = testSong.map(async (data) => {
+      const createSong = songsParser.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
           songTitle: data.songTitle,
@@ -38,10 +36,9 @@ module.exports = {
   updatePlaylist: async (req, res) => {
     const updateBody = req.body;
     const updateFile = req.file.path;
-    // const updateSongsParser = JSON.parse(updateBody.songs);
+    const updateSongsParser = JSON.parse(updateBody.songs);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
-    const testSong = req.body.songs;
     if (!updateBody) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
     }
@@ -58,7 +55,7 @@ module.exports = {
         },
         { where: { id: updateBody.id } }
       );
-      const updateSong = testSong.map(async (song) => {
+      const updateSong = updateSongsParser.map(async (song) => {
         await Song.update(
           {
             id: song.id,
@@ -70,10 +67,10 @@ module.exports = {
           },
           { where: { id: song.id } }
         );
-        return res.status(200).send({
-          data: { playlists: updatePlaylist, songs: updateSong },
-          response: "ok",
-        });
+      });
+      return res.status(200).send({
+        data: { playlists: updatePlaylist, songs: updateSong },
+        response: "ok",
       });
     } catch (error) {
       return res.status(500).send({ error: error });
