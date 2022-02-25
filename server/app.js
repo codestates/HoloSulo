@@ -38,7 +38,11 @@ app.post(
   upload.single("coverFile"),
   controllers.youtubePlaylist.createPlaylist
 );
-app.patch("/playlists", controllers.youtubePlaylist.updatePlaylist);
+app.patch(
+  "/playlists",
+  upload.single("coverFile"),
+  controllers.youtubePlaylist.updatePlaylist
+);
 app.delete("/playlists", controllers.youtubePlaylist.deletePlaylist);
 app.get("/users/:id", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);

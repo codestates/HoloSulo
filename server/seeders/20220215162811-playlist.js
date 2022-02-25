@@ -36,7 +36,7 @@ module.exports = {
           coverUrl: coverUrls[Math.floor(Math.random() * coverUrls.length)],
           title: playlist,
           description,
-          userId: Math.floor(Math.random() * 8) + 1,
+          userId: null,
           createdAt: new Date(),
           updatedAt: new Date(),
         };

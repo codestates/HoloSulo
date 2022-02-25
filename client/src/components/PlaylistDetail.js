@@ -297,6 +297,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     );
     // TODO: Update playlists states
     // TODO: Go back to Menu with new playlist info
+    console.log(response);
   };
 
   return (
