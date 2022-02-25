@@ -1,4 +1,4 @@
-const { Playlist, Song } = require("../../models");
+const { Playlist, Song, Playlist_Tag, Tag } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = {
@@ -8,6 +8,7 @@ module.exports = {
     const songsParser = JSON.parse(playlist.songs);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
+    const tagId = await Tag.findOne({ where: { tag: playlist.tag } });
     if (!playlist) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
     }
@@ -24,6 +25,10 @@ module.exports = {
           songTitle: data.songTitle,
           playlistId: createPlaylist.dataValues.id,
         });
+      });
+      const createJoinTable = await Playlist_Tag.create({
+        tagId: tagId.dataValues.id,
+        playlistId: createPlaylist.dataValues.id,
       });
       return res.status(200).send({
         data: { playlists: createPlaylist, songs: createSong },
@@ -46,7 +51,7 @@ module.exports = {
       const updatePlaylist = await Playlist.update(
         {
           id: updateBody.id,
-          coverUrl: updateFile,
+          coverUrl: process.env.DEV_DOMAIN + process.env.PORT + updateFile,
           title: updateBody.title,
           description: updateBody.description,
           userId: userId.id,
@@ -59,8 +64,8 @@ module.exports = {
         await Song.update(
           {
             id: song.id,
-            songUrl: song.url,
-            songTitle: song.title,
+            songUrl: song.songUrl,
+            songTitle: song.songTitle,
             playlistId: song.playlistId,
             createdAt: song.createdAt,
             updatedAt: song.updatedAt,
@@ -77,11 +82,10 @@ module.exports = {
     }
   },
   deletePlaylist: async (req, res) => {
-    console.log(req.body);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
     const playlistId = await Playlist.findOne({
-      where: { id: req.body.id },
+      where: { userId: userId.id },
     });
 
     if (!playlistId || !userId) {

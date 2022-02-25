@@ -1,5 +1,4 @@
 require("dotenv").config();
-const { findPlaylist } = require("../modules/finder");
 const finder = require("../modules/finder");
 
 module.exports = async (req, res) => {
@@ -10,7 +9,6 @@ module.exports = async (req, res) => {
     const findPlaylist = await finder.findPlaylist(
       findTagId.map((list) => list.dataValues.playlistID)
     );
-    // console.log(findPlaylist);
     const song = await finder.findSong(
       findPlaylist.map((list) => list.dataValues.id)
     );

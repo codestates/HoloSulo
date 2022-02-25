@@ -285,7 +285,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     setIsEditable(false);
   };
 
-  const handleEditDoneClick = () => {
+  const handleEditDoneClick = async () => {
     const formData = new FormData();
     formData.append("tag", state.tag);
     title && formData.append("title", title);
@@ -293,7 +293,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
     // TODO: call patch /playlist api
-    // const response = await axios.patch(
+    // const response = await axios.post(
     //   `${process.env.REACT_APP_API_URL}/playlists`,
     //   formData,
     //   {
