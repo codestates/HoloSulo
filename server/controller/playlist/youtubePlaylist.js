@@ -5,9 +5,8 @@ module.exports = {
   createPlaylist: async (req, res) => {
     const playlist = req.body;
     const coverFileUrl = req.file.path;
-    // const songsParser = JSON.parse(playlist.songs);
+    const songsParser = JSON.parse(playlist.songs);
     const authorization = req.headers.authorization;
-    const testSong = req.body.songs;
     const userId = isAuthorized(authorization);
     const tagId = await Tag.findOne({ where: { tag: playlist.tag } });
     if (!playlist) {
@@ -22,7 +21,7 @@ module.exports = {
         userId: userId.id,
       });
       console.log(createPlaylist.dataValues.id);
-      const createSong = testSong.map(async (data) => {
+      const createSong = songsParser.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
           songTitle: data.songTitle,
@@ -102,6 +101,9 @@ module.exports = {
     try {
       await Playlist.destroy({ where: { id: playlistId.dataValues.id } });
       await Song.destroy({ where: { playlistId: playlistId.dataValues.id } });
+      await Playlist_Tag.destroy({
+        where: { playlistId: playlistId.dataValues.id },
+      });
       return res.status(200).send({ response: "ok" });
     } catch (error) {
       res.status(500).send("error : ", error);
