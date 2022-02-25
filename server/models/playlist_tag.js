@@ -7,14 +7,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // this.hasMany(models.Tag);
-      // this.hasMany(models.Playlist);
-    }
+    static associate(models) {}
   }
   Playlist_Tag.init(
     {
-      playlistID: DataTypes.INTEGER,
+      playlistId: DataTypes.INTEGER,
       tagId: DataTypes.INTEGER,
     },
     {

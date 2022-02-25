@@ -52,7 +52,7 @@ export default async function NaverLoginCallback() {
                 if (el.data.data.accessToken) {
                   localStorage.setItem("accessToken", el.data.data.accessToken);
                   setIsLoggedInAtom(true);
-                  // window.location.assign("/menu");
+                  window.location.assign("/menu");
                 }
               });
             } catch (error) {

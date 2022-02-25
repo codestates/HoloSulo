@@ -39,7 +39,7 @@ app.post(
   controllers.youtubePlaylist.createPlaylist
 );
 app.patch(
-  "/playlists/:id",
+  "/playlists",
   upload.single("coverFile"),
   controllers.youtubePlaylist.updatePlaylist
 );

@@ -5,8 +5,9 @@ module.exports = {
   createPlaylist: async (req, res) => {
     const playlist = req.body;
     const coverFileUrl = req.file.path;
-    const songsParser = JSON.parse(playlist.songs);
+    // const songsParser = JSON.parse(playlist.songs);
     const authorization = req.headers.authorization;
+    const testSong = req.body.songs;
     const userId = isAuthorized(authorization);
     const tagId = await Tag.findOne({ where: { tag: playlist.tag } });
     if (!playlist) {
@@ -14,12 +15,14 @@ module.exports = {
     }
     try {
       const createPlaylist = await Playlist.create({
-        coverUrl: process.env.DEV_DOMAIN + process.env.PORT + coverFileUrl,
+        coverUrl:
+          process.env.DEV_DOMAIN + process.env.PORT + "/" + coverFileUrl,
         title: playlist.title,
         description: playlist.description,
         userId: userId.id,
       });
-      const createSong = songsParser.map(async (data) => {
+      console.log(createPlaylist.dataValues.id);
+      const createSong = testSong.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
           songTitle: data.songTitle,
@@ -31,7 +34,11 @@ module.exports = {
         playlistId: createPlaylist.dataValues.id,
       });
       return res.status(200).send({
-        data: { playlists: createPlaylist, songs: createSong },
+        data: {
+          playlists: createPlaylist,
+          songs: createSong,
+          Playlist_Tag: createJoinTable,
+        },
         response: "ok",
       });
     } catch (error) {
@@ -51,7 +58,8 @@ module.exports = {
       const updatePlaylist = await Playlist.update(
         {
           id: updateBody.id,
-          coverUrl: process.env.DEV_DOMAIN + process.env.PORT + updateFile,
+          coverUrl:
+            process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
           title: updateBody.title,
           description: updateBody.description,
           userId: userId.id,

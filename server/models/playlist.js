@@ -9,14 +9,28 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // this.belongsTo(models.Playlist_Tag);
+      Playlist.hasMany(models.Song, {
+        foreignKey: "playlistId",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      });
+      Playlist.belongsToMany(models.Tag, {
+        through: "Playlist_Tag",
+        targetKey: "id",
+        foreignKey: "playlistId",
+        onUpdate: "cascade",
+        onDelete: "cascade",
+      });
     }
   }
-  //User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id', onDelete: 'cascade', onUpdate: 'cascade' });
+
   Playlist.init(
     {
       coverUrl: DataTypes.STRING,
       title: DataTypes.STRING,
       description: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,
