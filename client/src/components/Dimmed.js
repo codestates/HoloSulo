@@ -19,8 +19,8 @@ function Dimmed({ toggleDimmed, isClickedAllowed = true }) {
   const handleClick = () => {
     if (isClickedAllowed) {
       toggleDimmed((prev) => !prev);
-      if (pathname === "/playlists") {
-        navigate(-1);
+      if (pathname.includes("/playlists")) {
+        navigate("/menu");
       }
       document.body.style.overflow = "auto";
     }

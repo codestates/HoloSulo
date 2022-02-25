@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -47,7 +48,9 @@ function Playlist({
   handlePlaylistClick,
   setShowPlaylistDetail,
   setPlaylistId,
+  tag,
 }) {
+  const navigate = useNavigate();
   const handleClick = () => {
     handlePlaylistClick(index);
   };
@@ -56,6 +59,7 @@ function Playlist({
     event.stopPropagation();
     setShowPlaylistDetail(true);
     setPlaylistId(index);
+    navigate(`/playlists/${playlist.id}`, { state: { tag: tag } });
     document.body.style.overflow = "hidden";
   };
   return (
