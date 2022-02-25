@@ -7,8 +7,9 @@ module.exports = async (req, res) => {
     const findTag = await finder.findTag(tag);
     const findTagId = await finder.findTagId(findTag.dataValues.id);
     const findPlaylist = await finder.findPlaylist(
-      findTagId.map((list) => list.dataValues.playlistID)
+      findTagId.map((list) => list.dataValues.playlistId)
     );
+    console.log(findPlaylist);
     const song = await finder.findSong(
       findPlaylist.map((list) => list.dataValues.id)
     );
