@@ -293,7 +293,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
     // TODO: call patch /playlist api
-    // const response = await axios.post(
+    // const response = await axios.patch(
     //   `${process.env.REACT_APP_API_URL}/playlists`,
     //   formData,
     //   {
