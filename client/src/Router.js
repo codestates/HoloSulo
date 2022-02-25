@@ -42,7 +42,7 @@ function Router() {
       <Route
         path="/main"
         element={
-          <Layout>
+          <Layout isTransparent={true}>
             <Main />
           </Layout>
         }
