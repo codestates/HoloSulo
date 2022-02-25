@@ -225,18 +225,15 @@ const Button = styled.button`
   }
 `;
 
-function PlaylistDetail({ scrollPosition, playlist }) {
+function CreatePlaylist({ scrollPosition, playlist }) {
   const { pathname, state } = useLocation();
-  const [isEditable, setIsEditable] = useState(false);
+
   const [cover, setCover] = useState();
-  const [title, setTitle] = useState(playlist.title);
-  const [description, setDescription] = useState(playlist.description);
-  const [songlist, setSonglist] = useState(
-    playlist.songs.map((p) => {
-      return { ...p };
-    })
-  );
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [songlist, setSonglist] = useState([{ title: "", url: "" }]);
   const [coverUrl, setCoverUrl] = useState();
+
   useEffect(() => {
     if (cover) {
       const url = URL.createObjectURL(cover);
@@ -245,6 +242,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
   }, [cover]);
   const handleTitleInputChange = (event) => {
     event.preventDefault();
+
     setTitle(event.target.value);
   };
 
@@ -262,50 +260,17 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     event.preventDefault();
 
     const newSonglist = [...songlist];
-    newSonglist[index].songTitle = event.target.value;
+    newSonglist[index].title = event.target.value;
     setSonglist(newSonglist);
   };
   const handleSongUrlChange = (event, index) => {
     event.preventDefault();
 
     const newSonglist = [...songlist];
-    newSonglist[index].songUrl = event.target.value;
+    newSonglist[index].url = event.target.value;
     setSonglist(newSonglist);
   };
-  const handleEditClick = () => {
-    setIsEditable(true);
-  };
-  const handleDeleteClick = () => {
-    // TODO: call delete /playlist api
-    // const response = await axios.delete(`${process.env.REACT_APP_API_URL}/playlists`, {
-    //   headers: {Authorization: localStorage.getItem("accessToken")}
-    // })
-  };
-  const handleEditCancelClick = () => {
-    setIsEditable(false);
-  };
-
-  const handleEditDoneClick = () => {
-    const formData = new FormData();
-    formData.append("tag", state.tag);
-    title && formData.append("title", title);
-    description && formData.append("description", description);
-    cover && formData.append("coverFile", cover);
-    songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
-    // TODO: call patch /playlist api
-    // const response = await axios.patch(
-    //   `${process.env.REACT_APP_API_URL}/playlists`,
-    //   formData,
-    //   {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //       Authorization: localStorage.getItem("accessToken"),
-    //     },
-    //     withCredentials: true,
-    //   }
-    // );
-  };
-  const handleAddSongClick = () => {
+  const handleAddClick = () => {
     setSonglist((prev) => [...prev, { title: "", url: "" }]);
   };
   const handleDeleteSong = (event, index) => {
@@ -313,90 +278,82 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     newSonglist.splice(index, 1);
     setSonglist(newSonglist);
   };
+  const handleSubmitClick = async () => {
+    // TODO: call POST /playlists
+    const formData = new FormData();
+    const accessToken = localStorage.getItem("accessToken");
+    formData.append("tag", state.tag);
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("coverFile", cover);
+    formData.append("songs", JSON.stringify(songlist));
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/playlists`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: accessToken,
+        },
+        withCredentials: true,
+      }
+    );
+    // TODO: Update playlists states
+    // TODO: Go back to Menu with new playlist info
+  };
 
   return (
     <Container scrollPosition={scrollPosition + ""}>
       <PlaylistContainer>
-        {isEditable ? (
-          <CoverContainer>
-            <Cover src={coverUrl || playlist.coverUrl} />
-            <CoverInput type="file" accept="image/*" onChange={handleUpload} />
-          </CoverContainer>
-        ) : (
-          <Cover src={playlist.coverUrl} />
-        )}
+        <CoverContainer>
+          <Cover src={coverUrl} />
+          <CoverInput type="file" accept="image/*" onChange={handleUpload} />
+        </CoverContainer>
         <PlaylistInfoContainer>
           <SubTitle>Playlist</SubTitle>
-          {isEditable ? (
-            <TitleInput
-              placeholder="플레이리스트 제목을 입력하세요"
-              onChange={handleTitleInputChange}
-              value={title}
-            />
-          ) : (
-            <Title>{playlist.title}</Title>
-          )}
-          {isEditable ? (
-            <DescriptionTextarea
-              placeholder="플레이리스트 상세 설명을 입력하세요"
-              onChange={handleTextareaChange}
-              value={description}
-            />
-          ) : (
-            <Description>{playlist.description}</Description>
-          )}
+          <TitleInput
+            placeholder="플레이리스트 제목을 입력하세요"
+            onChange={handleTitleInputChange}
+            value={title}
+          />
+          <DescriptionTextarea
+            placeholder="플레이리스트 상세 설명을 입력하세요"
+            onChange={handleTextareaChange}
+            value={description}
+          />
         </PlaylistInfoContainer>
       </PlaylistContainer>
       <SonglistContainer>
         <SonglistHeader>
           <Number>#</Number>
           <SongTitle>노래</SongTitle>
-          {isEditable && <SongTitle>URL</SongTitle>}
+          <SongTitle>URL</SongTitle>
         </SonglistHeader>
-        {isEditable
-          ? songlist.map((song, index) => (
-              <SongRow>
-                <Number>{index + 1}</Number>
-                <SongTitleInput
-                  placeholder="노래 제목을 입력하세요."
-                  onChange={(e) => handleSongTitleChange(e, index)}
-                  value={song.songTitle}
-                />
-                <SongUrlInput
-                  placeholder="유튜브 영상 링크를 입력하세요."
-                  value={song.songUrl}
-                  onChange={(e) => handleSongUrlChange(e, index)}
-                />
-                <SongDelete onClick={(e) => handleDeleteSong(e, index)}>
-                  삭제
-                </SongDelete>
-              </SongRow>
-            ))
-          : playlist.songs.map((item, index) => (
-              <SongRow key={index}>
-                <Number>{index + 1}</Number>
-                <SongTitle>{item.songTitle}</SongTitle>
-              </SongRow>
-            ))}
+        {songlist.map((song, index) => (
+          <SongRow>
+            <Number>{index + 1}</Number>
+            <SongTitleInput
+              placeholder="노래 제목을 입력하세요."
+              onChange={(e) => handleSongTitleChange(e, index)}
+              value={song.title}
+            />
+            <SongUrlInput
+              placeholder="유튜브 영상 링크를 입력하세요."
+              value={song.url}
+              onChange={(e) => handleSongUrlChange(e, index)}
+            />
+            <SongDelete onClick={(e) => handleDeleteSong(e, index)}>
+              삭제
+            </SongDelete>
+          </SongRow>
+        ))}
       </SonglistContainer>
       <ButtonContainer>
-        {isEditable ? (
-          <>
-            <Button onClick={handleAddSongClick}>노래 추가</Button>
-            <Button onClick={handleEditCancelClick}>취소</Button>
-            <Button onClick={handleEditDoneClick}>수정 완료</Button>
-          </>
-        ) : (
-          playlist.userId && (
-            <>
-              <Button onClick={handleEditClick}>수정</Button>
-              <Button onClick={handleDeleteClick}>삭제</Button>
-            </>
-          )
-        )}
+        <Button onClick={handleAddClick}>노래 추가</Button>
+        <Button onClick={handleSubmitClick}>생성</Button>
       </ButtonContainer>
     </Container>
   );
 }
 
-export default PlaylistDetail;
+export default CreatePlaylist;

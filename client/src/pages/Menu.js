@@ -10,6 +10,7 @@ import Dimmed from "../components/Dimmed";
 import axios from "axios";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CreatePlaylist from "../components/CreatePlaylist";
 
 const Container = styled.div`
   width: 100%;
@@ -290,7 +291,7 @@ function Menu() {
           {showCreatePlaylist && (
             <>
               <Dimmed toggleDimmed={setShowCreatePlaylist} />
-              <PlaylistDetail scrollPosition={scrollPosition} />
+              <CreatePlaylist scrollPosition={scrollPosition} />
             </>
           )}
           <TagContainer>
@@ -313,6 +314,7 @@ function Menu() {
                 handlePlaylistClick={() => handlePlaylistClick(index)}
                 setShowPlaylistDetail={setShowPlaylistDetail}
                 setPlaylistId={setPlaylistId}
+                tag={tag}
               />
             ))}
             <EmptyPlaylist onClick={handleCreatePlaylistClick}>
