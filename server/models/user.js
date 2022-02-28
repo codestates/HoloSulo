@@ -8,16 +8,29 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // this.hasMany(models.Oder);
+      // this.hasMany(models.Order);
+      User.hasMany(models.Order, {
+        foreignKey: "userId",
+        as: "userId_order",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      });
+      User.hasMany(models.Playlist, {
+        foreignKey: "userId",
+        as: "userId_playlist",
+        sourceKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      });
     }
   }
-  //User.hasMany(db.Comment, { foreignKey: 'commenter', sourceKey: 'id', onDelete: 'cascade', onUpdate: 'cascade' });
+
   User.init(
     {
       email: DataTypes.STRING,
       username: DataTypes.STRING,
       password: DataTypes.STRING,
-      salt: DataTypes.STRING,
       visitCount: DataTypes.INTEGER,
     },
     {

@@ -14,11 +14,13 @@ module.exports = {
     }
     try {
       const createPlaylist = await Playlist.create({
-        coverUrl: process.env.DEV_DOMAIN + process.env.PORT + coverFileUrl,
+        coverUrl:
+          process.env.DEV_DOMAIN + process.env.PORT + "/" + coverFileUrl,
         title: playlist.title,
         description: playlist.description,
         userId: userId.id,
       });
+      console.log(createPlaylist.dataValues.id);
       const createSong = songsParser.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
@@ -31,7 +33,11 @@ module.exports = {
         playlistId: createPlaylist.dataValues.id,
       });
       return res.status(200).send({
-        data: { playlists: createPlaylist, songs: createSong },
+        data: {
+          playlists: createPlaylist,
+          songs: createSong,
+          Playlist_Tag: createJoinTable,
+        },
         response: "ok",
       });
     } catch (error) {
@@ -51,7 +57,8 @@ module.exports = {
       const updatePlaylist = await Playlist.update(
         {
           id: updateBody.id,
-          coverUrl: process.env.DEV_DOMAIN + process.env.PORT + updateFile,
+          coverUrl:
+            process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
           title: updateBody.title,
           description: updateBody.description,
           userId: userId.id,
@@ -94,6 +101,9 @@ module.exports = {
     try {
       await Playlist.destroy({ where: { id: playlistId.dataValues.id } });
       await Song.destroy({ where: { playlistId: playlistId.dataValues.id } });
+      await Playlist_Tag.destroy({
+        where: { playlistId: playlistId.dataValues.id },
+      });
       return res.status(200).send({ response: "ok" });
     } catch (error) {
       res.status(500).send("error : ", error);
