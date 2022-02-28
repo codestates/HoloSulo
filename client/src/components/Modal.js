@@ -23,11 +23,38 @@ function Modal({
     }
   };
 
-  const [islogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   // 회원탈퇴 상태 state
-  const [isComplete, setIsComplete] = useState(false);
+  //const [isComplete, setIsComplete] = useState(false);
   const navigate = useNavigate();
 
+  const handleComplete = async () => {
+    await axios(`${process.env.REACT_APP_API_URL}/users/id:`, {
+      method: "DELETE",
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "DELETE",
+        "Access-Control-Allow-Credentials": "true",
+      },
+      withCredentials: true,
+    })
+      .then((res) => {
+        const { accessToken } = res.data.data;
+        // 로컬스토리지 accessToken 담기
+        localStorage.setItem("accessToken", accessToken);
+        // 탈퇴 완료 후 메인 페이지로 이동
+        isLogin(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error(err);
+        // 에러 완료 후 메인 페이지로 이동
+        setIsLogin(false);
+        navigate("/");
+      });
+  };
+  /*
   const handleComplete = () => {
     axios
       .delete(`${process.env.REACT_APP_API_URL}/users/id:`, {
@@ -42,7 +69,6 @@ function Modal({
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${accessToken}`;
-        console.log(res.data);
       })
 
       .then((res) => {
@@ -62,6 +88,7 @@ function Modal({
         console.log(err);
       });
   };
+  */
   return (
     <>
       <ModalOverlay visible={visible} />

@@ -156,7 +156,7 @@ const Mention3 = styled.div`
 const Msg = styled.div`
   color: #f06363;
   margin-left: 2%;
-  margin-top: -2.8%;
+  margin-top: -3.5%;
   font-size: 12px;
   font-family: monospace;
   font-weight: 500;

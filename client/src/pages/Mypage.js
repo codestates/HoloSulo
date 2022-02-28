@@ -220,9 +220,8 @@ export default function Mypage() {
 
         <Part3>
           <Compo>
-            <Link to="edit">
-              <VisitNum>3</VisitNum>
-            </Link>
+            <VisitNum>3</VisitNum>
+
             <VisitTimeNum>10</VisitTimeNum>
           </Compo>
 
