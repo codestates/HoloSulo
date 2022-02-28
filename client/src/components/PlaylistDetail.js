@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { playlistsAtom } from "../atom";
 
 const Container = styled.div`
   position: absolute;
@@ -231,11 +233,13 @@ function PlaylistDetail({ scrollPosition, playlist }) {
   const [cover, setCover] = useState();
   const [title, setTitle] = useState(playlist.title);
   const [description, setDescription] = useState(playlist.description);
+  const [playlists, setPlaylists] = useRecoilState(playlistsAtom);
   const [songlist, setSonglist] = useState(
     playlist.songs.map((p) => {
       return { ...p };
     })
   );
+  // console.log(playlist);
   const [coverUrl, setCoverUrl] = useState();
   useEffect(() => {
     if (cover) {
@@ -287,23 +291,57 @@ function PlaylistDetail({ scrollPosition, playlist }) {
 
   const handleEditDoneClick = async () => {
     const formData = new FormData();
+    formData.append("id", playlist.id);
     formData.append("tag", state.tag);
     title && formData.append("title", title);
     description && formData.append("description", description);
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
-    // TODO: call patch /playlist api
-    // const response = await axios.patch(
-    //   `${process.env.REACT_APP_API_URL}/playlists`,
-    //   formData,
-    //   {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //       Authorization: localStorage.getItem("accessToken"),
-    //     },
-    //     withCredentials: true,
-    //   }
-    // );
+
+    const response = await axios.patch(
+      `${process.env.REACT_APP_API_URL}/playlists`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+        withCredentials: true,
+      }
+    );
+    if (response.data.response === "ok") {
+      // udpate playlists state with new playlist
+
+      const newPlaylists = [...playlists[playlist.tag]];
+      playlist = {
+        ...playlist,
+        title: response.data.data.playlists.title,
+        description: response.data.data.playlists.description,
+        coverUrl: response.data.data.playlists.coverUrl,
+        songs: songlist,
+      };
+      // console.log(playlist);
+      // playlist = {
+      //   ...playlist,
+      //   title: response.data.data.playlists.title,
+      //       description: response.data.data.playlists.description,
+      //       coverUrl: response.data.data.playlists.coverUrl,
+      //       songs: songlist,
+      // }
+      newPlaylists.forEach((p) => {
+        if (p.id === playlist.id) {
+          p = playlist;
+        }
+      });
+      // console.log(newPlaylists);
+      setPlaylists((prev) => {
+        const newObj = Object.assign({}, prev);
+        newObj[playlist.tag] = newPlaylists;
+        return newObj;
+      });
+      // go back to detaul
+      setIsEditable(false);
+    }
   };
   const handleAddSongClick = () => {
     setSonglist((prev) => [...prev, { title: "", url: "" }]);
