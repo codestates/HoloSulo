@@ -275,7 +275,7 @@ function EditMypage() {
   const submitPassword = () => {
     axios
       .patch(
-        "/users/password",
+        `${process.env.REACT_APP_API_URL}/users/password`,
         {
           password: passwordInfo.newPassword,
         },
@@ -299,7 +299,7 @@ function EditMypage() {
   const submitNickname = () => {
     axios
       .patch(
-        "/users/username",
+        `${process.env.REACT_APP_API_URL}/users/username`,
         {
           nickname: nicknameInfo.newNickname,
         },
