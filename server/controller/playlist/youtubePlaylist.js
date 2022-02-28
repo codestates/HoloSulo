@@ -46,18 +46,19 @@ module.exports = {
   },
   updatePlaylist: async (req, res) => {
     const updateBody = req.body;
-    const updateFile = req.file.path;
+    const updateFile = req.file && req.file.path;
     const updateSongsParser = JSON.parse(updateBody.songs);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
+
     if (!updateBody) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
     }
     try {
-      const updatePlaylist = await Playlist.update(
+      await Playlist.update(
         {
-          id: updateBody.id,
           coverUrl:
+            updateFile &&
             process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
           title: updateBody.title,
           description: updateBody.description,
@@ -67,6 +68,9 @@ module.exports = {
         },
         { where: { id: updateBody.id } }
       );
+      const updatePlaylist = await Playlist.findOne({
+        where: { id: updateBody.id },
+      });
       const updateSong = updateSongsParser.map(async (song) => {
         await Song.update(
           {
@@ -80,6 +84,7 @@ module.exports = {
           { where: { id: song.id } }
         );
       });
+
       return res.status(200).send({
         data: { playlists: updatePlaylist, songs: updateSong },
         response: "ok",
