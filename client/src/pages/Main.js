@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import Dimmed from "../components/Dimmed";
 import { Link, useLocation } from "react-router-dom";
 import cheeers from "../images/cheers.jpg";
+import { getYoutubeVideoIdOrNull } from "../utils/getYoutubeVideoId";
 
 const Container = styled.div`
   width: 100%;
@@ -340,7 +341,7 @@ function Main() {
   const {
     state: { time, songs, coverUrl },
   } = useLocation();
-  console.log(coverUrl);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -363,7 +364,7 @@ function Main() {
       player.current = new window.YT.Player("player", {
         height: "360",
         width: "640",
-        videoId: songs[youtubeIndex.current].songUrl,
+        videoId: getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl),
         events: {
           onReady: onPlayerReady,
           onStateChange: onPlayerStateChange,
@@ -380,7 +381,9 @@ function Main() {
         if (event.data === window.YT.PlayerState.ENDED) {
           youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
           setCurrentYoutubeIndex(youtubeIndex.current);
-          event.target.loadVideoById(songs[youtubeIndex.current].songUrl);
+          event.target.loadVideoById(
+            getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+          );
         } else if (event.data === window.YT.PlayerState.PLAYING) {
           setIsPlaying(true);
         }
@@ -431,7 +434,9 @@ function Main() {
     youtubeIndex.current =
       youtubeIndex.current !== 0 ? youtubeIndex.current - 1 : songs.length - 1;
     setCurrentYoutubeIndex(youtubeIndex.current);
-    player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
+    player.current.loadVideoById(
+      getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+    );
     if (player.current.getPlayerState() === 1) {
       player.current.playVideo();
     }
@@ -440,7 +445,9 @@ function Main() {
     player.current.pauseVideo();
     youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
     setCurrentYoutubeIndex(youtubeIndex.current);
-    player.current.loadVideoById(songs[youtubeIndex.current].songUrl);
+    player.current.loadVideoById(
+      getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+    );
     if (player.current.getPlayerState() === 1) {
       player.current.playVideo();
     }
