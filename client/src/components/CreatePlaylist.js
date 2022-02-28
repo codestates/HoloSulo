@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { playlistsAtom } from "../atom";
 
 const Container = styled.div`
   position: absolute;
@@ -225,15 +227,16 @@ const Button = styled.button`
   }
 `;
 
-function CreatePlaylist({ scrollPosition, playlist }) {
+function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
   const { pathname, state } = useLocation();
 
   const [cover, setCover] = useState();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [songlist, setSonglist] = useState([{ title: "", url: "" }]);
+  const [songlist, setSonglist] = useState([{ songTitle: "", songUrl: "" }]);
   const [coverUrl, setCoverUrl] = useState();
-
+  const [playlists, setPlaylists] = useRecoilState(playlistsAtom);
+  const navigate = useNavigate();
   useEffect(() => {
     if (cover) {
       const url = URL.createObjectURL(cover);
@@ -260,18 +263,18 @@ function CreatePlaylist({ scrollPosition, playlist }) {
     event.preventDefault();
 
     const newSonglist = [...songlist];
-    newSonglist[index].title = event.target.value;
+    newSonglist[index].songTitle = event.target.value;
     setSonglist(newSonglist);
   };
   const handleSongUrlChange = (event, index) => {
     event.preventDefault();
 
     const newSonglist = [...songlist];
-    newSonglist[index].url = event.target.value;
+    newSonglist[index].songUrl = event.target.value;
     setSonglist(newSonglist);
   };
   const handleAddClick = () => {
-    setSonglist((prev) => [...prev, { title: "", url: "" }]);
+    setSonglist((prev) => [...prev, { songTitle: "", songUrl: "" }]);
   };
   const handleDeleteSong = (event, index) => {
     const newSonglist = [...songlist];
@@ -298,8 +301,26 @@ function CreatePlaylist({ scrollPosition, playlist }) {
         withCredentials: true,
       }
     );
-    // TODO: Update playlists states
-    // TODO: Go back to Menu with new playlist info
+    if (response.data.response === "ok") {
+      const newPlaylists = [...playlists[state.tag]];
+      const playlist = {
+        id: response.data.data.playlists.id,
+        tag: state.tag,
+        coverUrl: response.data.data.playlists.coverUrl,
+        title: response.data.data.playlists.title,
+        description: response.data.data.playlists.description,
+        songs: response.data.data.songs,
+      };
+      newPlaylists.push(playlist);
+      setPlaylists((prev) => {
+        const newObj = Object.assign({}, prev);
+        newObj[state.tag] = newPlaylists;
+        return newObj;
+      });
+      document.body.style.overflow = "auto";
+      setShowCreatePlaylist(false);
+      navigate("/menu");
+    }
   };
 
   return (
@@ -335,11 +356,11 @@ function CreatePlaylist({ scrollPosition, playlist }) {
             <SongTitleInput
               placeholder="노래 제목을 입력하세요."
               onChange={(e) => handleSongTitleChange(e, index)}
-              value={song.title}
+              value={song.songTitle}
             />
             <SongUrlInput
               placeholder="유튜브 영상 링크를 입력하세요."
-              value={song.url}
+              value={song.songUrl}
               onChange={(e) => handleSongUrlChange(e, index)}
             />
             <SongDelete onClick={(e) => handleDeleteSong(e, index)}>

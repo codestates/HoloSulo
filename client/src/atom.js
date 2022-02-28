@@ -9,3 +9,8 @@ export const isLoggedInAtom = atom({
   key: "isLoggedIn",
   default: localStorage.getItem("accessToken") ? true : false,
 });
+
+export const playlistsAtom = atom({
+  key: "playlists",
+  default: {},
+});
