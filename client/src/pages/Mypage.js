@@ -4,8 +4,6 @@ import styled from "styled-components";
 import axios from "axios";
 import Modal from "../components/Modal";
 
-// import smallLogo from "../images/smallLogo.png";
-
 const Total = styled.div`
   display: flex;
   width: 100%;
