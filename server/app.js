@@ -38,6 +38,9 @@ app.patch("/users/username", controllers.namechange);
 // app.get("/naver/callback", controllers.naverLogin);
 // app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
 app.post("/naver/api/callback", controllers.naverLogin.getNaverCallback);
+app.post("/kakaocallback", controllers.kakaoCallback);
+app.get("/user/kakaoCallback", controllers.kakaoCallback);
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

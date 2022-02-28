@@ -11,4 +11,5 @@ module.exports = {
   passwordchange: require("./user/passwordChange"),
   namechange: require("./user/nameChange"),
   naverLogin: require("./user/naverLogin"),
+  kakaoCallback: require("./user/kakaoCallback"),
 };

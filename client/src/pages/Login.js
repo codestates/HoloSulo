@@ -163,6 +163,24 @@ export default function Login(props) {
     // }
   }, []);
 
+  //카카오로그인
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get("code");
+    if (authorizationCode) {
+      axios
+        .post(process.env.REACT_APP_SERVER_URL + "/user/kakaoCallback", {
+          authorizationCode,
+        })
+        .then((res) => {
+          const { accessToken } = res.data.data;
+          window.localStorage.setItem("accessToken", accessToken);
+          setIsLoggedInAtom(true);
+          history("/menu");
+        });
+    }
+  }, [window.location.href]);
+
   const handleLogin = async () => {
     const userData = {
       email: userEmail,
