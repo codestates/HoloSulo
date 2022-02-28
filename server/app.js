@@ -1,8 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 80;
 const cors = require("cors");
+const multer = require("multer");
+const upload = multer({ dest: "static/" });
 
 app.use(express.json());
 const controllers = require("./controller");
@@ -10,7 +12,7 @@ const controllers = require("./controller");
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", process.env.HOLOSULO_HOST_DOMAIN],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "OPTIONS", "DELETE"],
   })
@@ -31,12 +33,20 @@ app.post("/users/logout", controllers.logout);
 app.post("/users/signup", controllers.signup);
 app.post("/orders", controllers.order);
 app.get("/playlists", controllers.playlist);
+app.post(
+  "/playlists",
+  upload.single("coverFile"),
+  controllers.youtubePlaylist.createPlaylist
+);
+app.patch(
+  "/playlists",
+  upload.single("coverFile"),
+  controllers.youtubePlaylist.updatePlaylist
+);
+app.delete("/playlists", controllers.youtubePlaylist.deletePlaylist);
 app.get("/users/:id", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
-
-// app.get("/naver/callback", controllers.naverLogin);
-// app.get("/naver/login", controllers.naverLoginVer2.getNaverLoginVer2);
 app.post("/naver/api/callback", controllers.naverLogin.getNaverCallback);
 app.post("/kakaocallback", controllers.kakaoCallback);
 app.get("/user/kakaoCallback", controllers.kakaoCallback);

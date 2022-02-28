@@ -275,7 +275,7 @@ function EditMypage() {
   const submitPassword = () => {
     axios
       .patch(
-        "/users/password",
+        `${process.env.REACT_APP_API_URL}/users/password`,
         {
           password: passwordInfo.newPassword,
         },
@@ -299,7 +299,7 @@ function EditMypage() {
   const submitNickname = () => {
     axios
       .patch(
-        "/users/username",
+        `${process.env.REACT_APP_API_URL}/users/username`,
         {
           nickname: nicknameInfo.newNickname,
         },
@@ -348,7 +348,7 @@ function EditMypage() {
           <Password
             type="password"
             placeholder="check password"
-            onChange={handleInputValue2("checkNewPassword")}
+            onChange={handleInputValue("checkNewPassword")}
             onBlur={() => {
               checkPassword(
                 passwordInfo.newPassword,
@@ -373,7 +373,7 @@ function EditMypage() {
             <TypoNickname
               type="text"
               placeholder="nickname"
-              onChange={handleInputValue("nickname")}
+              onChange={handleInputValue2("nickname")}
               onBlur={() => {}}
             ></TypoNickname>
             <Check

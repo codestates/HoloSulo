@@ -39,7 +39,6 @@ export default async function NaverLoginCallback() {
               nickname: el.data.data.nickname,
             },
           }).then(async (el) => {
-            console.log(el);
             try {
               await axios({
                 method: "post",
@@ -50,11 +49,10 @@ export default async function NaverLoginCallback() {
                   username: el.data.data.user.username,
                 },
               }).then((el) => {
-                console.log(el.data.data);
                 if (el.data.data.accessToken) {
                   localStorage.setItem("accessToken", el.data.data.accessToken);
                   setIsLoggedInAtom(true);
-                  // window.location.assign("/menu");
+                  window.location.assign("/menu");
                 }
               });
             } catch (error) {
@@ -67,13 +65,3 @@ export default async function NaverLoginCallback() {
     }
   }
 }
-/**
- *           console.log(el);
-          await axios({
-            method: "get",
-            url: "https://openapi.naver.com/v1/nid/me",
-            headers: {
-              Authorization: `Bearer ${el.data.accessToken.access_token}`,
-            },
-          }).then(async (el) => {
- */

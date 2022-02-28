@@ -9,13 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // this.belongsTo(models.User);
+      Order.belongsTo(models.User, {
+        foreignKey: "userId",
+        targetKey: "id",
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      });
     }
   }
-  //    db.Comment.belongsTo(db.User, { foreignKey: 'commenter', targetKey: 'id', onDelete: 'cascade', onUpdate: 'cascade'});
+
   Order.init(
     {
       theme: DataTypes.STRING,
       time: DataTypes.DATE,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,

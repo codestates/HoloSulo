@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { isGlowingAtom } from "../atom";
+import { isGlowingAtom, playlistsAtom } from "../atom";
 import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
@@ -10,6 +10,7 @@ import Dimmed from "../components/Dimmed";
 import axios from "axios";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import CreatePlaylist from "../components/CreatePlaylist";
 
 const Container = styled.div`
   width: 100%;
@@ -150,7 +151,7 @@ function Menu() {
   const [activeTagIndex, setActiveTagIndex] = useState(1);
   const [activeTimeIndex, setActiveTimeIndex] = useState(2);
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(0);
-  const [playlists, setPlaylists] = useState([]);
+  const [playlists, setPlaylists] = useRecoilState(playlistsAtom);
   const [showPlaylistDetail, setShowPlaylistDetail] = useState(false);
   const [tag, setTag] = useState(TAGS[0]);
   const [time, setTime] = useState("1시간");
@@ -258,6 +259,7 @@ function Menu() {
           state: {
             time: selectedTime,
             songs: playlists[tag][activePlaylistIndex].songs,
+            coverUrl: playlists[tag][activePlaylistIndex].coverUrl,
           },
         });
       }
@@ -289,7 +291,10 @@ function Menu() {
           {showCreatePlaylist && (
             <>
               <Dimmed toggleDimmed={setShowCreatePlaylist} />
-              <PlaylistDetail scrollPosition={scrollPosition} />
+              <CreatePlaylist
+                scrollPosition={scrollPosition}
+                setShowCreatePlaylist={setShowCreatePlaylist}
+              />
             </>
           )}
           <TagContainer>
@@ -312,6 +317,7 @@ function Menu() {
                 handlePlaylistClick={() => handlePlaylistClick(index)}
                 setShowPlaylistDetail={setShowPlaylistDetail}
                 setPlaylistId={setPlaylistId}
+                tag={tag}
               />
             ))}
             <EmptyPlaylist onClick={handleCreatePlaylistClick}>

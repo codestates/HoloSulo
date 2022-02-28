@@ -40,9 +40,17 @@ function Router() {
         }
       />
       <Route
-        path="/main"
+        path="/playlists/:id"
         element={
           <Layout>
+            <Menu />
+          </Layout>
+        }
+      />
+      <Route
+        path="/main"
+        element={
+          <Layout isTransparent={true}>
             <Main />
           </Layout>
         }

@@ -151,6 +151,7 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userLoginError, setUserLoginError] = useState("");
+
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const setIsLoggedInAtom = useSetRecoilState(isLoggedInAtom);
 
@@ -158,9 +159,9 @@ export default function Login(props) {
 
   useEffect(() => {
     // 로그인 된 상태이면 "/menu"로 이동
-    // if (localStorage.getItem("accessToken") && isLoggedIn) {
-    //   history("/menu");
-    // }
+    if (localStorage.getItem("accessToken") && isLoggedIn) {
+      history("/menu");
+    }
   }, []);
 
   //카카오로그인

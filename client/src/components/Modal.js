@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Delete from "../components/Delete";
 
 function Modal({
   className,
@@ -34,7 +35,7 @@ function Modal({
           <Part>
             <Mention>탈퇴하시겠습니까?</Mention>
             <Compo>
-              <Confirm>확인</Confirm>
+              <Confirm onClick={Delete}>확인</Confirm>
               <Cancle className="modal-close" onClick={close}>
                 취소
               </Cancle>
