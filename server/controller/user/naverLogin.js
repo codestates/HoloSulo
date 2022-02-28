@@ -1,5 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
+const { User } = require("../../models");
+const { generateAccessToken } = require("../modules/tokenFunction");
 const clientId = process.env.NAVER_CLIENT_ID;
 const clientSecret = process.env.NAVER_CLIENT_SECRET;
 module.exports = {
@@ -24,16 +26,33 @@ module.exports = {
         headers: {
           Authorization: `Bearer ${el.data.access_token}`,
         },
-      }).then((el) => {
-        console.log(el.data.response.id);
-        return res.status(200).send({
-          data: {
-            email: el.data.response.email,
-            nickname: el.data.response.nickname,
-            mobile: el.data.response.mobile,
-          },
-          state: query.state,
-        });
+      }).then(async (el) => {
+        // console.log(el.data.response.id);
+        try {
+          User.findOrCreate({
+            where: {
+              email: el.data.response.email,
+              username: el.data.response.nickname,
+            },
+          }).then((el) => {
+            console.log(el);
+            const payload = {
+              email: el[0].dataValues.email,
+              username: el[0].dataValues.username,
+            };
+            const accessToken = generateAccessToken(payload);
+            return res.status(200).send({
+              response: "ok",
+              data: {
+                accessToken: accessToken,
+                userInfo: { username: el[0].dataValues.username },
+              },
+            });
+          });
+        } catch (error) {
+          console.log("error : ", error);
+          res.state(500).send({ response: "잘못된 접근입니다" });
+        }
       });
     });
   },

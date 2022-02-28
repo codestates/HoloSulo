@@ -1,6 +1,5 @@
 const { Playlist, Song, Playlist_Tag, Tag } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
-
 module.exports = {
   createPlaylist: async (req, res) => {
     const playlist = req.body;

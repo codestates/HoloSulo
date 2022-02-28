@@ -31,40 +31,12 @@ export default async function NaverLoginCallback() {
           { withCredentials: true }
         )
         .then(async (el) => {
-          setTimeout(
-            await axios({
-              method: "post",
-              url: "http://localhost:8080/users/signup",
-              data: {
-                email: el.data.data.email,
-                password: el.data.data.mobile,
-                nickname: el.data.data.nickname,
-              },
-            }).then(async (el) => {
-              try {
-                await axios({
-                  method: "post",
-                  url: "http://localhost:8080/users/login",
-                  data: {
-                    email: el.data.data.user.email,
-                    password: el.data.data.user.password,
-                    username: el.data.data.user.username,
-                  },
-                }).then((el) => {
-                  if (el.data.data.accessToken) {
-                    localStorage.setItem(
-                      "accessToken",
-                      el.data.data.accessToken
-                    );
-                    setIsLoggedInAtom(true);
-                    // window.location.assign("/menu");
-                  }
-                });
-              } catch (error) {
-                console.log("err :", error.message);
-              }
-            })
-          );
+          console.log(el);
+          if (el.data.data.accessToken) {
+            localStorage.setItem("accessToken", el.data.data.accessToken);
+            setIsLoggedInAtom(true);
+            window.location.assign("/menu");
+          }
         });
     } catch (error) {
       console.log("error", error);
