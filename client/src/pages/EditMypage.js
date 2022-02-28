@@ -96,7 +96,6 @@ const Compo = styled.div`
   justify-content: center;
   margin-bottom: 3%;
   padding-left: 5.5%;
-  // margin-bottom: 2%; *삼항연산자 들어왔을때
 `;
 
 const Edit = styled.button`
@@ -157,7 +156,7 @@ const Mention3 = styled.div`
 const Msg = styled.div`
   color: #f06363;
   margin-left: 2%;
-  margin-top: -2.8%;
+  margin-top: -3.5%;
   font-size: 12px;
   font-family: monospace;
   font-weight: 500;
@@ -172,79 +171,34 @@ const Msg2 = styled.div`
 `;
 
 function EditMypage() {
-  const [nicknameMessage, setNicknameMessage] = useState("");
-  const [isDupNickname, setIsDupNickname] = useState(false);
-
-  // password
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
     checkNewPassword: "",
   });
 
-  // nickname
   const [nicknameInfo, setNicknameInfo] = useState({
-    newNickname: "",
+    nickname: "",
   });
 
-  // 비밀번호 변경 상태 state
   const [isComplete, setIsComplete] = useState(false);
   const history = useNavigate();
 
-  // nickname
-  const [isNicknameComplete, setIsNicknameComplete] = useState(false);
-
   const handleComplete = () => {
-    // mypage로 리다이렉트
     setIsComplete(true);
-    history("/mypage");
+    setTimeout(() => {
+      history("/mypage");
+    }, 2000);
   };
 
-  const handleComplete2 = () => {
-    // mypage로 리다이렉트
-    setIsNicknameComplete(true);
-    history("/mypage");
-  };
-
-  // 입력상태 state
   const [isNewPassword, setIsNewPassword] = useState(false);
-  const [isCheckNewPassword, setIsCheckNewPassword] = useState(false);
-  const [passwordMessage, setPasswordMessage] = useState(""); // 새로운 패스워드 유효성검사 메세지 state
-  const [passwordCheckMessage, setPasswordCheckMessage] = useState(""); // 새로운 패스워드 확인 메세지 state
+  const [isCheckNewpassword, setIsCheckNewPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState(""); // newpassword 유효성검사 메세지 state
+  const [passwordCheckMessage, setPasswordCheckMessage] = useState(""); // newpassword 확인 메세지 state
+  const [nicknameMessage, setNicknameMessage] = useState("");
+  const [isDupNickname, setIsDupNickname] = useState(false);
 
   const handleInputValue = (key) => (e) => {
     setPasswordInfo({ ...passwordInfo, [key]: e.target.value });
-  };
-
-  const handleInputValue2 = (key) => (e) => {
-    setNicknameInfo({ ...nicknameInfo, [key]: e.target.value });
-  };
-
-  // nickname  입력상태 state
-  const [isNewNickname, setIsNewNickname] = useState(false);
-
-  // nickname 중복체크
-  const dupNickname = (nickname) => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/users/userName`,
-        { username: nicknameInfo.newNickname },
-        { httpOnly: true, withCredentials: true }
-      )
-      .then((res) => {
-        //const resMsg = res.data.message;
-        if (res.data.response === "ok") {
-          setIsDupNickname(true);
-          setNicknameMessage("사용가능한 닉네임입니다.");
-        }
-      })
-      .catch((err) => {
-        console.log(err.response);
-        if (err.response.data.message === "user name conflict") {
-          setIsDupNickname(false);
-          setNicknameMessage("이미 사용중인 닉네임입니다.");
-        }
-        throw err;
-      });
   };
 
   // newPassword 유효성검사
@@ -253,7 +207,7 @@ function EditMypage() {
     if (!regPassword.test(newPassword)) {
       setIsNewPassword(false);
       setPasswordMessage(
-        "숫자+영문+특수문자 조합으로 8자리 이상 입력해주세요!"
+        "숫자+영문+특수문자 조합으로 8자리 이상 입력해주세요."
       );
     } else {
       setIsNewPassword(true);
@@ -272,7 +226,30 @@ function EditMypage() {
     }
   };
 
-  const submitPassword = () => {
+  const dupNickname = (nickname) => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/users/userName`,
+        { username: nicknameInfo.nickname },
+        { httpOnly: true, withCredentials: true }
+      )
+      .then((res) => {
+        if (res.data.response === "ok") {
+          setIsDupNickname(true);
+          setNicknameMessage("사용가능한 닉네임입니다.");
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+        if (err.response.data.message === "user name conflict") {
+          setIsDupNickname(false);
+          setNicknameMessage("이미 사용중인 닉네임입니다.");
+        }
+        throw err;
+      });
+  };
+
+  const infoAll = () => {
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/users/password`,
@@ -286,33 +263,9 @@ function EditMypage() {
         const resMsg = res.data.message;
         if (resMsg === "ok") {
           handleComplete();
-          console.log("비밀번호가 성공적으로 변경되었습니다.");
+          console.log("비밀번호 변경 성공");
         } else {
-          console.log("비밀번호 변경이 실패하였습니다.");
-        }
-      })
-      .catch((err) => {
-        throw err;
-      });
-  };
-
-  const submitNickname = () => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_API_URL}/users/username`,
-        {
-          nickname: nicknameInfo.newNickname,
-        },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res.data.message);
-        const resMsg = res.data.message;
-        if (resMsg === "ok") {
-          handleComplete2();
-          console.log("nickname이 성공적으로 변경되었습니다.");
-        } else {
-          console.log("nickname 변경이 실패하였습니다.");
+          console.log("비밀번호 변경 실패");
         }
       })
       .catch((err) => {
@@ -356,32 +309,26 @@ function EditMypage() {
               );
             }}
           ></Password>
-          {isCheckNewPassword ? (
+          {isCheckNewpassword ? (
             passwordInfo.checkNewPassword.length === 0 ? null : (
               <Msg>{passwordCheckMessage}</Msg>
             )
           ) : (
             <Msg>{passwordCheckMessage}</Msg>
           )}
+
           <Space></Space>
-          <Edit onClick={submitPassword}>password 변경 저장</Edit>
+          <Edit onClick={infoAll}>password 변경 저장</Edit>
         </Part2>
 
         <Part1>
           <Mention3>nickname 변경</Mention3>
           <Compo>
-            <TypoNickname
-              type="text"
-              placeholder="nickname"
-              onChange={handleInputValue2("nickname")}
-              onBlur={() => {}}
-            ></TypoNickname>
+            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
             <Check
-              disabled={
-                nicknameInfo.newNickname.length !== 0 ? false : "disabled"
-              }
+              disabled={nicknameInfo.nickname.length !== 0 ? false : "disabled"}
               onClick={() => {
-                dupNickname(nicknameInfo.newNickname);
+                dupNickname(nicknameInfo.nickname);
               }}
             >
               check
@@ -389,12 +336,12 @@ function EditMypage() {
           </Compo>
           {isDupNickname ? (
             <Msg2>{nicknameMessage}</Msg2>
-          ) : nicknameInfo.newNickname.length === 0 ? null : (
+          ) : nicknameInfo.nickname.length === 0 ? null : (
             <Msg>{nicknameMessage}</Msg>
           )}
         </Part1>
       </InputInfo>
-      <Edit onClick={submitNickname}>nickname 변경 저장</Edit>
+      <Edit>nickname 변경 저장</Edit>
 
       <Link to="/mypage">
         <Cancle>취소</Cancle>
