@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { isGlowingAtom } from "../atom";
+import { isGlowingAtom, playlistsAtom } from "../atom";
 import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
@@ -151,7 +151,7 @@ function Menu() {
   const [activeTagIndex, setActiveTagIndex] = useState(1);
   const [activeTimeIndex, setActiveTimeIndex] = useState(2);
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(0);
-  const [playlists, setPlaylists] = useState([]);
+  const [playlists, setPlaylists] = useRecoilState(playlistsAtom);
   const [showPlaylistDetail, setShowPlaylistDetail] = useState(false);
   const [tag, setTag] = useState(TAGS[0]);
   const [time, setTime] = useState("1시간");
@@ -291,7 +291,10 @@ function Menu() {
           {showCreatePlaylist && (
             <>
               <Dimmed toggleDimmed={setShowCreatePlaylist} />
-              <CreatePlaylist scrollPosition={scrollPosition} />
+              <CreatePlaylist
+                scrollPosition={scrollPosition}
+                setShowCreatePlaylist={setShowCreatePlaylist}
+              />
             </>
           )}
           <TagContainer>

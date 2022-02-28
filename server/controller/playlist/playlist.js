@@ -27,6 +27,7 @@ module.exports = async (req, res) => {
             songs: song.filter(
               (item) => item.dataValues.playlistId === list.dataValues.id
             ),
+            userId: list.dataValues.userId,
           };
         }),
         response: "ok",
