@@ -285,6 +285,7 @@ function Menu() {
               <PlaylistDetail
                 scrollPosition={scrollPosition}
                 playlist={playlists[tag][playlistId]}
+                setShowPlaylistDetail={setShowPlaylistDetail}
               />
             </>
           )}

@@ -97,7 +97,7 @@ module.exports = {
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
     const playlistId = await Playlist.findOne({
-      where: { userId: userId.id },
+      where: { id: req.body.playlistId },
     });
 
     if (!playlistId || !userId) {
