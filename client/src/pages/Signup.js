@@ -301,7 +301,7 @@ export default function Signup() {
     if (!regPassword.test(password)) {
       setIsPassword(false);
       setPasswordMessage(
-        "숫자+영문+특수문자 조합으로 8자리 이상 입력해주세요!"
+        "숫자+영문+특수문자 조합으로 8자리 이상 입력해주세요."
       );
     } else {
       setIsPassword(true);
