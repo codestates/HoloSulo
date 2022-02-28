@@ -1,3 +1,4 @@
+const { compareSync } = require("bcrypt");
 const { Playlist, Song, Playlist_Tag, Tag } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
 module.exports = {
@@ -7,6 +8,7 @@ module.exports = {
     const songsParser = JSON.parse(playlist.songs);
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
+    console.log(userId.id);
     const tagId = await Tag.findOne({ where: { tag: playlist.tag } });
     if (!playlist) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
@@ -49,6 +51,7 @@ module.exports = {
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
 
+    console.log(updateBody);
     if (!updateBody) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
     }

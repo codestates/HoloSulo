@@ -239,7 +239,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
       return { ...p };
     })
   );
-  // console.log(playlist);
+  console.log(playlist);
   const [coverUrl, setCoverUrl] = useState();
   useEffect(() => {
     if (cover) {
@@ -298,7 +298,6 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
 
-
     const response = await axios.patch(
       `${process.env.REACT_APP_API_URL}/playlists`,
       formData,
@@ -312,7 +311,7 @@ function PlaylistDetail({ scrollPosition, playlist }) {
     );
     if (response.data.response === "ok") {
       // udpate playlists state with new playlist
-
+      console.log(songlist);
       const newPlaylists = [...playlists[playlist.tag]];
       playlist = {
         ...playlist,

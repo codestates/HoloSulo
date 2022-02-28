@@ -37,6 +37,7 @@ module.exports = {
           }).then((el) => {
             console.log(el);
             const payload = {
+              id: el[0].dataValues.id,
               email: el[0].dataValues.email,
               username: el[0].dataValues.username,
             };
