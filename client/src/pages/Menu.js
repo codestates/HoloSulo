@@ -130,6 +130,7 @@ const EmptyPlaylist = styled.div`
 
 const EmptyMessage = styled.span`
   margin-top: 20px;
+  width: 120px;
 `;
 
 const TAGS = [
