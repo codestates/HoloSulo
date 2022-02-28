@@ -28,11 +28,21 @@ const Title = styled.h3`
   font-weight: bold;
   font-size: 14px;
   margin-bottom: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 20px;
+  overflow: hidden;
+  width: 115px;
 `;
 
 const Description = styled.p`
   color: rgba(255, 255, 255, 70%);
   font-size: 10px;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  height: 25px;
+  overflow: hidden;
+  width: 115px;
 `;
 
 const More = styled.span`
