@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
     const song = await finder.findSong(
       findPlaylist.map((list) => list.dataValues.id)
     );
+    //userId 개인이 만든것만 나오게 다른유저가 만든건 안나오게
     if (!findPlaylist || !song) {
       return res.status(400).send({ response: "err" });
     } else {
@@ -28,12 +29,6 @@ module.exports = async (req, res) => {
             ),
           };
         }),
-        // song: song.map((song) => {
-        //   return {
-        //     songUrl: song.dataValues.songUrl,
-        //     songTitle: song.dataValues.songTitle,
-        //   };
-        // }),
         response: "ok",
       });
     }
@@ -41,19 +36,3 @@ module.exports = async (req, res) => {
     res.status(500).send({ error: error });
   }
 };
-/**
- * 
- * 
- *       const payload = {
-        id: findPlaylist.dataValues.id,
-        coverUrl: findPlaylist.dataValues.coverUrl,
-        title: findPlaylist.dataValues.title,
-        description: findPlaylist.dataValues.description,
-        createdAt: findPlaylist.dataValues.createdAt,
-        updatedAt: findPlaylist.dataValues.updatedAt,
-      };
- *            id: payload.id,
-            coverUrl: payload.coverUrl,
-            title: payload.title,
-            description: payload.description
- */

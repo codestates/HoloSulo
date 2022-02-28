@@ -20,7 +20,6 @@ module.exports = {
         description: playlist.description,
         userId: userId.id,
       });
-      console.log(createPlaylist.dataValues.id);
       const createSong = songsParser.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
@@ -92,7 +91,7 @@ module.exports = {
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
     const playlistId = await Playlist.findOne({
-      where: { userId: userId.id },
+      where: { id: req.body.id },
     });
 
     if (!playlistId || !userId) {

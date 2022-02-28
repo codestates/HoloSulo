@@ -2,7 +2,6 @@ require("dotenv").config();
 const axios = require("axios");
 const clientId = process.env.NAVER_CLIENT_ID;
 const clientSecret = process.env.NAVER_CLIENT_SECRET;
-const state = "qwe123";
 module.exports = {
   getNaverCallback: async (req, res) => {
     const query = req.body;
@@ -26,29 +25,16 @@ module.exports = {
           Authorization: `Bearer ${el.data.access_token}`,
         },
       }).then((el) => {
-        console.log(el);
+        console.log(el.data.response.id);
         return res.status(200).send({
           data: {
             email: el.data.response.email,
             nickname: el.data.response.nickname,
             mobile: el.data.response.mobile,
           },
-          state: state,
+          state: query.state,
         });
       });
     });
   },
 };
-/**
- *       
-      return res.status(200).send({
-        accessToken: el.data,
-        state: query.state,
-      });
-
-            await axios({
-        method:"post",
-        url:"https://openapi.naver.com/v1/nid/me",
-        
-      }
- */
