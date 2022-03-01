@@ -3,7 +3,7 @@ const { User } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
-  const userData = isAuthorized(req.headers.Authorization);
+  const userData = isAuthorized(req.headers.authorization);
   if (!userData) {
     res.status(401).send({ response: "err" });
   } else {
