@@ -3,13 +3,15 @@ const res = require("express/lib/response");
 const { deleteUser } = require("../modules/deleteUsers");
 
 module.exports = async (req, res) => {
-  if (!req.headers.Authorization) {
+  console.log(req.headers.authorization);
+  if (!req.headers.authorization) {
     return res.status(401).send({ message: "Unauthorized" });
   }
-  return await deleteUser(req.headers.Authorization);
+  try {
+    await deleteUser(req.headers.authorization);
+    res.send({ message: "success delete" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: "server error" });
+  }
 };
-try {
-  res.send({ message: "success delete" });
-} catch (err) {
-  console.log(err);
-}
