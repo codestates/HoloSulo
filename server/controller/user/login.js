@@ -38,7 +38,12 @@ module.exports = async (req, res) => {
           response: "ok",
           data: {
             accessToken: accessToken,
-            userInfo: { username: userInfo.dataValues.username },
+            userInfo: {
+              id: userInfo.dataValues.id,
+              username: userInfo.dataValues.username,
+              email: userInfo.dataValues.email,
+              visitCount: userInfo.dataValues.visitCount,
+            },
           },
         });
       }
