@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Modal from "../components/Modal";
+import { useRecoilValue } from "recoil";
+import { userInfoAtom } from "../atom";
 
 const Total = styled.div`
   display: flex;
@@ -173,6 +175,8 @@ const Gage = styled.div`
 `;
 
 export default function Mypage() {
+  const userInfo = useRecoilValue(userInfoAtom);
+  console.log(userInfo);
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
     setModalVisible(true);
@@ -191,12 +195,12 @@ export default function Mypage() {
         <Part1>
           <Compo>
             <Email>email</Email>
-            <UserEmail>holosulo@gmail.com</UserEmail>
+            <UserEmail>{userInfo.email && userInfo.email}</UserEmail>
           </Compo>
 
           <Compo>
             <Nickname>nickname</Nickname>
-            <UserNick>holosulo</UserNick>
+            <UserNick>{userInfo.username && userInfo.username}</UserNick>
           </Compo>
         </Part1>
 
