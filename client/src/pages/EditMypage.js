@@ -172,6 +172,24 @@ const Msg2 = styled.div`
   font-weight: 500;
 `;
 
+const Msg3 = styled.div`
+  color: #117326;
+  margin-top: -1.5%;
+  margin-left: 7%;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 500;
+`;
+
+const Msg4 = styled.div`
+  color: #f06363;
+  margin-left: 7%;
+  margin-top: -1.5%;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 500;
+`;
+
 function EditMypage() {
   const [passwordInfo, setPasswordInfo] = useState({
     newPassword: "",
@@ -365,9 +383,9 @@ function EditMypage() {
             </Check>
           </Compo>
           {isDupNickname ? (
-            <Msg2>{nicknameMessage}</Msg2>
+            <Msg3>{nicknameMessage}</Msg3>
           ) : nicknameInfo.length === 0 ? null : (
-            <Msg>{nicknameMessage}</Msg>
+            <Msg4>{nicknameMessage}</Msg4>
           )}
         </Part1>
       </InputInfo>

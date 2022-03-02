@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Modal from "../components/Modal";
@@ -170,19 +170,56 @@ const Gage = styled.div`
   width: 50px;
   height: 50px;
   background-color: skyblue;
-
   margin-right: 4px;
 `;
 
-export default function Mypage() {
+const Gage2 = styled.div`
+  width: 50px;
+  height: 50px;
+  background-color: darkgray;
+  margin-right: 4px;
+`;
+
+export default function Mypage(userData) {
   const userInfo = useRecoilValue(userInfoAtom);
-  console.log(userInfo);
+  // console.log(userInfo);
+
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
     setModalVisible(true);
   };
   const closeModal = () => {
     setModalVisible(false);
+  };
+
+  useEffect(() => {
+    getUserInfo();
+    console.log(getUserInfo);
+  });
+
+  const getUserInfo = async () => {
+    await axios(`${process.env.REACT_APP_API_URL}/users/`, {
+      method: "GET",
+      data: {
+        username: userData.username,
+        useremail: userData.useremail,
+        visitCount: userData.visitCount,
+        weekVisitCount: "0",
+        totalHour: "13.5",
+      },
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Credentials": "true",
+        Authorization: localStorage.getItem("accessToken"),
+      },
+      withCredentials: true,
+    })
+      .then((res) => {})
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -224,9 +261,9 @@ export default function Mypage() {
 
         <Part3>
           <Compo>
-            <VisitNum>3</VisitNum>
+            <VisitNum>{getUserInfo.visitCount}</VisitNum>
 
-            <VisitTimeNum>10</VisitTimeNum>
+            <VisitTimeNum>{}</VisitTimeNum>
           </Compo>
 
           <Compo>
@@ -241,13 +278,13 @@ export default function Mypage() {
           </Compo>
 
           <Compo>
-            <Gage></Gage>
-            <Gage></Gage>
-            <Gage></Gage>
-            <Gage></Gage>
-            <Gage></Gage>
-            <Gage></Gage>
-            <Gage></Gage>
+            {userInfo.visitCount >= 1 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 2 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 3 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 4 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 5 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 6 ? <Gage></Gage> : <Gage2></Gage2>}
+            {userInfo.visitCount >= 7 ? <Gage></Gage> : <Gage2></Gage2>}
           </Compo>
         </Part4>
       </Total>
