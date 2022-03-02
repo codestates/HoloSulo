@@ -179,7 +179,7 @@ export default function Login(props) {
           const { accessToken } = res.data.data;
           window.localStorage.setItem("accessToken", accessToken);
           setIsLoggedInAtom(true);
-          history("/menu");
+          window.location.assign("/menu");
         });
     }
   }, [window.location.href]);
