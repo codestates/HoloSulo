@@ -187,7 +187,7 @@ function Menu() {
           )
         )
       ).then((responses) => {
-        console.log(responses);
+        // console.log(responses);
         const obj = {};
         responses.forEach((response) => {
           obj[response.data.data[0].tag] = response.data.data;

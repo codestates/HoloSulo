@@ -332,7 +332,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
         title: response.data.data.playlists.title,
         description: response.data.data.playlists.description,
         coverUrl: response.data.data.playlists.coverUrl,
-        songs: songlist,
+        songs: response.data.data.songs,
       };
       const newPlaylists = [...playlists[playlist.tag]];
 
@@ -350,7 +350,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
     }
   };
   const handleAddSongClick = () => {
-    setSonglist((prev) => [...prev, { title: "", url: "" }]);
+    setSonglist((prev) => [...prev, { songTitle: "", songUrl: "" }]);
   };
   const handleDeleteSong = (event, index) => {
     const newSonglist = [...songlist];
@@ -399,7 +399,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
         </SonglistHeader>
         {isEditable
           ? songlist.map((song, index) => (
-              <SongRow>
+              <SongRow key={index}>
                 <Number>{index + 1}</Number>
                 <SongTitleInput
                   placeholder="노래 제목을 입력하세요."

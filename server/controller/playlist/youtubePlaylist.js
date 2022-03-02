@@ -20,13 +20,23 @@ module.exports = {
         description: playlist.description,
         userId: userId.id,
       });
-      const createSong = songsParser.map(async (data) => {
-        await Song.create({
-          songUrl: data.songUrl,
-          songTitle: data.songTitle,
-          playlistId: createPlaylist.dataValues.id,
-        });
-      });
+      const createSong = [];
+      for await (const data of songsParser) {
+        createSong.push(
+          await Song.create({
+            songUrl: data.songUrl,
+            songTitle: data.songTitle,
+            playlistId: createPlaylist.dataValues.id,
+          })
+        );
+      }
+      // const createSong = songsParser.map(async (data) => {
+      //   await Song.create({
+      //     songUrl: data.songUrl,
+      //     songTitle: data.songTitle,
+      //     playlistId: createPlaylist.dataValues.id,
+      //   });
+      // });
       const createJoinTable = await Playlist_Tag.create({
         tagId: tagId.dataValues.id,
         playlistId: createPlaylist.dataValues.id,
@@ -117,7 +127,7 @@ module.exports = {
         const copySong = updateSongsParser.slice(0, OriginalSong.length);
         const addSong = updateSongsParser.slice(OriginalSong.length);
         // original Song update
-        const originalPlaylistSong = copySong.map(async (song) => {
+        for await (const song of copySong) {
           await Song.update(
             {
               id: song.id,
@@ -129,19 +139,45 @@ module.exports = {
             },
             { where: { id: song.id } }
           );
-        });
+        }
+        // const originalPlaylistSong = copySong.map(async (song) => {
+        //   await Song.update(
+        //     {
+        //       id: song.id,
+        //       songUrl: song.songUrl,
+        //       songTitle: song.songTitle,
+        //       playlistId: updateBody.id,
+        //       createdAt: song.createdAt,
+        //       updatedAt: song.updatedAt,
+        //     },
+        //     { where: { id: song.id } }
+        //   );
+        // });
+        // console.log(originalPlaylistSong);
         // new song update
-        const addUpdateSong = addSong.map(async (song) => {
+
+        for await (const song of addSong) {
           await Song.create({
             songUrl: song.songUrl,
             songTitle: song.songTitle,
             playlistId: updateBody.id,
           });
+        }
+        // const addUpdateSong = addSong.map(async (song) => {
+        // await Song.create({
+        //   songUrl: song.songUrl,
+        //   songTitle: song.songTitle,
+        //   playlistId: updateBody.id,
+        // });
+        // });
+        const songs = await Song.findAll({
+          where: { playlistId: updateBody.id },
         });
+
         return res.status(200).send({
           data: {
             playlists: updatePlaylist,
-            songs: [...originalPlaylistSong, ...addUpdateSong],
+            songs,
           },
           response: "ok",
         });
