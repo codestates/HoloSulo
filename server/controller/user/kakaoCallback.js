@@ -6,14 +6,11 @@ const kakaoClientID = process.env.KAKAO_CLIENT_ID;
 const redirect = process.env.KAKAO_REDIRECT_URL;
 
 module.exports = async (req, res) => {
-  console.log("\n req.body:", req.body, "\n");
-
   if (!req.body) {
-    console.log("no code in request body");
     return res.status(400).send({ message: "Code does not exist" });
   }
 
-  const kakao = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientID}&redirect_uri=${redirect}&code=${req.body.authorizationCode}`;
+  const kakao = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientID}&redirect_uri=${redirect}&code=${req.query.code}`;
 
   // 토큰발급 => 클라이언트에서 받은 code를 이용해서 카카오 oauth 서버에서 token 받아오는 요청
   const tokenCheck = await axios.get(kakao).catch((err) => {
@@ -21,7 +18,6 @@ module.exports = async (req, res) => {
   });
 
   if (!tokenCheck) {
-    console.log("no token data");
     return res.status(401).send({ message: "Failed kakao access token" });
   }
 
@@ -44,28 +40,38 @@ module.exports = async (req, res) => {
 
   const { email } = getData.data.kakao_account;
   const { nickname } = getData.data.kakao_account.profile;
-  console.log(
-    "email:",
-    email,
-    "\nnickname:",
-    nickname,
-    "\naccess_token:",
-    access_token
-  );
 
-  //받아온 email, nickname, token(password)을 가지고 회원가입
+  //받아온 email, nickname을 가지고 회원가입 & 로그인
   User.findOrCreate({
     where: {
       email: email,
-      password: access_token,
+    },
+    defaults: {
       username: nickname,
     },
   })
-    .then(([User, created]) => {
-      if (created) {
-        return res.status(201).send({ data: { user: User }, response: "ok" });
+    .then(([data, created]) => {
+      if (!created) {
+        User.findOne({ where: { email } })
+          .then((findData) => {
+            const holosuloAccessToken = generateAccessToken(
+              findData.dataValues
+            );
+            return res.status(200).send({
+              data: { accessToken: holosuloAccessToken },
+              message: "kakao social login success",
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).send({ message: "query error" });
+          });
       } else {
-        return res.status(400).send({ response: "err" });
+        const holosuloAccessToken = generateAccessToken(data.dataValues);
+        return res.status(200).send({
+          data: { accessToken: holosuloAccessToken },
+          message: "kakao social login success",
+        });
       }
     })
     .catch((err) => {
