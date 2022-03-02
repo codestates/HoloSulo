@@ -164,6 +164,7 @@ function Menu() {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
+  //user Id 뽑아오기
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -175,15 +176,18 @@ function Menu() {
   useEffect(() => {
     // Playlist 호출
     (async () => {
+      const accessToken = localStorage.getItem("accessToken");
       await Promise.all(
         TAGS.map((tag) =>
           axios.get(
             `${
               process.env.REACT_APP_API_URL
-            }/playlists?tag=${encodeURIComponent(tag)}`
+            }/playlists?tag=${encodeURIComponent(tag)}`,
+            { headers: { Authorization: accessToken } }
           )
         )
       ).then((responses) => {
+        console.log(responses);
         const obj = {};
         responses.forEach((response) => {
           obj[response.data.data[0].tag] = response.data.data;

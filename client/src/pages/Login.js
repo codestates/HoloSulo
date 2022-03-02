@@ -7,6 +7,7 @@ import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
 import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
+// import GuestLoginHandler from "../components/GuestLogin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoggedInAtom, userInfoAtom } from "../atom";
 
@@ -160,9 +161,9 @@ export default function Login(props) {
 
   useEffect(() => {
     // 로그인 된 상태이면 "/menu"로 이동
-    if (localStorage.getItem("accessToken") && isLoggedIn) {
-      history("/menu");
-    }
+    // if (localStorage.getItem("accessToken") && isLoggedIn) {
+    //   history("/menu");
+    // }
   }, []);
 
   //카카오로그인
@@ -253,6 +254,7 @@ export default function Login(props) {
     setUserPassword(e.target.value);
     // console.log(userPassword);
   };
+
   return (
     <>
       <Total>

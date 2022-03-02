@@ -1,6 +1,6 @@
+const { compareSync } = require("bcrypt");
 const { Playlist, Song, Playlist_Tag, Tag } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
-
 module.exports = {
   createPlaylist: async (req, res) => {
     const playlist = req.body;
@@ -20,7 +20,6 @@ module.exports = {
         description: playlist.description,
         userId: userId.id,
       });
-      console.log(createPlaylist.dataValues.id);
       const createSong = songsParser.map(async (data) => {
         await Song.create({
           songUrl: data.songUrl,
@@ -51,44 +50,102 @@ module.exports = {
     const authorization = req.headers.authorization;
     const userId = isAuthorized(authorization);
 
+    const OriginalSong = await Song.findAll({
+      where: { playlistId: updateBody.id },
+    });
     if (!updateBody) {
       return res.status(400).send({ response: "잘못된 요청입니다" });
     }
     try {
-      await Playlist.update(
-        {
-          coverUrl:
-            updateFile &&
-            process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
-          title: updateBody.title,
-          description: updateBody.description,
-          userId: userId.id,
-          createdAt: updateBody.createdAt,
-          updatedAt: updateBody.updatedAt,
-        },
-        { where: { id: updateBody.id } }
-      );
-      const updatePlaylist = await Playlist.findOne({
-        where: { id: updateBody.id },
-      });
-      const updateSong = updateSongsParser.map(async (song) => {
-        await Song.update(
+      if (
+        OriginalSong.length === updateBody.length ||
+        OriginalSong.length > updateBody.length
+      ) {
+        //새로 추가된 Song이 없을 시
+        await Playlist.update(
           {
-            id: song.id,
+            coverUrl:
+              updateFile &&
+              process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
+            title: updateBody.title,
+            description: updateBody.description,
+            userId: userId.id,
+            createdAt: updateBody.createdAt,
+            updatedAt: updateBody.updatedAt,
+          },
+          { where: { id: updateBody.id } }
+        );
+        const updatePlaylist = await Playlist.findOne({
+          where: { id: updateBody.id },
+        });
+        const updateSong = updateSongsParser.map(async (song) => {
+          await Song.update(
+            {
+              id: song.id,
+              songUrl: song.songUrl,
+              songTitle: song.songTitle,
+              playlistId: song.playlistId,
+              createdAt: song.createdAt,
+              updatedAt: song.updatedAt,
+            },
+            { where: { id: song.id } }
+          );
+        });
+        return res.status(200).send({
+          data: { playlists: updatePlaylist, songs: updateSong },
+          response: "ok",
+        });
+      } else {
+        //새로 추가된 Song이 있을 시
+        await Playlist.update(
+          {
+            coverUrl:
+              updateFile &&
+              process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
+            title: updateBody.title,
+            description: updateBody.description,
+            userId: userId.id,
+            createdAt: updateBody.createdAt,
+            updatedAt: updateBody.updatedAt,
+          },
+          { where: { id: updateBody.id } }
+        );
+        const updatePlaylist = await Playlist.findOne({
+          where: { id: updateBody.id },
+        });
+        //song Separation
+        const copySong = updateSongsParser.slice(0, OriginalSong.length);
+        const addSong = updateSongsParser.slice(OriginalSong.length);
+        // original Song update
+        const originalPlaylistSong = copySong.map(async (song) => {
+          await Song.update(
+            {
+              id: song.id,
+              songUrl: song.songUrl,
+              songTitle: song.songTitle,
+              playlistId: updateBody.id,
+              createdAt: song.createdAt,
+              updatedAt: song.updatedAt,
+            },
+            { where: { id: song.id } }
+          );
+        });
+        // new song update
+        const addUpdateSong = addSong.map(async (song) => {
+          await Song.create({
             songUrl: song.songUrl,
             songTitle: song.songTitle,
-            playlistId: song.playlistId,
-            createdAt: song.createdAt,
-            updatedAt: song.updatedAt,
+            playlistId: updateBody.id,
+          });
+        });
+        return res.status(200).send({
+          data: {
+            playlists: updatePlaylist,
+            songs: [...originalPlaylistSong, ...addUpdateSong],
           },
-          { where: { id: song.id } }
-        );
-      });
-
-      return res.status(200).send({
-        data: { playlists: updatePlaylist, songs: updateSong },
-        response: "ok",
-      });
+          response: "ok",
+        });
+      }
     } catch (error) {
       return res.status(500).send({ error: error });
     }

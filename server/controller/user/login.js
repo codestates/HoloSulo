@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
-  console.log(req.body);
   const user = req.body;
   if (user.email === null) {
     res.status(400).send("아이디를 입력하세요");

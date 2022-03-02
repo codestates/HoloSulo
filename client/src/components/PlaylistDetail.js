@@ -240,7 +240,6 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
       return { ...p };
     })
   );
-
   const [coverUrl, setCoverUrl] = useState();
   useEffect(() => {
     if (cover) {
