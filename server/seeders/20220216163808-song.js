@@ -2,19 +2,19 @@
 const playlistIds = [1, 2, 3, 4, 5, 6, 7, 8];
 const songs = [
   {
-    videoId: "kpEI2p_XK3o",
+    videoId: "https://www.youtube.com/watch?v=kpEI2p_XK3o",
     songTitle: "Want To",
   },
   {
-    videoId: "No3OajzT1G8",
+    videoId: "https://www.youtube.com/watch?v=No3OajzT1G8",
     songTitle: "Lost at Sea",
   },
   {
-    videoId: "3uUuPz_zP2o",
+    videoId: "https://www.youtube.com/watch?v=3uUuPz_zP2o",
     songTitle: "days like this",
   },
   {
-    videoId: "GEAy7eXb2lo",
+    videoId: "https://www.youtube.com/watch?v=GEAy7eXb2lo",
     songTitle: "Be Like That",
   },
 ];

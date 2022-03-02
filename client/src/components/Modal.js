@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
-import Delete from "../components/Delete";
 
 function Modal({
   className,
@@ -21,6 +22,73 @@ function Modal({
       onClose(e);
     }
   };
+
+  const [isLogin, setIsLogin] = useState(false);
+  // 회원탈퇴 상태 state
+  //const [isComplete, setIsComplete] = useState(false);
+  const navigate = useNavigate();
+
+  const handleComplete = async () => {
+    await axios(`${process.env.REACT_APP_API_URL}/users/id:`, {
+      method: "DELETE",
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "DELETE",
+        "Access-Control-Allow-Credentials": "true",
+      },
+      withCredentials: true,
+    })
+      .then((res) => {
+        const { accessToken } = res.data.data;
+        // 로컬스토리지 accessToken 담기
+        localStorage.setItem("accessToken", accessToken);
+        // 탈퇴 완료 후 메인 페이지로 이동
+        isLogin(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error(err);
+        // 에러 완료 후 메인 페이지로 이동
+        setIsLogin(false);
+        navigate("/");
+      });
+  };
+  /*
+  const handleComplete = () => {
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/users/id:`, {
+        withCredentials: true,
+      })
+
+      .then((res) => {
+        const { accessToken } = res.data.data;
+        // 로컬스토리지 accessToken 담기
+        localStorage.setItem("accessToken", accessToken);
+
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${accessToken}`;
+      })
+
+      .then((res) => {
+        console.log(res.data.message);
+        const resMsg = res.data.message;
+        if (resMsg === "success delete") {
+          setIsComplete(true);
+          setTimeout(() => {
+            setIsComplete(false);
+            setIsLogin(false);
+            navigate("/");
+            // console.log(isComplete);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  */
   return (
     <>
       <ModalOverlay visible={visible} />
@@ -35,7 +103,7 @@ function Modal({
           <Part>
             <Mention>탈퇴하시겠습니까?</Mention>
             <Compo>
-              <Confirm onClick={Delete}>확인</Confirm>
+              <Confirm onClick={handleComplete}>확인</Confirm>
               <Cancle className="modal-close" onClick={close}>
                 취소
               </Cancle>

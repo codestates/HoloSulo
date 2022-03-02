@@ -130,6 +130,7 @@ const EmptyPlaylist = styled.div`
 
 const EmptyMessage = styled.span`
   margin-top: 20px;
+  width: 120px;
 `;
 
 const TAGS = [
@@ -163,6 +164,7 @@ function Menu() {
     const position = window.pageYOffset;
     setScrollPosition(position);
   };
+  //user Id 뽑아오기
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -174,12 +176,14 @@ function Menu() {
   useEffect(() => {
     // Playlist 호출
     (async () => {
+      const accessToken = localStorage.getItem("accessToken");
       await Promise.all(
         TAGS.map((tag) =>
           axios.get(
             `${
               process.env.REACT_APP_API_URL
-            }/playlists?tag=${encodeURIComponent(tag)}`
+            }/playlists?tag=${encodeURIComponent(tag)}`,
+            { headers: { Authorization: accessToken } }
           )
         )
       ).then((responses) => {
@@ -286,6 +290,7 @@ function Menu() {
               <PlaylistDetail
                 scrollPosition={scrollPosition}
                 playlist={playlists[tag][playlistId]}
+                setShowPlaylistDetail={setShowPlaylistDetail}
               />
             </>
           )}

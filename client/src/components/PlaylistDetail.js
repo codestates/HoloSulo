@@ -227,7 +227,8 @@ const Button = styled.button`
   }
 `;
 
-function PlaylistDetail({ scrollPosition, playlist }) {
+function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
+  const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const [isEditable, setIsEditable] = useState(false);
   const [cover, setCover] = useState();
@@ -239,7 +240,6 @@ function PlaylistDetail({ scrollPosition, playlist }) {
       return { ...p };
     })
   );
-  console.log(playlist);
   const [coverUrl, setCoverUrl] = useState();
   useEffect(() => {
     if (cover) {
@@ -279,11 +279,28 @@ function PlaylistDetail({ scrollPosition, playlist }) {
   const handleEditClick = () => {
     setIsEditable(true);
   };
-  const handleDeleteClick = () => {
-    // TODO: call delete /playlist api
-    // const response = await axios.delete(`${process.env.REACT_APP_API_URL}/playlists`, {
-    //   headers: {Authorization: localStorage.getItem("accessToken")}
-    // })
+  const handleDeleteClick = async () => {
+    const response = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/playlists`,
+      {
+        data: { playlistId: playlist.id },
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+    if (response.data.response === "ok") {
+      const newPlaylists = [...playlists[playlist.tag]].filter(
+        (item) => item.id !== playlist.id
+      );
+      setShowPlaylistDetail(false);
+      navigate("/menu");
+
+      document.body.style.overflow = "auto";
+      setPlaylists((prev) => {
+        const newObj = Object.assign({}, prev);
+        newObj[playlist.tag] = newPlaylists;
+        return newObj;
+      });
+    }
   };
   const handleEditCancelClick = () => {
     setIsEditable(false);
@@ -310,8 +327,6 @@ function PlaylistDetail({ scrollPosition, playlist }) {
       }
     );
     if (response.data.response === "ok") {
-      // udpate playlists state with new playlist
-      console.log(songlist);
       const newPlaylists = [...playlists[playlist.tag]];
       playlist = {
         ...playlist,
@@ -320,26 +335,16 @@ function PlaylistDetail({ scrollPosition, playlist }) {
         coverUrl: response.data.data.playlists.coverUrl,
         songs: songlist,
       };
-      // console.log(playlist);
-      // playlist = {
-      //   ...playlist,
-      //   title: response.data.data.playlists.title,
-      //       description: response.data.data.playlists.description,
-      //       coverUrl: response.data.data.playlists.coverUrl,
-      //       songs: songlist,
-      // }
       newPlaylists.forEach((p) => {
         if (p.id === playlist.id) {
           p = playlist;
         }
       });
-      // console.log(newPlaylists);
       setPlaylists((prev) => {
         const newObj = Object.assign({}, prev);
         newObj[playlist.tag] = newPlaylists;
         return newObj;
       });
-      // go back to detaul
       setIsEditable(false);
     }
   };
