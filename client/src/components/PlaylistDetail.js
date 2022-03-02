@@ -314,7 +314,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
     description && formData.append("description", description);
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
-    console.log(songlist);
+
     const response = await axios.patch(
       `${process.env.REACT_APP_API_URL}/playlists`,
       formData,
