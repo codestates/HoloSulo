@@ -282,44 +282,47 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
     setSonglist(newSonglist);
   };
   const handleSubmitClick = async () => {
-    // TODO: call POST /playlists
-    const formData = new FormData();
-    const accessToken = localStorage.getItem("accessToken");
-    formData.append("tag", state.tag);
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("coverFile", cover);
-    formData.append("songs", JSON.stringify(songlist));
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/playlists`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: accessToken,
-        },
-        withCredentials: true,
+    if (title && description && cover && songlist.length > 0) {
+      // TODO: call POST /playlists
+      const formData = new FormData();
+      const accessToken = localStorage.getItem("accessToken");
+      formData.append("tag", state.tag);
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("coverFile", cover);
+      formData.append("songs", JSON.stringify(songlist));
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/playlists`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: accessToken,
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.data.response === "ok") {
+        const newPlaylists = [...playlists[state.tag]];
+        const playlist = {
+          id: response.data.data.playlists.id,
+          tag: state.tag,
+          coverUrl: response.data.data.playlists.coverUrl,
+          title: response.data.data.playlists.title,
+          description: response.data.data.playlists.description,
+          songs: response.data.data.songs,
+          userId: response.data.data.playlists.userId,
+        };
+        newPlaylists.push(playlist);
+        setPlaylists((prev) => {
+          const newObj = Object.assign({}, prev);
+          newObj[state.tag] = newPlaylists;
+          return newObj;
+        });
+        document.body.style.overflow = "auto";
+        setShowCreatePlaylist(false);
+        navigate("/menu");
       }
-    );
-    if (response.data.response === "ok") {
-      const newPlaylists = [...playlists[state.tag]];
-      const playlist = {
-        id: response.data.data.playlists.id,
-        tag: state.tag,
-        coverUrl: response.data.data.playlists.coverUrl,
-        title: response.data.data.playlists.title,
-        description: response.data.data.playlists.description,
-        songs: response.data.data.songs,
-      };
-      newPlaylists.push(playlist);
-      setPlaylists((prev) => {
-        const newObj = Object.assign({}, prev);
-        newObj[state.tag] = newPlaylists;
-        return newObj;
-      });
-      document.body.style.overflow = "auto";
-      setShowCreatePlaylist(false);
-      navigate("/menu");
     }
   };
 
@@ -351,7 +354,7 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
           <SongTitle>URL</SongTitle>
         </SonglistHeader>
         {songlist.map((song, index) => (
-          <SongRow>
+          <SongRow key={index}>
             <Number>{index + 1}</Number>
             <SongTitleInput
               placeholder="노래 제목을 입력하세요."
