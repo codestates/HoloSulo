@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { isGlowingAtom, playlistsAtom } from "../atom";
+import { isGlowingAtom, isLoggedInAtom, playlistsAtom } from "../atom";
 import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
@@ -149,6 +149,7 @@ function Menu() {
   const navigate = useNavigate();
   const isGlowing = useRecoilValue(isGlowingAtom);
   const setGlowingAtom = useSetRecoilState(isGlowingAtom);
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const [activeTagIndex, setActiveTagIndex] = useState(1);
   const [activeTimeIndex, setActiveTimeIndex] = useState(2);
   const [activePlaylistIndex, setActivePlaylistIndex] = useState(0);
@@ -254,8 +255,11 @@ function Menu() {
         url: `${process.env.REACT_APP_API_URL}/orders`,
         data: {
           tag,
-          playlistId: activePlaylistIndex,
+          playlistId: activePlaylistIndex + 1,
           time: selectedTime / (1000 * 60 * 60),
+        },
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
         },
       });
 
@@ -272,6 +276,10 @@ function Menu() {
   };
 
   const handleCreatePlaylistClick = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     setShowCreatePlaylist(true);
     document.body.style.overflow = "hidden";
     navigate("/playlists", { state: { tag: tag } });
