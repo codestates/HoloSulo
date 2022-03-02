@@ -14,15 +14,14 @@ module.exports = async (req, res) => {
     const song = await finder.findSong(
       findPlaylist.map((list) => list.dataValues.id)
     );
-    // console.log(token);
     //user token 이 있다면
-    if (token === "null") {
+    if (token === "null" || !isAuthorized(token)) {
       //기존 playlist
       try {
         const defaultPlaylist = findPlaylist.filter(
           (list) => list.dataValues.userId === null
         );
-        console.log(defaultPlaylist);
+
         if (!findPlaylist || !song) {
           return res.status(400).send({ response: "err" });
         } else {

@@ -13,7 +13,7 @@ module.exports = {
   },
   isAuthorized: (token) => {
     return verify(token, process.env.ACCESS_SECRET, (err, decode) => {
-      if (err) throw err;
+      if (err) return false;
       else return decode;
     });
   },
