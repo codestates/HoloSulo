@@ -52,31 +52,31 @@ module.exports = async (req, res) => {
       }
     } else {
       //기존 playlist
-      const defaultPlaylist = findPlaylist.filter(
-        (list) => list.dataValues.userId === null
-      );
-      console.log(defaultPlaylist);
-      const newPlaylist = [...defaultPlaylist];
-      if (!findPlaylist || !song) {
-        return res.status(400).send({ response: "err" });
-      } else {
-        return res.status(200).send({
-          data: newPlaylist.map((list) => {
-            return {
-              id: list.dataValues.id,
-              tag,
-              coverUrl: list.dataValues.coverUrl,
-              title: list.dataValues.title,
-              description: list.dataValues.description,
-              songs: song.filter(
-                (item) => item.dataValues.playlistId === list.dataValues.id
-              ),
-              userId: list.dataValues.userId,
-            };
-          }),
-          response: "ok",
-        });
-      }
+      // const defaultPlaylist = findPlaylist.filter(
+      //   (list) => list.dataValues.userId === null
+      // );
+      // console.log(defaultPlaylist);
+      // const newPlaylist = [...defaultPlaylist];
+      // if (!findPlaylist || !song) {
+      //   return res.status(400).send({ response: "err" });
+      // } else {
+      //   return res.status(200).send({
+      //     data: newPlaylist.map((list) => {
+      //       return {
+      //         id: list.dataValues.id,
+      //         tag,
+      //         coverUrl: list.dataValues.coverUrl,
+      //         title: list.dataValues.title,
+      //         description: list.dataValues.description,
+      //         songs: song.filter(
+      //           (item) => item.dataValues.playlistId === list.dataValues.id
+      //         ),
+      //         userId: list.dataValues.userId,
+      //       };
+      //     }),
+      //     response: "ok",
+      //   });
+      // }
     }
   } catch (error) {
     res.status(500).send({ error: error });

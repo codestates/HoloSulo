@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
+import { useSetRecoilState } from "recoil";
+import { userInfoAtom } from "../atom";
 
 const Total = styled.div`
   display: flex;
@@ -176,9 +178,7 @@ function EditMypage() {
     checkNewPassword: "",
   });
 
-  const [nicknameInfo, setNicknameInfo] = useState({
-    nickname: "",
-  });
+  const [nicknameInfo, setNicknameInfo] = useState("");
 
   const [isComplete, setIsComplete] = useState(false);
   const history = useNavigate();
@@ -196,6 +196,9 @@ function EditMypage() {
   const [passwordCheckMessage, setPasswordCheckMessage] = useState(""); // newpassword 확인 메세지 state
   const [nicknameMessage, setNicknameMessage] = useState("");
   const [isDupNickname, setIsDupNickname] = useState(false);
+
+  const setUserInfo = useSetRecoilState(userInfoAtom);
+  const navigate = useNavigate();
 
   const handleInputValue = (key) => (e) => {
     setPasswordInfo({ ...passwordInfo, [key]: e.target.value });
@@ -226,11 +229,14 @@ function EditMypage() {
     }
   };
 
-  const dupNickname = (nickname) => {
+  const handleNicknameChange = (event) => {
+    setNicknameInfo(event.target.value);
+  };
+  const dupNickname = () => {
     axios
       .post(
         `${process.env.REACT_APP_API_URL}/users/userName`,
-        { username: nicknameInfo.nickname },
+        { username: nicknameInfo },
         { httpOnly: true, withCredentials: true }
       )
       .then((res) => {
@@ -256,10 +262,12 @@ function EditMypage() {
         {
           password: passwordInfo.newPassword,
         },
-        { withCredentials: true }
+        {
+          headers: { Authorization: localStorage.getItem("accessToken") },
+          withCredentials: true,
+        }
       )
       .then((res) => {
-        console.log(res.data.message);
         const resMsg = res.data.message;
         if (resMsg === "ok") {
           handleComplete();
@@ -271,6 +279,26 @@ function EditMypage() {
       .catch((err) => {
         throw err;
       });
+  };
+
+  const handleNicknameSaveClick = async () => {
+    const response = await axios.patch(
+      `${process.env.REACT_APP_API_URL}/users/username`,
+      {
+        username: nicknameInfo,
+      },
+      {
+        headers: { Authorization: localStorage.getItem("accessToken") },
+      }
+    );
+
+    if (response.data.response === "ok") {
+      setUserInfo((prev) => ({
+        ...prev,
+        username: nicknameInfo,
+      }));
+      navigate(-1);
+    }
   };
 
   return (
@@ -324,24 +352,26 @@ function EditMypage() {
         <Part1>
           <Mention3>nickname 변경</Mention3>
           <Compo>
-            <TypoNickname type="text" placeholder="nickname"></TypoNickname>
+            <TypoNickname
+              type="text"
+              placeholder="nickname"
+              onChange={handleNicknameChange}
+            ></TypoNickname>
             <Check
-              disabled={nicknameInfo.nickname.length !== 0 ? false : "disabled"}
-              onClick={() => {
-                dupNickname(nicknameInfo.nickname);
-              }}
+              // disabled={nicknameInfo.nickname.length !== 0 ? false : "disabled"}
+              onClick={dupNickname}
             >
               check
             </Check>
           </Compo>
           {isDupNickname ? (
             <Msg2>{nicknameMessage}</Msg2>
-          ) : nicknameInfo.nickname.length === 0 ? null : (
+          ) : nicknameInfo.length === 0 ? null : (
             <Msg>{nicknameMessage}</Msg>
           )}
         </Part1>
       </InputInfo>
-      <Edit>nickname 변경 저장</Edit>
+      <Edit onClick={handleNicknameSaveClick}>nickname 변경 저장</Edit>
 
       <Link to="/mypage">
         <Cancle>취소</Cancle>

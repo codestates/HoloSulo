@@ -20,7 +20,10 @@ module.exports = async (req, res) => {
     if (!userInfo) {
       return res.status(404).send("이메일 혹은 비밀번호가 일치하지 않습니다.");
     } else {
-      const match = bcrypt.compare(user.password, userInfo.dataValues.password);
+      const match = await bcrypt.compare(
+        user.password,
+        userInfo.dataValues.password
+      );
       if (!match) {
         res.status(400).send("이메일 혹은 비밀번호가 일치하지 않습니다.");
       } else {
@@ -37,7 +40,12 @@ module.exports = async (req, res) => {
           response: "ok",
           data: {
             accessToken: accessToken,
-            userInfo: { username: userInfo.dataValues.username },
+            userInfo: {
+              id: userInfo.dataValues.id,
+              username: userInfo.dataValues.username,
+              email: userInfo.dataValues.email,
+              visitCount: userInfo.dataValues.visitCount,
+            },
           },
         });
       }

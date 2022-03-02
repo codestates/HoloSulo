@@ -9,7 +9,7 @@ import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
 // import GuestLoginHandler from "../components/GuestLogin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isLoggedInAtom } from "../atom";
+import { isLoggedInAtom, userInfoAtom } from "../atom";
 
 axios.defaults.withCredentials = true;
 
@@ -155,6 +155,7 @@ export default function Login(props) {
 
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
   const setIsLoggedInAtom = useSetRecoilState(isLoggedInAtom);
+  const setUserInfo = useSetRecoilState(userInfoAtom);
 
   const history = useNavigate();
 
@@ -208,7 +209,11 @@ export default function Login(props) {
       withCredentials: true,
     })
       .then((res) => {
-        const { accessToken } = res.data.data;
+        const { accessToken, userInfo } = res.data.data;
+
+        // 유저 정보 state
+        setUserInfo({ ...userInfo });
+
         // 로컬스토리지 accessToken 담기
         localStorage.setItem("accessToken", accessToken);
         setIsLoggedInAtom(true);

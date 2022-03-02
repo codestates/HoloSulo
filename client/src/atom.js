@@ -14,3 +14,8 @@ export const playlistsAtom = atom({
   key: "playlists",
   default: {},
 });
+
+export const userInfoAtom = atom({
+  key: "userinfo",
+  default: {},
+});

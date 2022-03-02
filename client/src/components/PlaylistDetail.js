@@ -327,7 +327,6 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
       }
     );
     if (response.data.response === "ok") {
-      const newPlaylists = [...playlists[playlist.tag]];
       playlist = {
         ...playlist,
         title: response.data.data.playlists.title,
@@ -335,11 +334,13 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
         coverUrl: response.data.data.playlists.coverUrl,
         songs: songlist,
       };
-      newPlaylists.forEach((p) => {
-        if (p.id === playlist.id) {
-          p = playlist;
+      const newPlaylists = [...playlists[playlist.tag]];
+
+      for (let i = 0; i < newPlaylists.length; i++) {
+        if (newPlaylists[i].id === playlist.id) {
+          newPlaylists[i] = playlist;
         }
-      });
+      }
       setPlaylists((prev) => {
         const newObj = Object.assign({}, prev);
         newObj[playlist.tag] = newPlaylists;

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isLoggedInAtom, userInfoAtom } from "../atom";
 
 function Modal({
   className,
@@ -22,35 +24,37 @@ function Modal({
       onClose(e);
     }
   };
-
-  const [isLogin, setIsLogin] = useState(false);
+  const userInfo = useRecoilValue(userInfoAtom);
+  const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
   // 회원탈퇴 상태 state
   //const [isComplete, setIsComplete] = useState(false);
   const navigate = useNavigate();
 
   const handleComplete = async () => {
-    await axios(`${process.env.REACT_APP_API_URL}/users/id:`, {
-      method: "DELETE",
-      headers: {
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "DELETE",
-        "Access-Control-Allow-Credentials": "true",
-      },
-      withCredentials: true,
-    })
+    await axios(
+      `${process.env.REACT_APP_API_URL}/users/${userInfo.id && userInfo.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "DELETE",
+          "Access-Control-Allow-Credentials": "true",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+        withCredentials: true,
+      }
+    )
       .then((res) => {
-        const { accessToken } = res.data.data;
-        // 로컬스토리지 accessToken 담기
-        localStorage.setItem("accessToken", accessToken);
+        localStorage.removeItem("accessToken");
         // 탈퇴 완료 후 메인 페이지로 이동
-        isLogin(false);
+        setIsLoggedIn(false);
         navigate("/");
       })
       .catch((err) => {
         console.error(err);
         // 에러 완료 후 메인 페이지로 이동
-        setIsLogin(false);
+        setIsLoggedIn(false);
         navigate("/");
       });
   };
