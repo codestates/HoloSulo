@@ -58,41 +58,7 @@ function Modal({
         navigate("/");
       });
   };
-  /*
-  const handleComplete = () => {
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/users/id:`, {
-        withCredentials: true,
-      })
 
-      .then((res) => {
-        const { accessToken } = res.data.data;
-        // 로컬스토리지 accessToken 담기
-        localStorage.setItem("accessToken", accessToken);
-
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-      })
-
-      .then((res) => {
-        console.log(res.data.message);
-        const resMsg = res.data.message;
-        if (resMsg === "success delete") {
-          setIsComplete(true);
-          setTimeout(() => {
-            setIsComplete(false);
-            setIsLogin(false);
-            navigate("/");
-            // console.log(isComplete);
-          }, 2000);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  */
   return (
     <>
       <ModalOverlay visible={visible} />
