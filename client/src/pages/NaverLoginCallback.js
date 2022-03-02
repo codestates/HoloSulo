@@ -15,7 +15,7 @@ export default async function NaverLoginCallback() {
       console.log("호출");
       await axios
         .post(
-          `http://localhost:8080/naver/api/callback`,
+          `${process.env.REACT_APP_API_URL}/naver/api/callback`,
           {
             code: code,
             state: state,
