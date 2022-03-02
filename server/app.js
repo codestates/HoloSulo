@@ -44,7 +44,7 @@ app.patch(
   controllers.youtubePlaylist.updatePlaylist
 );
 app.delete("/playlists", controllers.youtubePlaylist.deletePlaylist);
-app.get("/users/:id", controllers.userinfo);
+app.get("/users/info", controllers.userinfo);
 app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
 app.post("/naver/api/callback", controllers.naverLogin.getNaverCallback);
