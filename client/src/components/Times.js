@@ -43,7 +43,7 @@ function Times({ setTime }) {
 
   const handleTimeClick = (event, index) => {
     setIsActiveAt(index + 1);
-    setTime(event.target.innerText);
+    setTime(times[index]);
   };
   return (
     <TimeContainer>
