@@ -3,7 +3,7 @@ const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
   try {
-    const validate = isAuthorized();
+    const validate = isAuthorized(req.body.accessToken);
     if (!req.body.accessToken)
       return res.status(400).send({ response: "empty body" });
     if (!validate)
