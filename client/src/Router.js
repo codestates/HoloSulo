@@ -8,6 +8,7 @@ import Menu from "./pages/Menu";
 import Mypage from "./pages/Mypage";
 import Signup from "./pages/Signup";
 import NaverLoginCallback from "./pages/NaverLoginCallback";
+import KakaoCallback from "./pages/KakaoCallback";
 
 function Router() {
   return (
@@ -64,6 +65,7 @@ function Router() {
       />
       <Route path="/mypage/edit" element={<EditMypage />} />
       <Route path="/naver/callback" element={<NaverLoginCallback />} />
+      <Route path="/kakao/callback" element={<KakaoCallback />} />
     </Routes>
   );
 }

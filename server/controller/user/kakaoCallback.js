@@ -6,11 +6,11 @@ const kakaoClientID = process.env.KAKAO_CLIENT_ID;
 const redirect = process.env.KAKAO_REDIRECT_URL;
 
 module.exports = async (req, res) => {
-  if (!req.body) {
+  if (!req.body.data.code) {
     return res.status(400).send({ message: "Code does not exist" });
   }
 
-  const kakao = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientID}&redirect_uri=${redirect}&code=${req.query.code}`;
+  const kakao = `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${kakaoClientID}&redirect_uri=${redirect}&code=${req.body.data.code}`;
 
   // 토큰발급 => 클라이언트에서 받은 code를 이용해서 카카오 oauth 서버에서 token 받아오는 요청
   const tokenCheck = await axios.get(kakao).catch((err) => {
