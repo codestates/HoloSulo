@@ -80,9 +80,6 @@ function Header({ isTransparent = false }) {
               </Item>
               <Item>
                 <LogoutButton onClick={LogoutHandler}>Logout</LogoutButton>
-                {/* <Link to="/">
-                  <LogoutButton onClick={Logout}>Logout</LogoutButton>
-                </Link> */}
               </Item>
             </>
           ) : (
