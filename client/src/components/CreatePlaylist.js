@@ -291,37 +291,46 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
       formData.append("description", description);
       formData.append("coverFile", cover);
       formData.append("songs", JSON.stringify(songlist));
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/playlists`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: accessToken,
-          },
-          withCredentials: true,
+
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/playlists`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: accessToken,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response);
+        if (response.data.response === "ok") {
+          const newPlaylists = [...playlists[state.tag]];
+          const playlist = {
+            id: response.data.data.playlists.id,
+            tag: state.tag,
+            coverUrl: response.data.data.playlists.coverUrl,
+            title: response.data.data.playlists.title,
+            description: response.data.data.playlists.description,
+            songs: response.data.data.songs,
+            userId: response.data.data.playlists.userId,
+          };
+          newPlaylists.push(playlist);
+          setPlaylists((prev) => {
+            const newObj = Object.assign({}, prev);
+            newObj[state.tag] = newPlaylists;
+            return newObj;
+          });
+          document.body.style.overflow = "auto";
+          setShowCreatePlaylist(false);
+          navigate("/menu");
         }
-      );
-      if (response.data.response === "ok") {
-        const newPlaylists = [...playlists[state.tag]];
-        const playlist = {
-          id: response.data.data.playlists.id,
-          tag: state.tag,
-          coverUrl: response.data.data.playlists.coverUrl,
-          title: response.data.data.playlists.title,
-          description: response.data.data.playlists.description,
-          songs: response.data.data.songs,
-          userId: response.data.data.playlists.userId,
-        };
-        newPlaylists.push(playlist);
-        setPlaylists((prev) => {
-          const newObj = Object.assign({}, prev);
-          newObj[state.tag] = newPlaylists;
-          return newObj;
-        });
-        document.body.style.overflow = "auto";
-        setShowCreatePlaylist(false);
-        navigate("/menu");
+      } catch (err) {
+        if (err.response.data.message === "jwt expired") {
+          localStorage.removeItem("accessToken");
+          navigate("/login");
+        }
       }
     }
   };

@@ -14,6 +14,12 @@ module.exports = {
         return res.status(400).send({ response: "잘못된 요청입니다" });
       }
 
+      if (!userId) {
+        return res
+          .status(400)
+          .send({ response: "err", message: "jwt expired" });
+      }
+
       const createPlaylist = await Playlist.create({
         coverUrl:
           process.env.DEV_DOMAIN + process.env.PORT + "/" + coverFileUrl,
