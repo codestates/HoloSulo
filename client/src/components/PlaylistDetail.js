@@ -227,7 +227,8 @@ const Button = styled.button`
   }
 `;
 
-function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
+function PlaylistDetail({ playlist, setShowPlaylistDetail }) {
+  // console.log(playlist);
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const [isEditable, setIsEditable] = useState(false);
@@ -358,7 +359,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
   };
 
   return (
-    <Container scrollPosition={scrollPosition + ""}>
+    <Container>
       <PlaylistContainer>
         {isEditable ? (
           <CoverContainer>
