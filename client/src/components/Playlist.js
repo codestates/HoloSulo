@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -9,7 +10,10 @@ const Container = styled.div`
   margin-right: 40px;
   padding: 10px;
   background-color: rgba(48, 48, 48, 60%);
-  border: 2px solid ${(props) => (props.isActive ? "#38b5fb;" : "black;")};
+  border: 2px solid black;
+  &:nth-child(${(props) => props.isActiveAt}) {
+    border: 2px solid #38b5fb;
+  }
   border-radius: 10px;
   cursor: pointer;
   transition: border 0.2s;
@@ -54,7 +58,7 @@ const More = styled.span`
 function Playlist({
   index,
   playlist,
-  isActive,
+  isActiveAt,
   handlePlaylistClick,
   setShowPlaylistDetail,
   setPlaylistId,
@@ -65,19 +69,20 @@ function Playlist({
     handlePlaylistClick(index);
   };
 
-  const handleMoreClick = (event, index) => {
+  const handleMoreClick = (event) => {
     event.stopPropagation();
+    // console.log(playlist);
     setShowPlaylistDetail(true);
-    setPlaylistId(index);
+    setPlaylistId(playlist.id);
     navigate(`/playlists/${playlist.id}`, { state: { tag: tag } });
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
   };
   return (
-    <Container onClick={handleClick} isActive={isActive}>
+    <Container onClick={handleClick} isActiveAt={isActiveAt}>
       <Cover src={playlist.coverUrl} />
       <Title>{playlist.title}</Title>
       <Description>{playlist.description}</Description>
-      <More onClick={(e) => handleMoreClick(e, index)}>자세히보기 &rarr;</More>
+      <More onClick={(e) => handleMoreClick(e)}>자세히보기 &rarr;</More>
     </Container>
   );
 }

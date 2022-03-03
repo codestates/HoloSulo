@@ -102,7 +102,7 @@ function Main() {
   const {
     state: { time, songs, coverUrl },
   } = useLocation();
-  // console.log(songs);
+  // console.log(time, songs, coverUrl);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [isMemoOpen, setIsMemoOpen] = useState(false);

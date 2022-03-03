@@ -6,8 +6,8 @@ export const createOrder = (tag, playlistId, time) =>
     url: `${process.env.REACT_APP_API_URL}/orders`,
     data: {
       tag,
-      playlistId: playlistId,
-      time: time / (1000 * 60 * 60),
+      playlistId,
+      time,
     },
     headers: {
       Authorization: localStorage.getItem("accessToken"),
