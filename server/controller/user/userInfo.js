@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
           username: userData.username,
           useremail: userData.useremail,
           visitCount: userData.visitCount,
-          weekVisitCoint: "0",
+          weekVisitCount: "0",
           totalHour: "13.5",
         },
         response: "ok",
