@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { isLoggedInAtom } from "../atom";
 import logo from "../images/logo.png";
+import Logout from "../components/Logout";
 
 const Container = styled.div`
   width: 100%;
@@ -32,6 +33,11 @@ const Item = styled.li`
   margin-left: 20px;
   text-decoration: ${(props) => props.active};
 `;
+const LogoutButton = styled.button`
+  border: none;
+  width: auto;
+  cursor: pointer;
+`;
 
 function Header({ isTransparent = false }) {
   const { pathname } = useLocation();
@@ -48,9 +54,14 @@ function Header({ isTransparent = false }) {
             <Link to="/menu">Menu</Link>
           </Item>
           {isLoggedIn ? (
-            <Item active={pathname === "/mypage" ? "underline" : "none"}>
-              <Link to="/mypage">mypage</Link>
-            </Item>
+            <>
+              <Item active={pathname === "/mypage" ? "underline" : "none"}>
+                <Link to="/mypage">mypage</Link>
+              </Item>
+              <Item>
+                <LogoutButton onClick={Logout}>Logout</LogoutButton>
+              </Item>
+            </>
           ) : (
             <>
               <Item active={pathname === "/login" ? "underline" : "none"}>
