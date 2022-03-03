@@ -14,13 +14,19 @@ module.exports = async (req, res) => {
           id: accessToken.id,
         },
       });
+      const userOrderData = await Order.findOne({
+        where: {
+          id: accessToken.id,
+        },
+      });
+      const weekVisitCount = {};
       return res.status(200).send({
         data: {
           username: userData.username,
-          useremail: userData.useremail,
+          useremail: userData.email,
           visitCount: userData.visitCount,
           weekVisitCount: "0",
-          totalHour: "13.5",
+          totalHour: userOrderData.time,
         },
         response: "ok",
       });
