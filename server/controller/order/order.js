@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
         .send({ data: { tag: tag, song: findSong }, response: "ok" });
     } else {
       await User.increment({ visitCount: 1 }, { where: { id: userInfo.id } });
-      await creatOrder(tag, time);
+      await creatOrder(tag, time, userInfo.id);
       return res
         .status(200)
         .send({ data: { tag: tag, song: findSong }, response: "ok" });

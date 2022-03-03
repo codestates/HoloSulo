@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { isLoggedInAtom } from "../atom";
 import logo from "../images/logo.png";
+import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
@@ -32,10 +33,35 @@ const Item = styled.li`
   margin-left: 20px;
   text-decoration: ${(props) => props.active};
 `;
+const LogoutButton = styled.button`
+  border: none;
+  width: auto;
+  cursor: pointer;
+`;
 
 function Header({ isTransparent = false }) {
   const { pathname } = useLocation();
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
+  const setIsLoggedInAtom = useSetRecoilState(isLoggedInAtom);
+
+  const LogoutHandler = async () => {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}/users/logout`,
+      data: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    }).then((data) => {
+      console.log(data);
+      if (data.data.response === "ok") {
+        localStorage.removeItem("accessToken");
+        setIsLoggedInAtom(false);
+        window.location.href = "/";
+      } else {
+        console.log("토큰이 잘못 됬습니다.");
+      }
+    });
+  };
 
   return (
     <Container isTransparent={isTransparent}>
@@ -48,9 +74,14 @@ function Header({ isTransparent = false }) {
             <Link to="/menu">Menu</Link>
           </Item>
           {isLoggedIn ? (
-            <Item active={pathname === "/mypage" ? "underline" : "none"}>
-              <Link to="/mypage">mypage</Link>
-            </Item>
+            <>
+              <Item active={pathname === "/mypage" ? "underline" : "none"}>
+                <Link to="/mypage">mypage</Link>
+              </Item>
+              <Item>
+                <LogoutButton onClick={LogoutHandler}>Logout</LogoutButton>
+              </Item>
+            </>
           ) : (
             <>
               <Item active={pathname === "/login" ? "underline" : "none"}>

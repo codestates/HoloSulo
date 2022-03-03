@@ -7,7 +7,6 @@ import naverLogo from "../images/naverLogo.png";
 import kakaoLogo from "../images/kakaoLogo.png";
 import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
-// import GuestLoginHandler from "../components/GuestLogin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoggedInAtom, userInfoAtom } from "../atom";
 

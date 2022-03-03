@@ -180,10 +180,9 @@ const Gage2 = styled.div`
   margin-right: 4px;
 `;
 
-export default function Mypage(userData) {
+export default function Mypage(props) {
   const userInfo = useRecoilValue(userInfoAtom);
-  // console.log(userInfo);
-
+  const [user, setUser] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
     setModalVisible(true);
@@ -194,19 +193,11 @@ export default function Mypage(userData) {
 
   useEffect(() => {
     getUserInfo();
-    console.log(getUserInfo);
-  });
+  }, []);
 
   const getUserInfo = async () => {
-    await axios(`${process.env.REACT_APP_API_URL}/users/`, {
+    await axios(`${process.env.REACT_APP_API_URL}/users/info`, {
       method: "GET",
-      data: {
-        username: userData.username,
-        useremail: userData.useremail,
-        visitCount: userData.visitCount,
-        weekVisitCount: "0",
-        totalHour: "13.5",
-      },
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Origin": "*",
@@ -216,7 +207,10 @@ export default function Mypage(userData) {
       },
       withCredentials: true,
     })
-      .then((res) => {})
+      .then((res) => {
+        setUser(res.data);
+        console.log(user);
+      })
       .catch((err) => {
         console.error(err);
       });
@@ -232,12 +226,12 @@ export default function Mypage(userData) {
         <Part1>
           <Compo>
             <Email>email</Email>
-            <UserEmail>{userInfo.email && userInfo.email}</UserEmail>
+            <UserEmail>{user.data?.useremail}</UserEmail>
           </Compo>
 
           <Compo>
             <Nickname>nickname</Nickname>
-            <UserNick>{userInfo.username && userInfo.username}</UserNick>
+            <UserNick>{user.data?.username}</UserNick>
           </Compo>
         </Part1>
 
@@ -261,9 +255,9 @@ export default function Mypage(userData) {
 
         <Part3>
           <Compo>
-            <VisitNum>{getUserInfo.visitCount}</VisitNum>
+            <VisitNum>{user.data?.visitCount}</VisitNum>
 
-            <VisitTimeNum>{}</VisitTimeNum>
+            <VisitTimeNum>{user.data?.totalHour}</VisitTimeNum>
           </Compo>
 
           <Compo>
@@ -278,13 +272,13 @@ export default function Mypage(userData) {
           </Compo>
 
           <Compo>
-            {userInfo.visitCount >= 1 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 2 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 3 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 4 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 5 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 6 ? <Gage></Gage> : <Gage2></Gage2>}
-            {userInfo.visitCount >= 7 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 1 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 2 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 3 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 4 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 5 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 6 ? <Gage></Gage> : <Gage2></Gage2>}
+            {user.data?.weekVisitCount >= 7 ? <Gage></Gage> : <Gage2></Gage2>}
           </Compo>
         </Part4>
       </Total>

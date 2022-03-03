@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import { playlistsAtom } from "../atom";
+import { deletePlaylist, editPlaylist } from "../api";
 
 const Container = styled.div`
   position: absolute;
@@ -227,7 +227,8 @@ const Button = styled.button`
   }
 `;
 
-function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
+function PlaylistDetail({ playlist, setShowPlaylistDetail }) {
+  // console.log(playlist);
   const navigate = useNavigate();
   const { pathname, state } = useLocation();
   const [isEditable, setIsEditable] = useState(false);
@@ -280,26 +281,27 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
     setIsEditable(true);
   };
   const handleDeleteClick = async () => {
-    const response = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/playlists`,
-      {
-        data: { playlistId: playlist.id },
-        headers: { Authorization: localStorage.getItem("accessToken") },
-      }
-    );
-    if (response.data.response === "ok") {
-      const newPlaylists = [...playlists[playlist.tag]].filter(
-        (item) => item.id !== playlist.id
-      );
-      setShowPlaylistDetail(false);
-      navigate("/menu");
+    const response = await deletePlaylist(playlist.id);
+    try {
+      if (response.data.response === "ok") {
+        const newPlaylists = [...playlists[playlist.tag]].filter(
+          (item) => item.id !== playlist.id
+        );
+        setShowPlaylistDetail(false);
+        navigate("/menu");
 
-      document.body.style.overflow = "auto";
-      setPlaylists((prev) => {
-        const newObj = Object.assign({}, prev);
-        newObj[playlist.tag] = newPlaylists;
-        return newObj;
-      });
+        document.body.style.overflow = "auto";
+        setPlaylists((prev) => {
+          const newObj = Object.assign({}, prev);
+          newObj[playlist.tag] = newPlaylists;
+          return newObj;
+        });
+      }
+    } catch (err) {
+      if (err.response.data.message === "jwt expired") {
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
     }
   };
   const handleEditCancelClick = () => {
@@ -315,38 +317,36 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
     cover && formData.append("coverFile", cover);
     songlist.length > 0 && formData.append("songs", JSON.stringify(songlist));
 
-    const response = await axios.patch(
-      `${process.env.REACT_APP_API_URL}/playlists`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: localStorage.getItem("accessToken"),
-        },
-        withCredentials: true,
-      }
-    );
-    if (response.data.response === "ok") {
-      playlist = {
-        ...playlist,
-        title: response.data.data.playlists.title,
-        description: response.data.data.playlists.description,
-        coverUrl: response.data.data.playlists.coverUrl,
-        songs: response.data.data.songs,
-      };
-      const newPlaylists = [...playlists[playlist.tag]];
+    try {
+      const response = await editPlaylist(formData);
 
-      for (let i = 0; i < newPlaylists.length; i++) {
-        if (newPlaylists[i].id === playlist.id) {
-          newPlaylists[i] = playlist;
+      if (response.data.response === "ok") {
+        playlist = {
+          ...playlist,
+          title: response.data.data.playlists.title,
+          description: response.data.data.playlists.description,
+          coverUrl: response.data.data.playlists.coverUrl,
+          songs: response.data.data.songs,
+        };
+        const newPlaylists = [...playlists[playlist.tag]];
+
+        for (let i = 0; i < newPlaylists.length; i++) {
+          if (newPlaylists[i].id === playlist.id) {
+            newPlaylists[i] = playlist;
+          }
         }
+        setPlaylists((prev) => {
+          const newObj = Object.assign({}, prev);
+          newObj[playlist.tag] = newPlaylists;
+          return newObj;
+        });
+        setIsEditable(false);
       }
-      setPlaylists((prev) => {
-        const newObj = Object.assign({}, prev);
-        newObj[playlist.tag] = newPlaylists;
-        return newObj;
-      });
-      setIsEditable(false);
+    } catch (err) {
+      if (err.response.data.message === "jwt expired") {
+        localStorage.removeItem("accessToken");
+        navigate("/login");
+      }
     }
   };
   const handleAddSongClick = () => {
@@ -359,7 +359,7 @@ function PlaylistDetail({ scrollPosition, playlist, setShowPlaylistDetail }) {
   };
 
   return (
-    <Container scrollPosition={scrollPosition + ""}>
+    <Container>
       <PlaylistContainer>
         {isEditable ? (
           <CoverContainer>
