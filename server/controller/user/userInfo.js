@@ -4,7 +4,7 @@ const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
   try {
-    const accessToken = isAuthorized(req.headers.Authorization);
+    const accessToken = isAuthorized(req.headers.authorization);
 
     if (!accessToken) {
       res.status(401).send({ message: "유효하지 않은 토큰" });
