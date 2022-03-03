@@ -229,6 +229,37 @@ const Msg2 = styled.div`
   font-weight: 500;
 `;
 
+//Agreement
+const CommonForm = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const DescSpan = styled.span`
+  color: gray;
+  margin: 0 10px 10px 0;
+  font-size: 16px;
+`;
+const EssentialSpan = styled(DescSpan)`
+  color: #36c5f0;
+`;
+
+const OptionSpan = styled(DescSpan)`
+  color: rgb(45, 45, 45);
+`;
+const Label = styled.label`
+  display: block;
+`;
+const AgreementSection = styled.form`
+  border: solid 1px lightgray;
+  padding: 15px;
+  margin-bottom: 5px;
+`;
+
+const AgreementSpan = styled(DescSpan)`
+  display: inline-block;
+  margin-bottom: 10px;
+`;
+
 export default function Signup() {
   const [userinfo, setUserinfo] = useState({
     email: "",
@@ -386,7 +417,8 @@ export default function Signup() {
       isDupEmail &&
       isDupNickname &&
       isPassword &&
-      isPwdCheck === true
+      isPwdCheck === true &&
+      checkedItems.includes("use" && "age" && "agree")
     ) {
       handleComplete();
       console.log("회원가입 요청이 성공적으로 전달되었습니다.");
@@ -394,6 +426,23 @@ export default function Signup() {
       console.log("회원가입 요청이 실패하였습니다.");
     }
     console.log(stateInfo);
+  };
+
+  //Agreement
+  const [checkedItems, setCheckedItems] = useState([]);
+  const handleCheckChange = (checked, val) => {
+    if (checked) {
+      setCheckedItems([...checkedItems, val]);
+    } else {
+      setCheckedItems(checkedItems.filter((el) => el !== val));
+    }
+  };
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      setCheckedItems(["age", "use", "agree", "event"]);
+    } else {
+      setCheckedItems([]);
+    }
   };
 
   return (
@@ -498,10 +547,82 @@ export default function Signup() {
         </Part1>
       </InputInfo>
 
-      <Terms>회원약관</Terms>
-
+      <CommonForm>
+        <AgreementSection>
+          <Label>
+            <input
+              type="checkbox"
+              checked={checkedItems.length === 4 ? true : false}
+              onChange={(e) => handleAllCheck(e.target.checked)}
+            ></input>
+            <AgreementSpan>전체동의 </AgreementSpan>
+          </Label>
+          <hr></hr>
+          <Label>
+            <input
+              type="checkbox"
+              value="age"
+              checked={checkedItems.includes("age")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              만 14세 이상입니다.{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="use"
+              checked={checkedItems.includes("use")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              이용약관{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="agree"
+              checked={checkedItems.includes("agree")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              개인정보수집 및 이용동의{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="event"
+              checked={checkedItems.includes("event")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+            ></input>
+            <AgreementSpan>
+              이벤트, 프로모션 알림 메일 및 SMS 수신{" "}
+              <OptionSpan className="option">(선택)</OptionSpan>
+            </AgreementSpan>
+          </Label>
+        </AgreementSection>
+      </CommonForm>
       <Confirm onClick={submitAll}>회원가입</Confirm>
-
       <Link to="/login">
         <Cancle>취소</Cancle>
       </Link>
