@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import { playlistsAtom } from "../atom";
+import { createPlaylist } from "../api";
 
 const Container = styled.div`
   position: absolute;
@@ -283,9 +283,7 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
   };
   const handleSubmitClick = async () => {
     if (title && description && cover && songlist.length > 0) {
-      // TODO: call POST /playlists
       const formData = new FormData();
-      const accessToken = localStorage.getItem("accessToken");
       formData.append("tag", state.tag);
       formData.append("title", title);
       formData.append("description", description);
@@ -293,18 +291,8 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
       formData.append("songs", JSON.stringify(songlist));
 
       try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/playlists`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: accessToken,
-            },
-            withCredentials: true,
-          }
-        );
-        console.log(response);
+        const response = await createPlaylist(formData);
+        // console.log(response);
         if (response.data.response === "ok") {
           const newPlaylists = [...playlists[state.tag]];
           const playlist = {

@@ -7,10 +7,10 @@ import Glowing from "../components/Glowing";
 import Playlist from "../components/Playlist";
 import PlaylistDetail from "../components/PlaylistDetail";
 import Dimmed from "../components/Dimmed";
-import axios from "axios";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CreatePlaylist from "../components/CreatePlaylist";
+import { createOrder, getPlaylists } from "../api";
 
 const Container = styled.div`
   width: 100%;
@@ -175,26 +175,15 @@ function Menu() {
   }, [scrollPosition]);
 
   useEffect(() => {
-    // Playlist 호출
+    // Playlists 호출
     (async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      await Promise.all(
-        TAGS.map((tag) =>
-          axios.get(
-            `${
-              process.env.REACT_APP_API_URL
-            }/playlists?tag=${encodeURIComponent(tag)}`,
-            { headers: { Authorization: accessToken } }
-          )
-        )
-      ).then((responses) => {
-        // console.log(responses);
-        const obj = {};
-        responses.forEach((response) => {
-          obj[response.data.data[0].tag] = response.data.data;
-        });
-        setPlaylists(obj);
+      const responses = await getPlaylists(TAGS);
+      // console.log(responses);
+      const obj = {};
+      responses.forEach((response) => {
+        obj[response.data.data[0].tag] = response.data.data;
       });
+      setPlaylists(obj);
     })();
 
     if (isGlowing) {
@@ -250,19 +239,12 @@ function Menu() {
         default:
           break;
       }
-      const response = await axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}/orders`,
-        data: {
-          tag,
-          playlistId: activePlaylistIndex + 1,
-          time: selectedTime / (1000 * 60 * 60),
-        },
-        headers: {
-          Authorization: localStorage.getItem("accessToken"),
-        },
-      });
-
+      const response = await createOrder(
+        tag,
+        activePlaylistIndex + 1,
+        selectedTime
+      );
+      // console.log(response);
       if (response.data.response === "ok") {
         navigate("/main", {
           state: {
