@@ -18,7 +18,6 @@ module.exports = async (req, res) => {
 
   // console.log(userInfo);
   try {
-    console.log(user);
     if (!userInfo) {
       return res.status(404).send("이메일 혹은 비밀번호가 일치하지 않습니다.");
     } else {

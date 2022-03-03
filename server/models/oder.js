@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   Order.init(
     {
       theme: DataTypes.STRING,
-      time: DataTypes.DATE,
+      time: DataTypes.FLOAT,
       userId: DataTypes.INTEGER,
     },
     {
