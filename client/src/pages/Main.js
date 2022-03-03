@@ -341,7 +341,7 @@ function Main() {
   const {
     state: { time, songs, coverUrl },
   } = useLocation();
-
+  console.log(songs);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEndModalOpened, setIsEndModalOpened] = useState(false);
   const [isModalOpened, setIsModalOpened] = useState(false);
