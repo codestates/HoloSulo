@@ -7,7 +7,6 @@ import { createPlaylist } from "../api";
 
 const Container = styled.div`
   position: absolute;
-  top: ${(props) => (props.scrollPosition ? props.scrollPosition : "0")};
   left: 0;
   right: 0;
   bottom: 0;
@@ -227,7 +226,7 @@ const Button = styled.button`
   }
 `;
 
-function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
+function CreatePlaylist({ setShowCreatePlaylist }) {
   const { pathname, state } = useLocation();
 
   const [cover, setCover] = useState();
@@ -324,7 +323,7 @@ function CreatePlaylist({ scrollPosition, setShowCreatePlaylist }) {
   };
 
   return (
-    <Container scrollPosition={scrollPosition + ""}>
+    <Container>
       <PlaylistContainer>
         <CoverContainer>
           <Cover src={coverUrl} />
