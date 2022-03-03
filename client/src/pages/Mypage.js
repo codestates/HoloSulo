@@ -181,8 +181,8 @@ const Gage2 = styled.div`
 `;
 
 export default function Mypage(userData) {
+  console.log(userData);
   const userInfo = useRecoilValue(userInfoAtom);
-  // console.log(userInfo);
 
   const [modalVisible, setModalVisible] = useState(false);
   const openModal = () => {
@@ -198,8 +198,10 @@ export default function Mypage(userData) {
   });
 
   const getUserInfo = async () => {
-    await axios(`${process.env.REACT_APP_API_URL}/users/`, {
+    // axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('accessToken')}`;
+    await axios(`${process.env.REACT_APP_API_URL}/users/info`, {
       method: "GET",
+      /*
       data: {
         username: userData.username,
         useremail: userData.useremail,
@@ -207,6 +209,8 @@ export default function Mypage(userData) {
         weekVisitCount: "0",
         totalHour: "13.5",
       },
+      */
+      data: userData,
       headers: {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Origin": "*",
