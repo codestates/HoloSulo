@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import EditMypage from "./pages/EditMypage";
-import Ending from "./pages/Ending";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
@@ -52,14 +51,6 @@ function Router() {
         element={
           <Layout isTransparent={true}>
             <Main />
-          </Layout>
-        }
-      />
-      <Route
-        path="/ending"
-        element={
-          <Layout>
-            <Ending />
           </Layout>
         }
       />
