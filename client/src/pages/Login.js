@@ -160,9 +160,9 @@ export default function Login(props) {
 
   useEffect(() => {
     // 로그인 된 상태이면 "/menu"로 이동
-    // if (localStorage.getItem("accessToken") && isLoggedIn) {
-    //   history("/menu");
-    // }
+    if (localStorage.getItem("accessToken") && isLoggedIn) {
+      history("/menu");
+    }
   }, []);
 
   //카카오로그인
