@@ -5,6 +5,7 @@ import axios from "axios";
 import Modal from "../components/Modal";
 import { useRecoilValue } from "recoil";
 import { userInfoAtom } from "../atom";
+import { Helmet } from "react-helmet-async";
 
 const Total = styled.div`
   display: flex;
@@ -206,6 +207,9 @@ export default function Mypage(props) {
 
   return (
     <>
+      <Helmet>
+        <title>Mypage | HoloSulo</title>
+      </Helmet>
       <Total>
         <TitleBox>
           <Title>my info</Title>

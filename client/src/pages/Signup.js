@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
+import { Helmet } from "react-helmet-async";
 
 axios.defaults.withCredentials = true;
 
@@ -435,6 +436,9 @@ export default function Signup() {
 
   return (
     <Total>
+      <Helmet>
+        <title>Signup | HoloSulo</title>
+      </Helmet>
       <Link to="/">
         <FontLogo></FontLogo>
       </Link>
