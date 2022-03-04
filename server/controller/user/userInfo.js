@@ -1,7 +1,6 @@
 require("dotenv").config();
 const { User, Order } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
-const schedule = require("node-schedule");
 
 module.exports = async (req, res) => {
   try {
@@ -29,7 +28,7 @@ module.exports = async (req, res) => {
           useremail: userData.email,
           visitCount: userData.visitCount,
           weekVisitCount: "0",
-          totalHour: userOrderData.time,
+          totalHour: userOrderData ? userOrderData.time : 0,
         },
         response: "ok",
       });
