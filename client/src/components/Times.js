@@ -19,6 +19,9 @@ const Text = styled.li`
     color: #38b5fb;
     transition: color 0.2s;
   }
+  @media only screen and (max-width: 450px) {
+    font-size: 14px;
+  }
   /* border: 1px solid white; */
 `;
 const TimeContainer = styled.div`
