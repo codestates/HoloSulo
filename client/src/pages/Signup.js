@@ -18,12 +18,12 @@ const Total = styled.div`
 `;
 
 const Part1 = styled.div`
-  margin-bottom: 10%;
+  margin-bottom: 7%;
 `;
 
 const Part2 = styled.div`
   margin-left: 5.5%;
-  margin-bottom: 10%;
+  margin-bottom: 7%;
 `;
 
 const Part3 = styled.div`
@@ -125,6 +125,25 @@ const Password = styled.input`
   justify-content: center;
 `;
 
+const PasswordCheck = styled.input`
+  width: 200px;
+  background-color: #e8e8e8;
+  color: #707070;
+  outline: none;
+  font-family: monospace;
+  border: 0.2em;
+  border-radius: 0.9em;
+  width: 23em;
+  height: 2em;
+  margin-top: 10%;
+  margin-bottom: 14%;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const TypoNickname = styled.input`
   width: 200px;
   background-color: #e8e8e8;
@@ -161,7 +180,6 @@ const Compo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  // margin-bottom: 3%;
   padding-left: 5.5%;
 `;
 
@@ -185,21 +203,21 @@ const Terms = styled.button`
 
 const Mention1 = styled.div`
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 8%;
 `;
 
 const Mention2 = styled.div`
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 2.7%;
 `;
 
 const Mention3 = styled.div`
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 7.8%;
 `;
@@ -215,6 +233,42 @@ const Msg2 = styled.div`
   color: #117326;
   margin-top: 5%;
   font-size: 12px;
+  font-weight: 500;
+`;
+
+const Msg3 = styled.div`
+  color: #117326;
+  margin-top: 5%;
+  margin-bottom: -5%;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 500;
+`;
+
+const Msg4 = styled.div`
+  color: #f06363;
+  margin-top: 5%;
+  margin-bottom: -5%;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 500;
+`;
+
+const Msg5 = styled.div`
+  color: #117326;
+  margin-top: -12%;
+  margin-bottom: 3%;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: 500;
+`;
+
+const Msg6 = styled.div`
+  color: #f06363;
+  margin-top: -12%;
+  margin-bottom: 3%;
+  font-size: 12px;
+  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -485,27 +539,27 @@ export default function Signup() {
           ></Password>
           <Part4>
             {isPassword ? (
-              <Msg2>{passwordMessage}</Msg2>
+              <Msg3>{passwordMessage}</Msg3>
             ) : userinfo.password.length === 0 ? null : (
-              <Msg>{passwordMessage}</Msg>
+              <Msg4>{passwordMessage}</Msg4>
             )}
           </Part4>
 
-          <Password
+          <PasswordCheck
             type="password"
             placeholder="check password"
             onChange={handleInputValue("passwordCheck")}
             onBlur={() => {
               checkPassword(userinfo.password, userinfo.passwordCheck);
             }}
-          ></Password>
+          ></PasswordCheck>
           <Part4>
             {isPwdCheck ? (
               userinfo.passwordCheck.length === 0 ? null : (
-                <Msg2>{passwordCheckMessage}</Msg2>
+                <Msg5>{passwordCheckMessage}</Msg5>
               )
             ) : userinfo.passwordCheck.length === 0 ? null : (
-              <Msg>{passwordCheckMessage}</Msg>
+              <Msg6>{passwordCheckMessage}</Msg6>
             )}
           </Part4>
         </Part2>
@@ -547,7 +601,7 @@ export default function Signup() {
               checked={checkedItems.length === 4 ? true : false}
               onChange={(e) => handleAllCheck(e.target.checked)}
             ></input>
-            <AgreementSpan>전체동의 </AgreementSpan>
+            <AgreementSpan>전체동의</AgreementSpan>
           </Label>
           <hr></hr>
           <Label>
