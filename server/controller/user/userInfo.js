@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("../../models");
+const { User, Order } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
