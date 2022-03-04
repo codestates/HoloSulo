@@ -51,15 +51,6 @@ function Header({ isTransparent = false }) {
     setIsLoggedInAtom(false);
     window.location.href = "/";
     console.log("토큰이 잘못 됬습니다.");
-    // await axios({
-    //   method: "post",
-    //   url: `${process.env.REACT_APP_API_URL}/users/logout`,
-    //   data: {
-    //     accessToken: localStorage.getItem("accessToken"),
-    //   },
-    // }).then(() => {
-
-    // });
   };
 
   return (

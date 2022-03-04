@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
           response: "ok",
           data: {
             accessToken: accessToken,
-            refreshToken: retoken,
+            // refreshToken: retoken,
             userInfo: {
               id: userInfo.dataValues.id,
               username: userInfo.dataValues.username,
