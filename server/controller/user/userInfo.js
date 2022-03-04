@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
       });
       const userOrderData = await Order.findOne({
         where: {
-          id: accessToken.id,
+          userId: accessToken.id,
         },
       });
       /*const weekVisitCount = schedule.scheduleJob('0 0 0 * * 1', async()=>{
