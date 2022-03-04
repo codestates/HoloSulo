@@ -51,3 +51,9 @@ export const deletePlaylist = (playlistId) => {
     headers: { Authorization: localStorage.getItem("accessToken") },
   });
 };
+
+export const kakaoAuthenticate = (code) => {
+  return axios.post(`${process.env.REACT_APP_API_URL}/user/kakaoCallback`, {
+    data: { code },
+  });
+};
