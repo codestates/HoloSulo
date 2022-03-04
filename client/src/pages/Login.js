@@ -139,7 +139,6 @@ const LoginErr = styled.div`
   color: #f06363;
   margin-top: 5%;
   font-size: 13px;
-  font-family: monospace;
 `;
 
 export default function Login(props) {

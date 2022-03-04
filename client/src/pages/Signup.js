@@ -130,7 +130,7 @@ const PasswordCheck = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
+
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -241,7 +241,6 @@ const Msg3 = styled.div`
   margin-top: 5%;
   margin-bottom: -5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -250,7 +249,6 @@ const Msg4 = styled.div`
   margin-top: 5%;
   margin-bottom: -5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -259,7 +257,6 @@ const Msg5 = styled.div`
   margin-top: -12%;
   margin-bottom: 3%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -268,7 +265,6 @@ const Msg6 = styled.div`
   margin-top: -12%;
   margin-bottom: 3%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
