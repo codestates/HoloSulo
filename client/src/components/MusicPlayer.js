@@ -11,7 +11,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getYoutubeVideoIdOrNull } from "../utils/getYoutubeVideoId";
 import Equalizer from "./Equalizer";
-import { isMobile } from "../utils/isMobile";
+import { isMobile } from "../utils/detectIOSDevice";
 
 const Container = styled.div`
   display: flex;

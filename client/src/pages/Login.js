@@ -9,6 +9,7 @@ import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoggedInAtom, userInfoAtom } from "../atom";
+import { Helmet } from "react-helmet-async";
 
 axios.defaults.withCredentials = true;
 
@@ -256,6 +257,9 @@ export default function Login(props) {
 
   return (
     <>
+      <Helmet>
+        <title>Login | HoloSulo</title>
+      </Helmet>
       <Total>
         <center>
           <Link to="/">

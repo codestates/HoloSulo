@@ -6,6 +6,7 @@ import cheeers from "../images/cheers.jpg";
 import MusicPlayer from "../components/MusicPlayer";
 import Memo from "../components/Memo";
 import FloatingButton from "../components/FloatingButton";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   width: 100%;
@@ -127,6 +128,9 @@ function Main() {
 
   return (
     <Container>
+      <Helmet>
+        <title>Main | HoloSulo</title>
+      </Helmet>
       <Background coverUrl={coverUrl}>
         <Header>HOLOSULO</Header>
         <MusicPlayer
