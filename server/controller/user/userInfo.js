@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
       return res.status(200).send({
         data: {
           username: userData.username,
-          useremail: userData.email,
+          useremail: userData.useremail,
           visitCount: userData.visitCount,
           weekVisitCount: "0",
           totalHour: userOrderData.time,
