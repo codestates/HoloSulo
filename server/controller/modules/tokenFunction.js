@@ -5,9 +5,11 @@ module.exports = {
   generateAccessToken: (data) => {
     return sign(data, process.env.ACCESS_SECRET, { expiresIn: "1h" });
   },
+
   refreshToken: (data) => {
-    return sign(data, process.env.ACCESS_SECRET, { expiresIn: "14d" });
+    return sign(data, process.env.REFRESH_SECRET, { expiresIn: "14d" });
   },
+
   sendAccessToken: (res, accessToken) => {
     res.cookie("jwt", accessToken);
   },
