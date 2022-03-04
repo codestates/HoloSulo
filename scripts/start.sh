@@ -10,5 +10,9 @@ export S3_DOMAIN=$(aws ssm get-parameters --region ap-northeast-2 --names S3_DOM
 export PORT=$(aws ssm get-parameters --region ap-northeast-2 --names PORT --query Parameters[0].Value | sed 's/"//g')
 export NODE_ENV=$(aws ssm get-parameters --region ap-northeast-2 --names NODE_ENV --query Parameters[0].Value | sed 's/"//g')
 export HOLOSULO_HOST_DOMAIN=$(aws ssm get-parameters --region ap-northeast-2 --names HOLOSULO_HOST_DOMAIN --query Parameters[0].Value | sed 's/"//g')
+export KAKAO_CLIENT_ID=$(aws ssm get-parameters --region ap-northeast-2 --names KAKAO_CLIENT_ID --query Parameters[0].Value | sed 's/"//g')
+export KAKAO_REDIRECT_URL=$(aws ssm get-parameters --region ap-northeast-2 --names KAKAO_REDIRECT_URL --query Parameters[0].Value | sed 's/"//g')
+
+
 
 authbind --deep pm2 start "npm run prod" --name app.js

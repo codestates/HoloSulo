@@ -49,7 +49,7 @@ app.patch("/users/password", controllers.passwordchange);
 app.patch("/users/username", controllers.namechange);
 app.post("/naver/api/callback", controllers.naverLogin.getNaverCallback);
 app.post("/kakaocallback", controllers.kakaoCallback);
-app.get("/user/kakaoCallback", controllers.kakaoCallback);
+app.post("/user/kakaoCallback", controllers.kakaoCallback);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
