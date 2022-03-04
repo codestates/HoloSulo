@@ -38,7 +38,6 @@ const Part4 = styled.div`
 `;
 
 const Title = styled.div`
-  font-family: monospace;
   font-size: 40px;
   font-weight: 600;
   margin-bottom: 5%;
@@ -52,7 +51,6 @@ const TitleBox = styled.div`
 
 const Editbut = styled.button`
   width: 120px;
-  font-family: monospace;
   border: 0;
   font-size: 16px;
   font-weight: 600;
@@ -63,7 +61,6 @@ const Editbut = styled.button`
 
 const Resignbut = styled.button`
   width: 170px;
-  font-family: monospace;
   border: 0;
   font-size: 16px;
   font-weight: 600;
@@ -74,21 +71,18 @@ const Resignbut = styled.button`
 `;
 
 const Email = styled.div`
-  font-family: monospace;
   font-size: 19px;
   padding-left: 10px;
   display: flex;
 `;
 
 const Nickname = styled.div`
-  font-family: monospace;
   font-size: 19px;
   padding-left: 10px;
   display: flex;
 `;
 
 const UserNick = styled.div`
-  font-family: monospace;
   font-size: 19px;
   border-bottom: 2.5px dashed grey;
 
@@ -96,7 +90,6 @@ const UserNick = styled.div`
 `;
 
 const UserEmail = styled.div`
-  font-family: monospace;
   font-size: 19px;
   border-bottom: 2.5px dashed grey;
 
@@ -109,7 +102,6 @@ const Compo = styled.div`
 `;
 
 const VisitNum = styled.div`
-  font-family: monospace;
   border: 0;
   width: 160px;
   font-size: 50px;
@@ -119,7 +111,6 @@ const VisitNum = styled.div`
 `;
 
 const VisitTimeNum = styled.div`
-  font-family: monospace;
   border: 0;
   width: 160px;
   font-size: 50px;
@@ -129,7 +120,6 @@ const VisitTimeNum = styled.div`
 `;
 
 const Visit = styled.div`
-  font-family: monospace;
   border: 0;
   font-size: 20px;
   font-weight: 600;
@@ -138,7 +128,6 @@ const Visit = styled.div`
 `;
 
 const VisitTime = styled.div`
-  font-family: monospace;
   border: 0;
   font-size: 20px;
   font-weight: 600;
@@ -147,7 +136,6 @@ const VisitTime = styled.div`
 `;
 
 const Mention = styled.div`
-  font-family: monospace;
   font-size: 16px;
   font-weight: 600;
   margin-top: 5%;

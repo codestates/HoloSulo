@@ -45,7 +45,6 @@ const Password = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -63,7 +62,6 @@ const TypoNickname = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -78,7 +76,6 @@ const Check = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   margin-left: 2%;
   border: 0.2em;
   border-radius: 0.9em;
@@ -105,7 +102,6 @@ const Edit = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -125,7 +121,6 @@ const Cancle = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -140,7 +135,6 @@ const Cancle = styled.button`
 `;
 
 const Mention2 = styled.div`
-  font-family: monospace;
   font-size: 15px;
   margin-bottom: 2%;
   margin-top: 10px;
@@ -148,7 +142,6 @@ const Mention2 = styled.div`
 `;
 
 const Mention3 = styled.div`
-  font-family: monospace;
   font-size: 15px;
   margin-bottom: 2%;
   margin-top: 10px;
@@ -160,7 +153,6 @@ const Msg = styled.div`
   margin-left: 2%;
   margin-top: -3.5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -168,7 +160,6 @@ const Msg2 = styled.div`
   color: #117326;
   margin-top: 5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -177,7 +168,6 @@ const Msg3 = styled.div`
   margin-top: -1.5%;
   margin-left: 7%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -186,7 +176,6 @@ const Msg4 = styled.div`
   margin-left: 7%;
   margin-top: -1.5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 

@@ -136,14 +136,12 @@ const CloseButton = styled.div`
 `;
 
 const Mention = styled.div`
-  font-family: monospace;
   color: #565656;
   font-weight: 500;
   font-size: 20px;
 `;
 
 const Confirm = styled.div`
-  font-family: monospace;
   color: #f06363;
   font-size: 17px;
   font-weight: 500;
@@ -151,7 +149,6 @@ const Confirm = styled.div`
 `;
 
 const Cancle = styled.div`
-  font-family: monospace;
   color: #565656;
   font-size: 17px;
   font-weight: 500;
