@@ -37,6 +37,8 @@ const LogoutButton = styled.li`
   text-decoration: ${(props) => props.active};
   border: none;
   width: auto;
+  background-color: transparent;
+  color: ${(props) => props.active};
   cursor: pointer;
 `;
 
@@ -46,22 +48,10 @@ function Header({ isTransparent = false }) {
   const setIsLoggedInAtom = useSetRecoilState(isLoggedInAtom);
 
   const LogoutHandler = async () => {
-    await axios({
-      method: "post",
-      url: `${process.env.REACT_APP_API_URL}/users/logout`,
-      data: {
-        accessToken: localStorage.getItem("accessToken"),
-      },
-    }).then((data) => {
-      console.log(data);
-      if (data.data.response === "ok") {
-        localStorage.removeItem("accessToken");
-        setIsLoggedInAtom(false);
-        window.location.href = "/";
-      } else {
-        console.log("토큰이 잘못 됬습니다.");
-      }
-    });
+    localStorage.removeItem("accessToken");
+    setIsLoggedInAtom(false);
+    window.location.href = "/";
+    console.log("토큰이 잘못 됬습니다.");
   };
 
   return (
@@ -80,7 +70,12 @@ function Header({ isTransparent = false }) {
                 <Link to="/mypage">mypage</Link>
               </Item>
               <Item>
-                <LogoutButton onClick={LogoutHandler}>Logout</LogoutButton>
+                <LogoutButton
+                  active={pathname === "/main" ? "white" : "black"}
+                  onClick={LogoutHandler}
+                >
+                  Logout
+                </LogoutButton>
               </Item>
             </>
           ) : (

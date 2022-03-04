@@ -2,7 +2,7 @@ require("dotenv").config();
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const { generateAccessToken } = require("../modules/tokenFunction");
-
+const refreshToken = require("../modules/tokenFunction");
 module.exports = async (req, res) => {
   const user = req.body;
   if (user.email === null) {
@@ -36,11 +36,16 @@ module.exports = async (req, res) => {
           createdAt: userInfo.dataValues.createdAt,
           updatedAt: userInfo.dataValues.updatedAt,
         };
+        // const refreshPayload = {
+        //   email: userInfo.dataValues.email,
+        // };
         const accessToken = generateAccessToken(payload);
+        // const retoken = refreshToken.refreshToken(refreshPayload);
         return res.status(200).send({
           response: "ok",
           data: {
             accessToken: accessToken,
+            // refreshToken: retoken,
             userInfo: {
               id: userInfo.dataValues.id,
               username: userInfo.dataValues.username,
