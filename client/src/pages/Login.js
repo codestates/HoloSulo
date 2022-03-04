@@ -208,11 +208,12 @@ export default function Login(props) {
       withCredentials: true,
     })
       .then((res) => {
-        const { accessToken, userInfo } = res.data.data;
+        const { accessToken, refreshToken, userInfo } = res.data.data;
 
         // 유저 정보 state
         setUserInfo({ ...userInfo });
-
+        // 로컬스토리지에 refreshToken 담기
+        // localStorage.setItem("refreshToken", refreshToken);
         // 로컬스토리지 accessToken 담기
         localStorage.setItem("accessToken", accessToken);
         setIsLoggedInAtom(true);
