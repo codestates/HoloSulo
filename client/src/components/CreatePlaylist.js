@@ -291,7 +291,6 @@ function CreatePlaylist({ setShowCreatePlaylist }) {
 
       try {
         const response = await createPlaylist(formData);
-        // console.log(response);
         if (response.data.response === "ok") {
           const newPlaylists = [...playlists[state.tag]];
           const playlist = {
