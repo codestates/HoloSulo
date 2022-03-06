@@ -5,7 +5,7 @@ const { isAuthorized } = require("../modules/tokenFunction");
 module.exports = async (req, res) => {
   try {
     const accessToken = isAuthorized(req.headers.authorization);
-
+    console.log(accessToken);
     if (!accessToken) {
       res.status(401).send({ message: "유효하지 않은 토큰" });
     } else {
@@ -14,11 +14,13 @@ module.exports = async (req, res) => {
           id: accessToken.id,
         },
       });
+      console.log("userData", userData);
       const userOrderData = await Order.findOne({
         where: {
           userId: accessToken.id,
         },
       });
+      console.log("userOrderData", userOrderData);
       /*const weekVisitCount = schedule.scheduleJob('0 0 0 * * 1', async()=>{
         const mondayreset = 
       })*/
