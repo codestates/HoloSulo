@@ -5,11 +5,12 @@ module.exports = {
   createPlaylist: async (req, res) => {
     try {
       const playlist = req.body;
-      const coverFileUrl = req.file.path;
+      const coverFileUrl = req.file.location;
       const songsParser = JSON.parse(playlist.songs);
       const authorization = req.headers.authorization;
       const userId = isAuthorized(authorization);
       const tagId = await Tag.findOne({ where: { tag: playlist.tag } });
+      console.log(coverFileUrl);
       if (!playlist) {
         return res.status(400).send({ response: "잘못된 요청입니다" });
       }
@@ -21,8 +22,7 @@ module.exports = {
       }
 
       const createPlaylist = await Playlist.create({
-        coverUrl:
-          process.env.DEV_DOMAIN + process.env.PORT + "/" + coverFileUrl,
+        coverUrl: coverFileUrl,
         title: playlist.title,
         description: playlist.description,
         userId: userId.id,
