@@ -3,8 +3,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 80;
 const cors = require("cors");
-const multer = require("multer");
-const upload = multer({ dest: "static/" });
+const upload = require("./controller/modules/multer");
 
 app.use(express.json());
 const controllers = require("./controller");

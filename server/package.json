@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1087.0",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
@@ -23,6 +24,7 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.4",
+    "multer-s3": "^2.10.0",
     "mysql2": "^2.3.3",
     "sequelize": "^6.16.1"
   },
