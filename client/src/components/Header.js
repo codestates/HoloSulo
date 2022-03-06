@@ -3,7 +3,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { isLoggedInAtom } from "../atom";
 import logo from "../images/logo.png";
-import axios from "axios";
 
 const Container = styled.div`
   width: 100%;
