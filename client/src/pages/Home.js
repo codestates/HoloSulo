@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import landing from "../images/landing.jpg";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   width: 100%;
@@ -53,6 +54,9 @@ const Button = styled.div`
 function Home() {
   return (
     <Container>
+      <Helmet>
+        <title>HoloSulo</title>
+      </Helmet>
       <Title>당신의 혼술 HoloSulo와 함께</Title>
       <Link to="login">
         <Button>시작하기</Button>

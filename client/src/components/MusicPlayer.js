@@ -11,6 +11,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { getYoutubeVideoIdOrNull } from "../utils/getYoutubeVideoId";
 import Equalizer from "./Equalizer";
+import { isMobile } from "../utils/detectIOSDevice";
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const Container = styled.div`
 
 const MusicControllerContainer = styled.div`
   width: 30%;
-  min-width: 280px;
+  min-width: 200px;
   height: 80px;
   background-color: white;
   position: absolute;
@@ -33,6 +34,9 @@ const MusicControllerContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  @media only screen and (max-width: 600px) {
+    bottom: 40px;
+  }
 `;
 
 const Text = styled.span`
@@ -51,7 +55,8 @@ const PlayerBtn = styled.div`
   width: 30px;
   height: 30px;
   background-color: white;
-  margin-right: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,9 +111,13 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
         if (event.data === window.YT.PlayerState.ENDED) {
           youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
           setCurrentYoutubeIndex(youtubeIndex.current);
-          event.target.loadVideoById(
-            getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
-          );
+          if (getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)) {
+            event.target.loadVideoById(
+              getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+            );
+          } else {
+            console.log("invalid youtube url");
+          }
         } else if (event.data === window.YT.PlayerState.PLAYING) {
           setIsPlaying(true);
         }
@@ -135,6 +144,7 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
     };
   }, []);
   const handlePlayClick = () => {
+    console.log(player.current.getVideoUrl());
     if (player.current.getPlayerState() === 1) {
       player.current.pauseVideo();
       setIsPlaying(false);
@@ -151,22 +161,30 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
     youtubeIndex.current =
       youtubeIndex.current !== 0 ? youtubeIndex.current - 1 : songs.length - 1;
     setCurrentYoutubeIndex(youtubeIndex.current);
-    player.current.loadVideoById(
-      getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
-    );
-    if (player.current.getPlayerState() === 1) {
-      player.current.playVideo();
+    if (getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)) {
+      player.current.loadVideoById(
+        getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+      );
+      if (player.current.getPlayerState() === 1) {
+        player.current.playVideo();
+      }
+    } else {
+      console.log("invalid youtube url");
     }
   };
   const playNextSong = () => {
     player.current.pauseVideo();
     youtubeIndex.current = (youtubeIndex.current + 1) % songs.length;
     setCurrentYoutubeIndex(youtubeIndex.current);
-    player.current.loadVideoById(
-      getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
-    );
-    if (player.current.getPlayerState() === 1) {
-      player.current.playVideo();
+    if (getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)) {
+      player.current.loadVideoById(
+        getYoutubeVideoIdOrNull(songs[youtubeIndex.current].songUrl)
+      );
+      if (player.current.getPlayerState() === 1) {
+        player.current.playVideo();
+      }
+    } else {
+      console.log("invalid youtube url");
     }
   };
 
@@ -176,7 +194,7 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
   };
 
   const handleMuteClick = () => {
-    if (player.current.isMute()) {
+    if (player.current.isMuted()) {
       player.current.unMute();
       setVolume(player.current.getVolume());
     } else {
@@ -189,8 +207,8 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
       <Equalizer isPlaying={isPlaying} />
       <Text>NOW PLAYING</Text>
       <SongTitle>{songs[currentYoutubeIndex].songTitle}</SongTitle>
+      <div id="player" style={{ display: "none" }} />
       <MusicControllerContainer>
-        <div id="player" style={{ display: "none" }} />
         <PrevButton onClick={playPrevSong}>
           <FontAwesomeIcon icon={faBackward} />
         </PrevButton>
@@ -200,17 +218,21 @@ function MusicPlayer({ time, songs, isTimeOver, setIsEndModalOpened }) {
         <NextButton onClick={playNextSong}>
           <FontAwesomeIcon icon={faForward} />
         </NextButton>
-        <PlayerBtn onClick={handleMuteClick}>
-          <FontAwesomeIcon icon={volume > 0 ? faVolumeUp : faVolumeOff} />
-        </PlayerBtn>
-        <VolumeSlider
-          onChange={(e) => handleVolumeChange(e)}
-          type="range"
-          min="0"
-          max="100"
-          step="10"
-          value={volume}
-        />
+        {!isMobile() && (
+          <>
+            <PlayerBtn onClick={handleMuteClick}>
+              <FontAwesomeIcon icon={volume > 0 ? faVolumeUp : faVolumeOff} />
+            </PlayerBtn>
+            <VolumeSlider
+              onChange={(e) => handleVolumeChange(e)}
+              type="range"
+              min="0"
+              max="100"
+              step="10"
+              value={volume}
+            />
+          </>
+        )}
       </MusicControllerContainer>
     </Container>
   );

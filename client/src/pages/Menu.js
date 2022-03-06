@@ -13,6 +13,7 @@ import Tags from "../components/Tags";
 import Times from "../components/Times";
 import Playlists from "../components/Playlists";
 import { getPlaylistById } from "../utils/getPlaylistById";
+import { Helmet } from "react-helmet-async";
 
 const Container = styled.div`
   width: 100%;
@@ -99,6 +100,9 @@ function Menu() {
   // console.log(time, tag, playlistId);
   return (
     <>
+      <Helmet>
+        <title>Menu | HoloSulo</title>
+      </Helmet>
       {isGlowing ? (
         <LoadingWrapper>
           <Glowing />

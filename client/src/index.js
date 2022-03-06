@@ -37,6 +37,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 menu, ol, ul {
   list-style: none;

@@ -9,6 +9,7 @@ import kakaoLoginClickHandler from "../components/KaKaoLogin";
 import naverLoginClickHandler from "../components/NaverLogin";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isLoggedInAtom, userInfoAtom } from "../atom";
+import { Helmet } from "react-helmet-async";
 
 axios.defaults.withCredentials = true;
 
@@ -39,7 +40,6 @@ const LoginButton = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   margin-top: 30%;
   border: 0.2em;
   border-radius: 0.9em;
@@ -61,7 +61,6 @@ const Email = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -79,7 +78,6 @@ const Password = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -93,14 +91,12 @@ const Password = styled.input`
 `;
 
 const GuestLoginbut = styled.button`
-  font-family: monospace;
   border: 0;
   background-color: #f3f1f0;
   cursor: pointer;
 `;
 
 const SignUpButton = styled.button`
-  font-family: monospace;
   border: 0;
   background-color: #f3f1f0;
   margin-right: 8%;
@@ -108,7 +104,6 @@ const SignUpButton = styled.button`
 `;
 
 const Slash = styled.span`
-  font-family: monospace;
   margin-left: 1%;
   margin-right: 1%;
 `;
@@ -144,7 +139,6 @@ const LoginErr = styled.div`
   color: #f06363;
   margin-top: 5%;
   font-size: 13px;
-  font-family: monospace;
 `;
 
 export default function Login(props) {
@@ -257,6 +251,9 @@ export default function Login(props) {
 
   return (
     <>
+      <Helmet>
+        <title>Login | HoloSulo</title>
+      </Helmet>
       <Total>
         <center>
           <Link to="/">

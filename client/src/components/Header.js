@@ -32,7 +32,8 @@ const Item = styled.li`
   margin-left: 20px;
   text-decoration: ${(props) => props.active};
 `;
-const LogoutButton = styled.button`
+const LogoutButton = styled.li`
+  text-decoration: ${(props) => props.active};
   border: none;
   width: auto;
   background-color: transparent;

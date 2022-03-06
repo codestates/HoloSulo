@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("../../models");
+const { User, Order } = require("../../models");
 const { isAuthorized } = require("../modules/tokenFunction");
 
 module.exports = async (req, res) => {
@@ -14,13 +14,21 @@ module.exports = async (req, res) => {
           id: accessToken.id,
         },
       });
+      const userOrderData = await Order.findOne({
+        where: {
+          userId: accessToken.id,
+        },
+      });
+      /*const weekVisitCount = schedule.scheduleJob('0 0 0 * * 1', async()=>{
+        const mondayreset = 
+      })*/
       return res.status(200).send({
         data: {
           username: userData.username,
-          useremail: userData.useremail,
+          useremail: userData.email,
           visitCount: userData.visitCount,
           weekVisitCount: "0",
-          totalHour: "13.5",
+          totalHour: userOrderData ? userOrderData.time : 0,
         },
         response: "ok",
       });

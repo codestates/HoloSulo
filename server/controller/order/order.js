@@ -11,11 +11,10 @@ module.exports = async (req, res) => {
     const findTag = await finder.findTag(tag);
     const findSong = await finder.findSong(playlistId);
     const userInfo = isAuthorized(Authorization);
-    // console.log(userInfo);
+
     if (!findTag || !findSong) {
       return res.status(400).send("not find tag");
     }
-
     if (!Authorization || !userInfo) {
       return res
         .status(200)
@@ -23,7 +22,6 @@ module.exports = async (req, res) => {
     } else {
       await User.increment({ visitCount: 1 }, { where: { id: userInfo.id } });
       await creatOrder(tag, time, userInfo.id);
-      console.log(req.body);
       return res
         .status(200)
         .send({ data: { tag: tag, song: findSong }, response: "ok" });

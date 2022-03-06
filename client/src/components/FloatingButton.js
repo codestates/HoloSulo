@@ -17,6 +17,9 @@ const Button = styled.div`
   @media only screen and (max-width: 800px) {
     right: 20px;
   }
+  @media only screen and (max-width: 600px) {
+    bottom: 60px;
+  }
 `;
 
 function FloatingButton({ isMemoOpen, setIsMemoOpen }) {

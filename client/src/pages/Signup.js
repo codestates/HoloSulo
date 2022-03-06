@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Logo from "../images/logo.png";
+import { Helmet } from "react-helmet-async";
 
 axios.defaults.withCredentials = true;
 
@@ -17,12 +18,12 @@ const Total = styled.div`
 `;
 
 const Part1 = styled.div`
-  margin-bottom: 10%;
+  margin-bottom: 7%;
 `;
 
 const Part2 = styled.div`
   margin-left: 5.5%;
-  margin-bottom: 10%;
+  margin-bottom: 7%;
 `;
 
 const Part3 = styled.div`
@@ -57,7 +58,6 @@ const TypoEmail = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -75,7 +75,6 @@ const Confirm = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   margin-top: 2%;
   margin-bottom: 2%;
   border: 0.2em;
@@ -96,7 +95,6 @@ const Cancle = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -115,7 +113,6 @@ const Password = styled.input`
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -128,12 +125,30 @@ const Password = styled.input`
   justify-content: center;
 `;
 
+const PasswordCheck = styled.input`
+  width: 200px;
+  background-color: #e8e8e8;
+  color: #707070;
+  outline: none;
+
+  border: 0.2em;
+  border-radius: 0.9em;
+  width: 23em;
+  height: 2em;
+  margin-top: 10%;
+  margin-bottom: 14%;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const TypoNickname = styled.input`
   width: 200px;
   background-color: #e8e8e8;
   color: #707070;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -148,7 +163,6 @@ const Check = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   margin-left: 2%;
   border: 0.2em;
   border-radius: 0.9em;
@@ -166,7 +180,6 @@ const Compo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  // margin-bottom: 3%;
   padding-left: 5.5%;
 `;
 
@@ -175,7 +188,6 @@ const Terms = styled.button`
   background-color: #8c8c8c;
   color: whitesmoke;
   outline: none;
-  font-family: monospace;
   border: 0.2em;
   border-radius: 0.9em;
   width: 23em;
@@ -190,25 +202,22 @@ const Terms = styled.button`
 `;
 
 const Mention1 = styled.div`
-  font-family: monospace;
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 8%;
 `;
 
 const Mention2 = styled.div`
-  font-family: monospace;
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 2.7%;
 `;
 
 const Mention3 = styled.div`
-  font-family: monospace;
   font-size: 15px;
-  margin-bottom: 2%;
+  margin-bottom: 1%;
   margin-top: 10px;
   margin-left: 7.8%;
 `;
@@ -217,7 +226,6 @@ const Msg = styled.div`
   color: #f06363;
   margin-top: 5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
 `;
 
@@ -225,8 +233,70 @@ const Msg2 = styled.div`
   color: #117326;
   margin-top: 5%;
   font-size: 12px;
-  font-family: monospace;
   font-weight: 500;
+`;
+
+const Msg3 = styled.div`
+  color: #117326;
+  margin-top: 5%;
+  margin-bottom: -5%;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+const Msg4 = styled.div`
+  color: #f06363;
+  margin-top: 5%;
+  margin-bottom: -5%;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+const Msg5 = styled.div`
+  color: #117326;
+  margin-top: -12%;
+  margin-bottom: 3%;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+const Msg6 = styled.div`
+  color: #f06363;
+  margin-top: -12%;
+  margin-bottom: 3%;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+//Agreement
+const CommonForm = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const DescSpan = styled.span`
+  color: gray;
+  margin: 0 10px 10px 0;
+  font-size: 16px;
+`;
+const EssentialSpan = styled(DescSpan)`
+  color: #36c5f0;
+`;
+
+const OptionSpan = styled(DescSpan)`
+  color: rgb(45, 45, 45);
+`;
+const Label = styled.label`
+  display: block;
+`;
+const AgreementSection = styled.form`
+  border: solid 1px lightgray;
+  padding: 15px;
+  margin-bottom: 5px;
+`;
+
+const AgreementSpan = styled(DescSpan)`
+  display: inline-block;
+  margin-bottom: 10px;
 `;
 
 export default function Signup() {
@@ -386,7 +456,8 @@ export default function Signup() {
       isDupEmail &&
       isDupNickname &&
       isPassword &&
-      isPwdCheck === true
+      isPwdCheck === true &&
+      checkedItems.includes("use" && "age" && "agree")
     ) {
       handleComplete();
       console.log("회원가입 요청이 성공적으로 전달되었습니다.");
@@ -396,8 +467,28 @@ export default function Signup() {
     console.log(stateInfo);
   };
 
+  //Agreement
+  const [checkedItems, setCheckedItems] = useState([]);
+  const handleCheckChange = (checked, val) => {
+    if (checked) {
+      setCheckedItems([...checkedItems, val]);
+    } else {
+      setCheckedItems(checkedItems.filter((el) => el !== val));
+    }
+  };
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      setCheckedItems(["age", "use", "agree", "event"]);
+    } else {
+      setCheckedItems([]);
+    }
+  };
+
   return (
     <Total>
+      <Helmet>
+        <title>Signup | HoloSulo</title>
+      </Helmet>
       <Link to="/">
         <FontLogo></FontLogo>
       </Link>
@@ -444,27 +535,27 @@ export default function Signup() {
           ></Password>
           <Part4>
             {isPassword ? (
-              <Msg2>{passwordMessage}</Msg2>
+              <Msg3>{passwordMessage}</Msg3>
             ) : userinfo.password.length === 0 ? null : (
-              <Msg>{passwordMessage}</Msg>
+              <Msg4>{passwordMessage}</Msg4>
             )}
           </Part4>
 
-          <Password
+          <PasswordCheck
             type="password"
             placeholder="check password"
             onChange={handleInputValue("passwordCheck")}
             onBlur={() => {
               checkPassword(userinfo.password, userinfo.passwordCheck);
             }}
-          ></Password>
+          ></PasswordCheck>
           <Part4>
             {isPwdCheck ? (
               userinfo.passwordCheck.length === 0 ? null : (
-                <Msg2>{passwordCheckMessage}</Msg2>
+                <Msg5>{passwordCheckMessage}</Msg5>
               )
             ) : userinfo.passwordCheck.length === 0 ? null : (
-              <Msg>{passwordCheckMessage}</Msg>
+              <Msg6>{passwordCheckMessage}</Msg6>
             )}
           </Part4>
         </Part2>
@@ -498,10 +589,82 @@ export default function Signup() {
         </Part1>
       </InputInfo>
 
-      <Terms>회원약관</Terms>
-
+      <CommonForm>
+        <AgreementSection>
+          <Label>
+            <input
+              type="checkbox"
+              checked={checkedItems.length === 4 ? true : false}
+              onChange={(e) => handleAllCheck(e.target.checked)}
+            ></input>
+            <AgreementSpan>전체동의</AgreementSpan>
+          </Label>
+          <hr></hr>
+          <Label>
+            <input
+              type="checkbox"
+              value="age"
+              checked={checkedItems.includes("age")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              만 14세 이상입니다.{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="use"
+              checked={checkedItems.includes("use")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              이용약관{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="agree"
+              checked={checkedItems.includes("agree")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+              required
+            ></input>
+            <AgreementSpan>
+              개인정보수집 및 이용동의{" "}
+              <EssentialSpan className="essential">(필수)</EssentialSpan>
+            </AgreementSpan>
+            <br></br>
+          </Label>
+          <Label>
+            <input
+              type="checkbox"
+              value="event"
+              checked={checkedItems.includes("event")}
+              onChange={(e) =>
+                handleCheckChange(e.target.checked, e.target.value)
+              }
+            ></input>
+            <AgreementSpan>
+              이벤트, 프로모션 알림 메일 및 SMS 수신{" "}
+              <OptionSpan className="option">(선택)</OptionSpan>
+            </AgreementSpan>
+          </Label>
+        </AgreementSection>
+      </CommonForm>
       <Confirm onClick={submitAll}>회원가입</Confirm>
-
       <Link to="/login">
         <Cancle>취소</Cancle>
       </Link>
