@@ -64,7 +64,7 @@ module.exports = {
   updatePlaylist: async (req, res) => {
     try {
       const updateBody = req.body;
-      const updateFile = req.file && req.file.path;
+      const updateFile = req.file && req.file.location;
       const updateSongsParser = JSON.parse(updateBody.songs);
       const authorization = req.headers.authorization;
       const userId = isAuthorized(authorization);
@@ -83,9 +83,7 @@ module.exports = {
         //새로 추가된 Song이 없을 시
         await Playlist.update(
           {
-            coverUrl:
-              updateFile &&
-              process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
+            coverUrl: updateFile && updateFile,
             title: updateBody.title,
             description: updateBody.description,
             userId: userId.id,
@@ -118,9 +116,7 @@ module.exports = {
         //새로 추가된 Song이 있을 시
         await Playlist.update(
           {
-            coverUrl:
-              updateFile &&
-              process.env.DEV_DOMAIN + process.env.PORT + "/" + updateFile,
+            coverUrl: updateFile && updateFile,
             title: updateBody.title,
             description: updateBody.description,
             userId: userId.id,

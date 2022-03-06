@@ -32,14 +32,6 @@ const Item = styled.li`
   margin-left: 20px;
   text-decoration: ${(props) => props.active};
 `;
-const LogoutButton = styled.li`
-  text-decoration: ${(props) => props.active};
-  border: none;
-  width: auto;
-  background-color: transparent;
-  color: ${(props) => props.active};
-  cursor: pointer;
-`;
 
 function Header({ isTransparent = false }) {
   const { pathname } = useLocation();
@@ -49,7 +41,6 @@ function Header({ isTransparent = false }) {
   const LogoutHandler = async () => {
     localStorage.removeItem("accessToken");
     setIsLoggedInAtom(false);
-    window.location.href = "/";
     console.log("토큰이 잘못 됬습니다.");
   };
 
@@ -68,13 +59,8 @@ function Header({ isTransparent = false }) {
               <Item active={pathname === "/mypage" ? "underline" : "none"}>
                 <Link to="/mypage">mypage</Link>
               </Item>
-              <Item>
-                <LogoutButton
-                  active={pathname === "/main" ? "white" : "black"}
-                  onClick={LogoutHandler}
-                >
-                  Logout
-                </LogoutButton>
+              <Item onClick={LogoutHandler}>
+                <Link to="/">Logout</Link>
               </Item>
             </>
           ) : (

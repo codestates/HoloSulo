@@ -12,6 +12,8 @@ export NODE_ENV=$(aws ssm get-parameters --region ap-northeast-2 --names NODE_EN
 export HOLOSULO_HOST_DOMAIN=$(aws ssm get-parameters --region ap-northeast-2 --names HOLOSULO_HOST_DOMAIN --query Parameters[0].Value | sed 's/"//g')
 export KAKAO_CLIENT_ID=$(aws ssm get-parameters --region ap-northeast-2 --names KAKAO_CLIENT_ID --query Parameters[0].Value | sed 's/"//g')
 export KAKAO_REDIRECT_URL=$(aws ssm get-parameters --region ap-northeast-2 --names KAKAO_REDIRECT_URL --query Parameters[0].Value | sed 's/"//g')
+export ACCESS_KEY=$(aws ssm get-parameters --region ap-northeast-2 --names ACCESS_KEY --query Parameters[0].Value | sed 's/"//g')
+export SECRET_KEY=$(aws ssm get-parameters --region ap-northeast-2 --names SECRET_KEY --query Parameters[0].Value | sed 's/"//g')
 
 
 
