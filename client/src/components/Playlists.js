@@ -25,7 +25,8 @@ const PlaylistCard = styled.div`
   width: 140px;
   height: 220px;
   margin-right: 10px;
-  padding: 10px;
+  font-size: 14px;
+  /* padding: 5px; */
   background-color: rgba(48, 48, 48, 60%);
   border: 2px solid black;
   border-radius: 10px;
@@ -39,6 +40,7 @@ const PlaylistCard = styled.div`
 const PlaylistCardMessage = styled.span`
   margin-top: 20px;
   width: 120px;
+  text-align: center;
 `;
 
 function Playlists({

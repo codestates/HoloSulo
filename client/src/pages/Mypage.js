@@ -198,7 +198,6 @@ export default function Mypage(props) {
     })
       .then((res) => {
         setUser(res.data);
-        console.log(user);
       })
       .catch((err) => {
         console.error(err);
