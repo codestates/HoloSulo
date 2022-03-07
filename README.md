@@ -44,7 +44,7 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 
 **- Position :** Back-End
 
-**- Stack :** `jwt` `MySQL`
+**- Stack :** `Node.js` `JWT` `Bcrypt` `sequlize` `express` `Multer` `Multer-s3` `Oauth 2.0` `MySQL`
 
 <details>
 <summary>💻 Work</summary>
@@ -69,16 +69,18 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 
 **- Position :** Front-End
 
-**- Stack :** `Javascript` `React`
-
+**- Stack :** `React` `React-Hooks` `recoil` `styled-components` `react-router` `EC2` `S3` `RDS` `Parameter Store` `Codepipeline` `Route53`
 <details>
 <summary>💻 Work</summary>
 <div markdown="1">
 <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>메인 페이지, 로딩 페이지 UI 구현 </li>
+<li>메뉴 페이지 UI 구현 + api 연동 </li>
+<li>플레이리스트 CRUD UI 구현 + api 연동</li>
+<li>메인 페이지(플레이어 + 노트 + 엔딩 팝업) UI 구현</li>
+<li>YouTube IFrame Player API를 사용해 플레이어 구현</li>
+<li>AWS CodePipeline, CodeDeploy, CodeBuilder를 이용해 client, server 배포 자동화 구축</li>
+<li>CloudFront, ELB를 통해 https 적용</li>
 </ul>
 </div>
 </details>
@@ -89,16 +91,17 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 
 **- Position :** Front-End
 
-**- Stack :** `Javascript` `React`
+**- Stack :** `EC6` `React` `React-Hooks` `React-router` `recoil` `styled-components` `Axios`
 
 <details>
 <summary>💻 Work</summary>
 <div markdown="1">
 <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>Figma 툴을 이용한 UI/UX 셋업 프로토타입 작성</li>
+<li>login UI 구현(아이디, 비밀번호 유효성 검사) + API 연동</li>
+<li>sign up UI 구현(이메일, 비밀번호 유효성 검사/중복 확인) + API 연동</li>
+<li>유저정보 UI 구현(회원탈퇴 모달, 방문횟수/시간 시각적 제공) +  API 연동</li>
+<li>회원정보 수정 UI 구현(아이디, 비밀번호 유효성 검사/중복 확인) + API 연동</li>
 </ul>
 </div>
 </details>
@@ -109,16 +112,20 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 
 **- Position :** Back-End
 
-**- Stack :** `jwt` `MySQL`
+**- Stack :** `Node.js` `JWT` `Express` `Axios` `Sequlize` `Bcrypt` `Mysql`
 
 <details>
 <summary>💻 Work</summary>
 <div markdown="1">
 <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>Back-End 초기환경 세팅</li>
+<li>회원가입 API</li>
+<li>카카오 Social Login 구현</li>
+<li>로그아웃 API 구현</li>
+<li>유저 정보 수정 API 구현</li>
+<li>유저 정보 요청 API구현</li>
+<li>비밀번호 변경 모듈 구현</li>
+<li>회원가입 Agreement Form 구현</li>
 </ul>
 </div>
 </details>
