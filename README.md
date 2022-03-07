@@ -23,7 +23,8 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 <p align="right">(<a href="#top">상단으로 돌아가기</a>)</p>
 
 ## :electric_plug: Built with
-![HoloSulo V2](https://user-images.githubusercontent.com/82024154/157092596-6bee4add-20da-46df-85f5-33c779f12c2a.png)
+![HoloSulo V2 (1)](https://user-images.githubusercontent.com/82024154/157092918-62d93286-ccd1-481c-9eac-cf3ba5e2387a.png)
+
 
 * [React.js](https://reactjs.org/)
 * [Axios](https://axios-http.com/)
