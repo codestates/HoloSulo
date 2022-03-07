@@ -50,10 +50,15 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 <summary>💻 Work</summary>
 <div markdown="1">
 <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>Logout 기능 구현</li>
+<li>Naver Social Login 구현</li>
+<li>Login API 구현</li>
+<li>회원 탈퇴 API 구현</li>
+<li>닉네임 중복체크 API 구현</li>
+<li>Menu Page 에서 주문하기 API 구현</li>
+<li>태그에 따른 Playlist 요청 API 구현</li>
+<li>Playlist CRUD API 구현</li>
+<li>DB 설계 및 관계 설정</li>
 </ul>
 </div>
 </details>
