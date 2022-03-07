@@ -64,7 +64,7 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 </details>
 <hr>
 
-### 성재호 [![깃허브](https://img.shields.io/badge/GitHub-Jaeho97-181717?style=for-the-badge&logo=GitHub&logoColor=181717)](https://github.com/Jaeho97)
+### 강범규 [![깃허브](https://img.shields.io/badge/GitHub-kangbumkyu-181717?style=for-the-badge&logo=GitHub&logoColor=181717)](https://github.com/kangbumkyu)
 **- Role :** Team Member
 
 **- Position :** Front-End
@@ -86,7 +86,7 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 </details>
 <hr>
 
-### 강범규 [![깃허브](https://img.shields.io/badge/GitHub-kangbumkyu-181717?style=for-the-badge&logo=GitHub&logoColor=181717)](https://github.com/kangbumkyu)
+### 성재호 [![깃허브](https://img.shields.io/badge/GitHub-Jaeho97-181717?style=for-the-badge&logo=GitHub&logoColor=181717)](https://github.com/Jaeho97)
 **- Role :** Team Member
 
 **- Position :** Front-End
