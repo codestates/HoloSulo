@@ -91,7 +91,7 @@ HoloSulo는 유저의 선택에 따른 타이머 기능 제공과
 
 **- Position :** Front-End
 
-**- Stack :** `EC6` `React` `React-Hooks` `React-router` `recoil` `styled-components` `Axios`
+**- Stack :** `ES6` `React` `React-Hooks` `React-router` `recoil` `styled-components` `Axios`
 
 <details>
 <summary>💻 Work</summary>
